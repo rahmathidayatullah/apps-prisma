@@ -9,6 +9,7 @@ import HomeScreen from '../../screens/home/Home';
 import LoginScreen from '../../screens/auth/Login';
 import RegisterScreen from '../../screens/auth/Register';
 import ForgotPasswordScreen from '../../screens/auth/ForgotPassword';
+import HomeNaviagator from './HomeNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,7 +34,7 @@ function AuthNavigator() {
         />
         <Stack.Screen
           name={ROUTES.HOME}
-          component={HomeScreen}
+          component={HomeNaviagator}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
