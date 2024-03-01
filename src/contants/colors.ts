@@ -1,12 +1,11 @@
 export default {
-  gradientForm: '#A376F1',
-  primary: '#7d5fff',
-  white: '#FFFFFF',
-  dark: '#444',
-  bgColor: '#82ccdd',
-  warning: '#f0d500',
-  danger: '#FF0D0E',
-  gray: '#666666',
-  grayLight: '#ccc',
-  black: '#0a0a0a',
+  // primary bg
+  // #FBB03B green
+  // #219C90 orange
+
+  bgPrimary: '#FBB03B',
+  // bgPrimary: '#219C90',
+
+  // text color body
+  bgGrey: '#585858',
 };
