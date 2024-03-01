@@ -44,6 +44,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AwesomeProjectPrisma/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AwesomeProjectPrisma-AwesomeProjectPrismaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProjectPrisma-AwesomeProjectPrismaTests.release.xcconfig"; path = "Target Support Files/Pods-AwesomeProjectPrisma-AwesomeProjectPrismaTests/Pods-AwesomeProjectPrisma-AwesomeProjectPrismaTests.release.xcconfig"; sourceTree = "<group>"; };
 		AC1515522B9017DA0080C30D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		AC3D3DE52B92482D00122281 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		AC3D3DE62B92483800122281 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		AC5D89522B92313800A026F8 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		AC5D89532B9233D700A026F8 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -144,6 +146,8 @@
 		AC1515512B9017350080C30D /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				AC3D3DE62B92483800122281 /* AntDesign.ttf */,
+				AC3D3DE52B92482D00122281 /* SimpleLineIcons.ttf */,
 				AC5D89532B9233D700A026F8 /* Entypo.ttf */,
 				AC5D89522B92313800A026F8 /* Feather.ttf */,
 				AC1515522B9017DA0080C30D /* Ionicons.ttf */,

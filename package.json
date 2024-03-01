@@ -15,6 +15,7 @@
     "android:build:apk": "npm run android:clean && cd android && ./"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.16",
     "@react-navigation/native": "^6.1.12",
     "@react-navigation/native-stack": "^6.9.20",
     "react": "18.2.0",

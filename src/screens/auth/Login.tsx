@@ -57,7 +57,9 @@ const LoginScreen = () => {
         </View>
 
         <View style={{marginTop: 15, flexDirection: 'row'}}>
-          <CButton>Log In</CButton>
+          <CButton onPress={() => navigation.navigate(ROUTES.HOME)}>
+            Log In
+          </CButton>
         </View>
 
         <CButtonText
