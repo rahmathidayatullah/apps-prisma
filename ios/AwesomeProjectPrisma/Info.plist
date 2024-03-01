@@ -4,6 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Entypo.ttf</string>
+		<string>Feather.ttf</string>
 		<string>Ionicons.ttf</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
