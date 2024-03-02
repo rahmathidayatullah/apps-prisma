@@ -1,39 +1,35 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {ROUTES} from '../../contants';
-import HomeScreen from '../../screens/home/Home';
-// import AboutScreen from "../../screens/home/About";
-// import ProfileScreen from "../../screens/home/Profile";
-// import ForgotPasswordScreen from "../../screens/auth/ForgotPassword";
 import LoginScreen from '../../screens/auth/Login';
 import RegisterScreen from '../../screens/auth/Register';
 import ForgotPasswordScreen from '../../screens/auth/ForgotPassword';
 import HomeNaviagator from './HomeNavigator';
+import {routeMenu} from '../../contants/routes';
 
 const Stack = createNativeStackNavigator();
 
 function AuthNavigator() {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator screenOptions={{}} initialRouteName={ROUTES.LOGIN}>
+      <Stack.Navigator screenOptions={{}} initialRouteName={routeMenu.LOGIN}>
         <Stack.Screen
-          name={ROUTES.LOGIN}
+          name={routeMenu.LOGIN}
           component={LoginScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name={ROUTES.REGISTER}
+          name={routeMenu.REGISTER}
           component={RegisterScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name={ROUTES.FORGOT_PASSWORD}
+          name={routeMenu.FORGOT_PASSWORD}
           component={ForgotPasswordScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name={ROUTES.HOME}
+          name={routeMenu.HOME}
           component={HomeNaviagator}
           options={{headerShown: false}}
         />

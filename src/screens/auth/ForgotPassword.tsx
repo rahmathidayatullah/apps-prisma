@@ -10,6 +10,7 @@ import CInputTextWithIconLabel from '../../components/atoms/input/TextWithIconLa
 import CButtonText from '../../components/atoms/button/ButtonText';
 
 import {ROUTES} from '../../contants';
+import {routeMenu} from '../../contants/routes';
 
 const ForgotPasswordScreen = () => {
   const navigation: any = useNavigation();
@@ -37,7 +38,7 @@ const ForgotPasswordScreen = () => {
           <CButton>Submit</CButton>
         </View>
 
-        <CButtonText onPress={() => navigation.navigate(ROUTES.LOGIN)}>
+        <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
           Back to Sign In
         </CButtonText>
       </View>

@@ -48,6 +48,7 @@
 		AC3D3DE62B92483800122281 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		AC5D89522B92313800A026F8 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		AC5D89532B9233D700A026F8 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		ACEBF2722B9312FE0087910B /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -146,6 +147,7 @@
 		AC1515512B9017350080C30D /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				ACEBF2722B9312FE0087910B /* MaterialIcons.ttf */,
 				AC3D3DE62B92483800122281 /* AntDesign.ttf */,
 				AC3D3DE52B92482D00122281 /* SimpleLineIcons.ttf */,
 				AC5D89532B9233D700A026F8 /* Entypo.ttf */,
