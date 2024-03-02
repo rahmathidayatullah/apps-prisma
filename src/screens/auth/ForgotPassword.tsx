@@ -9,7 +9,6 @@ import CButton from '../../components/atoms/button/Button';
 import CInputTextWithIconLabel from '../../components/atoms/input/TextWithIconLabel';
 import CButtonText from '../../components/atoms/button/ButtonText';
 
-import {ROUTES} from '../../contants';
 import {routeMenu} from '../../contants/routes';
 
 const ForgotPasswordScreen = () => {
@@ -38,9 +37,11 @@ const ForgotPasswordScreen = () => {
           <CButton>Submit</CButton>
         </View>
 
-        <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
-          Back to Sign In
-        </CButtonText>
+        <View style={{marginTop: 15}}>
+          <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
+            Back to Sign In
+          </CButtonText>
+        </View>
       </View>
     </SafeAreaView>
   );

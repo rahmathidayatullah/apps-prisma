@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     borderRadius: 16,
-    padding: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
     alignSelf: 'flex-start',
   },
   containerBgBadge: {

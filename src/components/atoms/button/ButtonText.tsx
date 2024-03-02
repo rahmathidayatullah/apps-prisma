@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     color: COLORS.bgPrimary,
     textAlign: 'center',
     fontWeight: '600',
-    marginTop: 15,
   },
 });
 

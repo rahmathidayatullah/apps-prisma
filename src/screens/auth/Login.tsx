@@ -63,10 +63,12 @@ const LoginScreen = () => {
           </CButton>
         </View>
 
-        <CButtonText
-          onPress={() => navigation.navigate(routeMenu.FORGOT_PASSWORD)}>
-          Forgot Password
-        </CButtonText>
+        <View style={{marginTop: 15}}>
+          <CButtonText
+            onPress={() => navigation.navigate(routeMenu.FORGOT_PASSWORD)}>
+            Forgot Password
+          </CButtonText>
+        </View>
       </View>
     </SafeAreaView>
   );

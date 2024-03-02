@@ -22,7 +22,6 @@ const CardMenuItem = ({item}: typeCardMenuItem) => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    overflow: 'hidden',
     padding: 10,
     borderRadius: 8,
     width: 75,
@@ -35,6 +34,17 @@ const styles = StyleSheet.create({
     right: 0,
     left: 0,
     bottom: 0,
+    borderRadius: 8,
+    // box shadow ios
+    shadowColor: COLORS.bgBlackShadow,
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    // box shadow android
+    elevation: 2,
   },
   containerIconText: {
     flexDirection: 'column',
