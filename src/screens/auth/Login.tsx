@@ -10,7 +10,8 @@ import CButton from '../../components/atoms/button/Button';
 import CInputTextWithIconLabel from '../../components/atoms/input/TextWithIconLabel';
 import CButtonText from '../../components/atoms/button/ButtonText';
 
-import {COLORS, ROUTES} from '../../contants';
+import {COLORS} from '../../contants';
+import {routeMenu} from '../../contants/routes';
 
 const LoginScreen = () => {
   const navigation: any = useNavigation();
@@ -57,13 +58,13 @@ const LoginScreen = () => {
         </View>
 
         <View style={{marginTop: 15, flexDirection: 'row'}}>
-          <CButton onPress={() => navigation.navigate(ROUTES.HOME)}>
+          <CButton onPress={() => navigation.navigate(routeMenu.HOME)}>
             Log In
           </CButton>
         </View>
 
         <CButtonText
-          onPress={() => navigation.navigate(ROUTES.FORGOT_PASSWORD)}>
+          onPress={() => navigation.navigate(routeMenu.FORGOT_PASSWORD)}>
           Forgot Password
         </CButtonText>
       </View>
