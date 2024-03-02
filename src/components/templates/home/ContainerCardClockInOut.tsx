@@ -19,6 +19,16 @@ const styles = StyleSheet.create({
     width: '98%',
     bottom: '-50%',
     left: '4.5%',
+    // box shadow
+    shadowColor: COLORS.bgBlackShadow,
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    // box shadow android
+    elevation: 4,
   },
 });
 

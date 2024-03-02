@@ -15,4 +15,10 @@ export default {
 
   // bgSecondary: '#FFA210',
   bgSecondary: '#119387',
+
+  // shadow color just ios
+  bgBlackShadow: '#333333',
+
+  // backgournd color list
+  bgGreyList: '#F8F8F8',
 };
