@@ -2,20 +2,22 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../../contants';
 import {MenuItem} from './inteface';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface typeCardMenuItem {
   item: MenuItem;
+  onPress?: any;
 }
 
-const CardMenuItem = ({item}: typeCardMenuItem) => {
+const CardMenuItem = ({item, onPress}: typeCardMenuItem) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.containerBgTransparent}></View>
       <View style={styles.containerIconText}>
         {item.icon}
         <Text style={styles.font}>{item.label}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

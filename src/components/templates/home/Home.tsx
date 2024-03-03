@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -18,80 +18,148 @@ import {MenuItem} from './inteface';
 import CardMenuItem from './CardMenuItem';
 import {ListAttendace} from './ListAttendace';
 import {ListSubmission} from './ListSubmission';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
+
+// interface MenuItemState {
+//   cuti: boolean;
+//   lembur: boolean;
+//   izin: boolean;
+// }
 
 const TemplateHome = () => {
+  const [isShowMenuItem, setIsShowMenuItem] = useState<any>({
+    cuti: false,
+    lembur: false,
+    izin: false,
+  });
+
+  // start bottomSheet ===========
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['50%'], []);
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index === -1) {
+      setIsShowMenuItem({
+        cuti: false,
+        lembur: false,
+        izin: false,
+      });
+    }
+  }, []);
+
+  // end bottomSheet ===========
+
+  const onPressMenuItem = (menuItem: string) => {
+    setIsShowMenuItem((prevState: any) => ({
+      ...Object.fromEntries(
+        Object.keys(prevState).map(key => [key, key === menuItem]),
+      ),
+    }));
+    bottomSheetModalRef.current?.present();
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.containerHead}>
-            <Badge />
+    <GestureHandlerRootView style={{flex: 1}}>
+      <BottomSheetModalProvider>
+        <SafeAreaView style={styles.safeArea}>
+          <ScrollView>
+            <View style={styles.container}>
+              <View style={styles.containerHead}>
+                <Badge />
 
-            <View style={styles.containerHeadTitleImage}>
-              <View>
-                <Text style={styles.titleName}>Rahmat Hidayatullah</Text>
-                <Text style={styles.titleRole}>Karyawan</Text>
-              </View>
-              <ImageProfile />
-            </View>
-
-            <ContainerCardClockInOut>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <Text style={styles.titleDay}>Today - 26 Januari 2024</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: 4,
-                  }}>
-                  <IconMaterialIcons
-                    name="access-alarm"
-                    size={24}
-                    color="white"
-                  />
-                  <Text
-                    style={{color: 'white', fontSize: 12, fontWeight: '600'}}>
-                    08:00 - 17:00
-                  </Text>
+                <View style={styles.containerHeadTitleImage}>
+                  <View>
+                    <Text style={styles.titleName}>Rahmat Hidayatullah</Text>
+                    <Text style={styles.titleRole}>Karyawan</Text>
+                  </View>
+                  <ImageProfile />
                 </View>
+
+                <ContainerCardClockInOut>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={styles.titleDay}>Today - 26 Januari 2024</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: 4,
+                      }}>
+                      <IconMaterialIcons
+                        name="access-alarm"
+                        size={24}
+                        color="white"
+                      />
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontSize: 12,
+                          fontWeight: '600',
+                        }}>
+                        08:00 - 17:00
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      marginTop: 24,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      gap: 14,
+                    }}>
+                    <CardClockInOut clockIn />
+                    <CardClockInOut clockOut />
+                  </View>
+                </ContainerCardClockInOut>
               </View>
               <View
                 style={{
-                  marginTop: 24,
+                  marginTop: 90,
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  gap: 14,
+                  justifyContent: 'space-around',
                 }}>
-                <CardClockInOut clockIn />
-                <CardClockInOut clockOut />
+                {routeMenuItem.map((item: MenuItem) => (
+                  <CardMenuItem
+                    onPress={() => onPressMenuItem(item.value)}
+                    key={item.id}
+                    item={item}
+                  />
+                ))}
               </View>
-            </ContainerCardClockInOut>
-          </View>
-          <View
-            style={{
-              marginTop: 90,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-            }}>
-            {routeMenuItem.map((item: MenuItem) => (
-              <CardMenuItem key={item.id} item={item} />
-            ))}
-          </View>
-          <View style={styles.containerListAttendace}>
-            <ListAttendace />
-          </View>
-          <View style={styles.containerListAttendace}>
-            <ListSubmission />
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+              <View style={styles.containerListAttendace}>
+                <ListAttendace />
+              </View>
+              <View style={styles.containerListAttendace}>
+                <ListSubmission />
+              </View>
+            </View>
+            <BottomSheetModal
+              ref={bottomSheetModalRef}
+              index={0}
+              snapPoints={snapPoints}
+              onChange={handleSheetChanges}>
+              <BottomSheetView style={styles.contentBottomSheetContainer}>
+                {isShowMenuItem.cuti && <Text>Form Cuti</Text>}
+                {isShowMenuItem.lembur && <Text>Form Lembur</Text>}
+                {isShowMenuItem.izin && <Text>Form Izin</Text>}
+              </BottomSheetView>
+            </BottomSheetModal>
+          </ScrollView>
+        </SafeAreaView>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };
 
@@ -142,6 +210,10 @@ const styles = StyleSheet.create({
     paddingLeft: 14,
     paddingRight: 14,
     marginTop: 38,
+  },
+  contentBottomSheetContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 });
 
