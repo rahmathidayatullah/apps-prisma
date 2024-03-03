@@ -1,12 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import Profile from '../../components/templates/profile/Profile';
 
 const ProfileScreen = () => {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Profile!</Text>
-    </View>
-  );
+  return <Profile />;
 };
 
 export default ProfileScreen;

@@ -36,12 +36,14 @@ import {COLORS} from '.';
 export const routeMenuItem: MenuItem[] = [
   {
     id: 1,
+    value: 'cuti',
     label: 'Cuti',
     path: '/',
     icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
   },
   {
     id: 2,
+    value: 'lembur',
     label: 'Lembur',
     path: '/profile',
     icon: (
@@ -50,6 +52,7 @@ export const routeMenuItem: MenuItem[] = [
   },
   {
     id: 3,
+    value: 'izin',
     label: 'Izin',
     path: '/settings',
     icon: <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />,
