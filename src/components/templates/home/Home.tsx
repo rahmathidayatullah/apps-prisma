@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -24,46 +24,41 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-
-// interface MenuItemState {
-//   cuti: boolean;
-//   lembur: boolean;
-//   izin: boolean;
-// }
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  onPressMenuItem,
+  resetValueBottomSheet,
+} from '../../../redux/features/home/actions';
+import {stateGlobalHome} from '../../../redux/features/home/interface';
+import FormPermission from './FormPermission';
+import FormCuti from './FormCuti';
 
 const TemplateHome = () => {
-  const [isShowMenuItem, setIsShowMenuItem] = useState<any>({
-    cuti: false,
-    lembur: false,
-    izin: false,
-  });
-
-  // start bottomSheet ===========
-  // ref
+  const dispatch: any = useDispatch();
+  const {isShowMenuItem} = useSelector((state: stateGlobalHome) => state.home);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  // variables
   const snapPoints = useMemo(() => ['50%'], []);
+  // variables
   const handleSheetChanges = useCallback((index: number) => {
     if (index === -1) {
-      setIsShowMenuItem({
-        cuti: false,
-        lembur: false,
-        izin: false,
-      });
+      dispatch(resetValueBottomSheet());
     }
   }, []);
 
-  // end bottomSheet ===========
-
-  const onPressMenuItem = (menuItem: string) => {
-    setIsShowMenuItem((prevState: any) => ({
-      ...Object.fromEntries(
-        Object.keys(prevState).map(key => [key, key === menuItem]),
-      ),
-    }));
+  const handleOnPressMenuItem = (menuItem: string) => {
+    dispatch(onPressMenuItem(menuItem));
     bottomSheetModalRef.current?.present();
   };
+
+  useEffect(() => {
+    return () => {
+      bottomSheetModalRef.current?.dismiss();
+    };
+  }, []);
+
+  const atLeastOneTrue = Object.values(isShowMenuItem).some(
+    value => value === true,
+  );
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -132,7 +127,7 @@ const TemplateHome = () => {
                 }}>
                 {routeMenuItem.map((item: MenuItem) => (
                   <CardMenuItem
-                    onPress={() => onPressMenuItem(item.value)}
+                    onPress={() => handleOnPressMenuItem(item.value)}
                     key={item.id}
                     item={item}
                   />
@@ -145,15 +140,40 @@ const TemplateHome = () => {
                 <ListSubmission />
               </View>
             </View>
+            {atLeastOneTrue && <View style={styles.backdrop} />}
             <BottomSheetModal
               ref={bottomSheetModalRef}
               index={0}
               snapPoints={snapPoints}
               onChange={handleSheetChanges}>
               <BottomSheetView style={styles.contentBottomSheetContainer}>
-                {isShowMenuItem.cuti && <Text>Form Cuti</Text>}
-                {isShowMenuItem.lembur && <Text>Form Lembur</Text>}
-                {isShowMenuItem.izin && <Text>Form Izin</Text>}
+                <ScrollView>
+                  {isShowMenuItem.cuti && (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        width: '100%',
+                        paddingHorizontal: 30,
+                      }}>
+                      <FormCuti bottomSheetModalRef={bottomSheetModalRef} />
+                    </View>
+                  )}
+                  {isShowMenuItem.lembur && <Text>Form Lembur</Text>}
+                  {isShowMenuItem.izin && (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        width: '100%',
+                        paddingHorizontal: 30,
+                      }}>
+                      <FormPermission
+                        bottomSheetModalRef={bottomSheetModalRef}
+                      />
+                    </View>
+                  )}
+                </ScrollView>
               </BottomSheetView>
             </BottomSheetModal>
           </ScrollView>
@@ -214,6 +234,15 @@ const styles = StyleSheet.create({
   contentBottomSheetContainer: {
     flex: 1,
     alignItems: 'center',
+  },
+
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent black color
   },
 });
 
