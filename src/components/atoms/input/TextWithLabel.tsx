@@ -6,29 +6,21 @@ interface typeInputTextWithIcon {
   placeholder: string;
   label: string;
   icon?: any;
-  right?: boolean;
 }
 
-const CInputTextWithIconLabel = ({
+const CInputTextWithLabel = ({
   placeholder,
   label,
   icon,
-  right,
 }: typeInputTextWithIcon) => {
   return (
     <View style={styles.containerInputIconLabel}>
       <Text style={{color: COLORS.bgGrey}}>{label}</Text>
       <View style={styles.containerInput}>
-        {right ? (
-          <View style={{position: 'absolute', top: '32%', right: '15%'}}>
-            {icon}
-          </View>
-        ) : (
-          <View>{icon}</View>
-        )}
+        {icon}
         <TextInput
           placeholderTextColor="#ccc"
-          style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
+          style={styles.input}
           placeholder={placeholder}
         />
       </View>
@@ -49,18 +41,14 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingTop: 15,
     paddingBottom: 15,
+    paddingLeft: 50,
     marginVertical: 10,
     borderRadius: 16,
     height: 50,
+    paddingVertical: 0,
     flex: 1,
     color: COLORS.bgGrey,
   },
-  inputLeft: {
-    paddingLeft: 50,
-  },
-  inputRight: {
-    paddingLeft: 15,
-  },
 });
 
-export default CInputTextWithIconLabel;
+export default CInputTextWithLabel;
