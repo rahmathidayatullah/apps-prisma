@@ -6,7 +6,6 @@ import RegisterScreen from '../../screens/auth/Register';
 import ForgotPasswordScreen from '../../screens/auth/ForgotPassword';
 import HomeNaviagator from './HomeNavigator';
 import {routeMenu} from '../../contants/routes';
-
 const Stack = createNativeStackNavigator();
 
 function AuthNavigator() {

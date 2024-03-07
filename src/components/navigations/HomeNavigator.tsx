@@ -5,9 +5,9 @@ import {COLORS} from '../../contants';
 
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import HomeScreen from '../../screens/home/Home';
 import ProfileScreen from '../../screens/home/Profile';
 import {routeMenu} from '../../contants/routes';
+import NestedHomeNaviagator from './NestedHomeNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +20,7 @@ export default function HomeNaviagator() {
         }}>
         <Tab.Screen
           name={routeMenu.HOME}
-          component={HomeScreen}
+          component={NestedHomeNaviagator}
           options={{
             headerShown: false,
             tabBarIcon: ({color}) => (

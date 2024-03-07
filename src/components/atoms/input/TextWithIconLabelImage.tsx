@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {COLORS} from '../../../contants';
 
 interface typeInputTextWithIcon {
@@ -10,9 +16,11 @@ interface typeInputTextWithIcon {
   stylesProps?: any;
   onChangeText?: any;
   value?: string;
+  onPressInputContainer?: any;
+  onPressInInput?: any;
 }
 
-const CInputTextWithIconLabel = ({
+const CInputTextWithIconLabelImage = ({
   placeholder,
   label,
   icon,
@@ -20,6 +28,8 @@ const CInputTextWithIconLabel = ({
   stylesProps,
   onChangeText,
   value,
+  onPressInputContainer,
+  onPressInInput,
 }: typeInputTextWithIcon) => {
   return (
     <View style={[styles.containerInputIconLabel, stylesProps]}>
@@ -32,13 +42,19 @@ const CInputTextWithIconLabel = ({
         ) : (
           <View>{icon}</View>
         )}
-        <TextInput
-          placeholderTextColor="#ccc"
-          style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
-          placeholder={placeholder}
-          onChangeText={onChangeText}
-          value={value}
-        />
+        <TouchableOpacity
+          onPress={onPressInputContainer}
+          style={{width: '100%'}}>
+          <TextInput
+            placeholderTextColor="#ccc"
+            style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
+            placeholder={placeholder}
+            onChangeText={onChangeText}
+            value={value}
+            onPressIn={onPressInInput}
+            editable={false}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -71,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CInputTextWithIconLabel;
+export default CInputTextWithIconLabelImage;

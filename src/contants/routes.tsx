@@ -20,6 +20,10 @@ export const routeMenu = {
   // menu home
   HOME: 'Home',
   PROFILE: 'My Profile',
+  LIST_ATTENDACE_LOG: 'List Attendace Log',
+  LIST_OF_SUBMISSION: 'List Of Submission',
+  TAKE_SEFIE: 'Take Selfie',
+  VIEW_CURRENT_LOCATION: 'View Current Location',
 
   // menu auth
   LOGIN: 'Login',
