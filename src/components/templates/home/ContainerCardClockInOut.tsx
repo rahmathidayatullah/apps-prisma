@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     padding: 12,
     position: 'absolute',
     width: '98%',
-    bottom: '-50%',
+    bottom: '-60%',
     left: '4.5%',
     // box shadow
     shadowColor: COLORS.bgBlackShadow,

@@ -32,10 +32,17 @@ import {
 import {stateGlobalHome} from '../../../redux/features/home/interface';
 import FormPermission from './FormPermission';
 import FormCuti from './FormCuti';
+import {useNavigation} from '@react-navigation/native';
+import FormClockInClockOut from './FormClockInClockOut';
+import FormClockInClockOutOvertime from './FormClockInClockOutOvertime';
+import moment from 'moment';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
-  const {isShowMenuItem} = useSelector((state: stateGlobalHome) => state.home);
+  const navigation: any = useNavigation();
+  const {isShowMenuItem, name, role, timeWork, statusWork} = useSelector(
+    (state: stateGlobalHome) => state.home,
+  );
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['50%'], []);
   // variables
@@ -52,9 +59,21 @@ const TemplateHome = () => {
 
   useEffect(() => {
     return () => {
-      bottomSheetModalRef.current?.dismiss();
+      dispatch(resetValueBottomSheet());
     };
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      if (bottomSheetModalRef.current) {
+        bottomSheetModalRef.current.dismiss();
+      }
+      dispatch(resetValueBottomSheet());
+    });
+
+    // Cleanup function
+    return unsubscribe;
+  }, [navigation]);
 
   const atLeastOneTrue = Object.values(isShowMenuItem).some(
     value => value === true,
@@ -71,8 +90,8 @@ const TemplateHome = () => {
 
                 <View style={styles.containerHeadTitleImage}>
                   <View>
-                    <Text style={styles.titleName}>Rahmat Hidayatullah</Text>
-                    <Text style={styles.titleRole}>Karyawan</Text>
+                    <Text style={styles.titleName}>{name}</Text>
+                    <Text style={styles.titleRole}>{role}</Text>
                   </View>
                   <ImageProfile />
                 </View>
@@ -82,40 +101,65 @@ const TemplateHome = () => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                      alignItems: 'center',
+                      alignItems: 'flex-end',
                     }}>
-                    <Text style={styles.titleDay}>Today - 26 Januari 2024</Text>
+                    <View>
+                      <Text style={styles.titleDay}>
+                        Today - {moment().format('DD MMMM YYYY')}
+                      </Text>
+                      <View style={{marginTop: 9}}>
+                        <View style={styles.containerBadge}>
+                          <View style={styles.containerBgBadge} />
+                          <Text style={styles.textBadge}>{statusWork}</Text>
+                        </View>
+                      </View>
+                    </View>
                     <View
                       style={{
-                        flexDirection: 'row',
+                        flexDirection: 'column',
                         justifyContent: 'space-between',
-                        alignItems: 'center',
+                        alignItems: 'flex-start',
                         gap: 4,
                       }}>
-                      <IconMaterialIcons
-                        name="access-alarm"
-                        size={24}
-                        color="white"
-                      />
-                      <Text
+                      <View
                         style={{
-                          color: 'white',
-                          fontSize: 12,
-                          fontWeight: '600',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          gap: 4,
                         }}>
-                        08:00 - 17:00
-                      </Text>
+                        <IconMaterialIcons
+                          name="access-alarm"
+                          size={24}
+                          color="white"
+                        />
+
+                        <Text
+                          style={{
+                            color: 'white',
+                            fontSize: 12,
+                            fontWeight: '600',
+                          }}>
+                          {timeWork}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                   <View
                     style={{
-                      marginTop: 24,
+                      marginTop: 16,
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       gap: 14,
                     }}>
-                    <CardClockInOut clockIn />
-                    <CardClockInOut clockOut />
+                    <CardClockInOut
+                      clockIn
+                      onPress={() => handleOnPressMenuItem('clockIn')}
+                    />
+                    <CardClockInOut
+                      clockOut
+                      onPress={() => handleOnPressMenuItem('clockOut')}
+                    />
                   </View>
                 </ContainerCardClockInOut>
               </View>
@@ -149,29 +193,29 @@ const TemplateHome = () => {
               <BottomSheetView style={styles.contentBottomSheetContainer}>
                 <ScrollView>
                   {isShowMenuItem.cuti && (
-                    <View
-                      style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        width: '100%',
-                        paddingHorizontal: 30,
-                      }}>
-                      <FormCuti bottomSheetModalRef={bottomSheetModalRef} />
-                    </View>
+                    <FormCuti bottomSheetModalRef={bottomSheetModalRef} />
                   )}
                   {isShowMenuItem.lembur && <Text>Form Lembur</Text>}
+                  {isShowMenuItem.clockIn && (
+                    <FormClockInClockOut
+                      clockIn
+                      bottomSheetModalRef={bottomSheetModalRef}
+                    />
+                  )}
+                  {isShowMenuItem.clockOut && (
+                    <FormClockInClockOut
+                      clockOut
+                      bottomSheetModalRef={bottomSheetModalRef}
+                    />
+                  )}
+                  {isShowMenuItem.clockInOvertime && (
+                    <FormClockInClockOutOvertime />
+                  )}
+                  {isShowMenuItem.clockOutOvertime && (
+                    <FormClockInClockOutOvertime />
+                  )}
                   {isShowMenuItem.izin && (
-                    <View
-                      style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        width: '100%',
-                        paddingHorizontal: 30,
-                      }}>
-                      <FormPermission
-                        bottomSheetModalRef={bottomSheetModalRef}
-                      />
-                    </View>
+                    <FormPermission bottomSheetModalRef={bottomSheetModalRef} />
                   )}
                 </ScrollView>
               </BottomSheetView>
@@ -242,7 +286,32 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent black color
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  containerBadge: {
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 4,
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingLeft: 6,
+    paddingRight: 6,
+    alignSelf: 'flex-start',
+  },
+  containerBgBadge: {
+    // backgroundColor: COLORS.bgOrangeOpacity,
+    backgroundColor: '#fff',
+    // opacity: 0.08,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+  },
+  textBadge: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: COLORS.bgPrimary,
   },
 });
 

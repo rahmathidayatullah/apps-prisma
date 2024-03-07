@@ -1,16 +1,23 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
+import {stateGlobalHome} from '../../../redux/features/home/interface';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 
 interface typeCardClockInOut {
   clockIn?: boolean;
   clockOut?: boolean;
+  onPress?: any;
 }
 
-const CardClockInOut = ({clockIn, clockOut}: typeCardClockInOut) => {
+const CardClockInOut = ({clockIn, clockOut, onPress}: typeCardClockInOut) => {
+  const {dateClockIn, dateClockOut} = useSelector(
+    (state: stateGlobalHome) => state.home,
+  );
   return (
-    <View style={styles.cardClockInOut}>
+    <TouchableOpacity onPress={onPress} style={styles.cardClockInOut}>
       <View style={{transform: clockOut ? [{rotateY: '180deg'}] : ''}}>
         <IconSimpleLineIcons name="login" size={28} color={COLORS.bgPrimary} />
       </View>
@@ -21,11 +28,19 @@ const CardClockInOut = ({clockIn, clockOut}: typeCardClockInOut) => {
         <View style={{marginTop: 4}}>
           <View style={styles.containerBadge}>
             <View style={styles.containerBgBadge} />
-            <Text style={styles.textBadge}>{clockIn ? '08:00' : '17:00'}</Text>
+            <Text style={styles.textBadge}>
+              {clockIn
+                ? dateClockIn
+                  ? moment(dateClockIn).format('hh:mm a')
+                  : '- : -'
+                : dateClockOut
+                ? moment(dateClockOut).format('hh:mm a')
+                : '- : -'}
+            </Text>
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

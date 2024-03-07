@@ -1,20 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import CButtonText from '../../atoms/button/ButtonText';
-import {ListItemSubmission} from './ListItemSubmission';
-import {useNavigation} from '@react-navigation/native';
-import {routeMenu} from '../../../contants/routes';
+import {StyleSheet, Text, View} from 'react-native';
+import {ListItemSubmission} from '../../components/templates/home/ListItemSubmission';
 
-export const ListSubmission = () => {
-  const navigation: any = useNavigation();
-  const handleViewAllLogAttendace = () => {
-    navigation.navigate(routeMenu.LIST_OF_SUBMISSION);
-  };
+const ListOfSubmission = () => {
   return (
     <View style={styles.container}>
       <View style={styles.containerTitleList}>
         <Text style={styles.textAttendaceLog}>List of submission</Text>
-        <CButtonText onPress={handleViewAllLogAttendace}>View All</CButtonText>
       </View>
       <View style={{marginTop: 10}}>
         {[1, 2, 3, 4, 5].map(item => (
@@ -28,7 +20,11 @@ export const ListSubmission = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingLeft: 14,
+    paddingRight: 14,
+    marginTop: 38,
+  },
   containerTitleList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -40,3 +36,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default ListOfSubmission;

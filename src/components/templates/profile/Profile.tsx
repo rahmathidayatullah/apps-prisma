@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, Text, StyleSheet, Button, Platform} from 'react-native';
 import {
   BottomSheetModal,
   BottomSheetView,

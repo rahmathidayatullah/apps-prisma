@@ -7,22 +7,22 @@ interface typeInputTextWithIcon {
   label: string;
   icon?: any;
   right?: boolean;
-  stylesProps?: any;
   onChangeText?: any;
   value?: string;
+  onPressIn?: any;
 }
 
-const CInputTextWithIconLabel = ({
+const CInputTextWithIconLabelDate = ({
   placeholder,
   label,
   icon,
   right,
-  stylesProps,
   onChangeText,
   value,
+  onPressIn,
 }: typeInputTextWithIcon) => {
   return (
-    <View style={[styles.containerInputIconLabel, stylesProps]}>
+    <View style={styles.containerInputIconLabel}>
       <Text style={{color: COLORS.bgGrey}}>{label}</Text>
       <View style={styles.containerInput}>
         {right ? (
@@ -38,6 +38,8 @@ const CInputTextWithIconLabel = ({
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}
+          editable={false}
+          onPressIn={onPressIn}
         />
       </View>
     </View>
@@ -71,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CInputTextWithIconLabel;
+export default CInputTextWithIconLabelDate;
