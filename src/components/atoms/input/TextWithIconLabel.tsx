@@ -10,6 +10,7 @@ interface typeInputTextWithIcon {
   stylesProps?: any;
   onChangeText?: any;
   value?: string;
+  editable?: boolean;
 }
 
 const CInputTextWithIconLabel = ({
@@ -20,6 +21,7 @@ const CInputTextWithIconLabel = ({
   stylesProps,
   onChangeText,
   value,
+  editable = true,
 }: typeInputTextWithIcon) => {
   return (
     <View style={[styles.containerInputIconLabel, stylesProps]}>
@@ -33,6 +35,7 @@ const CInputTextWithIconLabel = ({
           <View>{icon}</View>
         )}
         <TextInput
+          editable={editable}
           placeholderTextColor="#ccc"
           style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
           placeholder={placeholder}

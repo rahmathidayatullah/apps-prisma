@@ -5,14 +5,16 @@ import {COLORS} from '../../../contants';
 interface typeButton {
   onPress?: any;
   children: any;
+  disabled?: boolean;
 }
 
-const CButton = ({onPress, children}: typeButton) => {
+const CButton = ({onPress, children, disabled = false}: typeButton) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
-      style={styles.loginBtn}>
+      style={styles.loginBtn}
+      disabled={disabled}>
       <Text style={styles.loginText}>{children}</Text>
     </TouchableOpacity>
   );

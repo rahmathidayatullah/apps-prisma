@@ -25,6 +25,9 @@ export const routeMenu = {
   TAKE_SEFIE: 'Take Selfie',
   VIEW_CURRENT_LOCATION: 'View Current Location',
 
+  // menu profile
+  PERSONAL_INFO: 'Personal Info',
+
   // menu auth
   LOGIN: 'Login',
   REGISTER: 'Register',

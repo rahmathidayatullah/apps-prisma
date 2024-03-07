@@ -8,6 +8,7 @@ import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ProfileScreen from '../../screens/home/Profile';
 import {routeMenu} from '../../contants/routes';
 import NestedHomeNaviagator from './NestedHomeNavigator';
+import NestedProfileNaviagator from './NestedProfileNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,7 @@ export default function HomeNaviagator() {
         />
         <Tab.Screen
           name={routeMenu.PROFILE}
-          component={ProfileScreen}
+          component={NestedProfileNaviagator}
           options={{
             headerShown: false,
             tabBarIcon: ({color}) => (

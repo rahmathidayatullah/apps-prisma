@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -12,9 +12,19 @@ import CButtonText from '../../components/atoms/button/ButtonText';
 
 import {COLORS} from '../../contants';
 import {routeMenu} from '../../contants/routes';
+import {useDispatch} from 'react-redux';
+import {login} from '../../redux/features/auth/actions';
 
 const LoginScreen = () => {
+  const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = () => {
+    dispatch(login(email, password));
+  };
   return (
     <SafeAreaView style={styles.containerSafeArea}>
       <View style={styles.containerView}>
@@ -40,6 +50,7 @@ const LoginScreen = () => {
               color="#B8B8B8"
             />
           }
+          onChangeText={(newText: string) => setEmail(newText)}
         />
 
         <View style={{marginTop: 10, flexDirection: 'row'}}>
@@ -54,11 +65,12 @@ const LoginScreen = () => {
                 color="#B8B8B8"
               />
             }
+            onChangeText={(newText: string) => setPassword(newText)}
           />
         </View>
 
         <View style={{marginTop: 15, flexDirection: 'row'}}>
-          <CButton onPress={() => navigation.navigate(routeMenu.HOME)}>
+          <CButton disabled={!email && !password} onPress={handleSubmit}>
             Log In
           </CButton>
         </View>
