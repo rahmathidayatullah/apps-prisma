@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,8 +6,14 @@ import {
   View,
   ScrollView,
   TextInput,
+  Image,
+  TouchableOpacity,
 } from 'react-native';
-import {COLORS} from '../../contants';
+import {useSelector} from 'react-redux';
+import {stateGlobalProfile} from '../../redux/features/profile/interface';
+import IconFeather from 'react-native-vector-icons/Feather';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 interface typeInputTextWithIcon {
   placeholder: string;
@@ -54,60 +60,153 @@ const CInputTextWithIconLabel = ({
   );
 };
 
+interface typeCInputTextWithIconLabelImage {
+  label: string;
+  url?: string;
+  changeImage?: any;
+}
+const CInputTextWithIconLabelImage = ({
+  label,
+  url,
+  changeImage,
+}: typeCInputTextWithIconLabelImage) => {
+  return (
+    <View
+      style={[
+        styles.containerInputIconLabel,
+        {
+          borderBottomWidth: 1,
+          paddingBottom: 10,
+          borderBottomColor: '#ccc',
+        },
+      ]}>
+      <Text style={{color: '#AFAFAF', fontWeight: '500', marginBottom: 10}}>
+        {label}
+      </Text>
+      <View style={{position: 'relative'}}>
+        <View
+          style={{
+            height: 70,
+            width: 70,
+            overflow: 'hidden',
+            borderRadius: 100,
+            backgroundColor: '#EFEFEF',
+            position: 'relative',
+          }}>
+          {url ? (
+            <Image
+              style={styles.imageProfile}
+              source={{
+                uri: url,
+              }}
+              resizeMode="cover"
+            />
+          ) : (
+            <TouchableOpacity
+              onPress={changeImage}
+              style={{
+                position: 'absolute',
+                top: '33%',
+                left: '33%',
+              }}>
+              <IconFeather name="camera" size={22} color="#B8B8B8" />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {url ? (
+          <TouchableOpacity
+            onPress={changeImage}
+            style={{
+              position: 'absolute',
+              top: '75%',
+              left: '15%',
+            }}>
+            <IconAntDesign name="edit" size={22} color="#B8B8B8" />
+          </TouchableOpacity>
+        ) : (
+          ''
+        )}
+      </View>
+    </View>
+  );
+};
+
 const PersonalInfo = () => {
+  const profile = useSelector((state: stateGlobalProfile) => state.profile);
+  const [urlImage, setUrlImage] = useState(
+    'https://picsum.photos/seed/696/3000/2000',
+  );
+  const changeImage = () => {
+    ImageCropPicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      useFrontCamera: true,
+    }).then((image: any) => {
+      setUrlImage(image.path);
+    });
+  };
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
         <View style={styles.container}>
           <View style={{marginTop: 10}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
-              label="Fullname"
-              editable={false}
-              right
-              value="Rahmat Hidayatullah"
+            <CInputTextWithIconLabelImage
+              changeImage={changeImage}
+              label="Foto Profile"
+              url={urlImage}
             />
           </View>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 20}}>
             <CInputTextWithIconLabel
               placeholder="Please input password"
-              label="Role"
+              label="Nama Lengkap"
               editable={false}
               right
-              value="Admin Puchasing"
+              value={profile.profile.user.name}
             />
           </View>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 20}}>
+            <CInputTextWithIconLabel
+              placeholder="Please input password"
+              label="Jabatan"
+              editable={false}
+              right
+              value={profile.profile.user.role.name}
+            />
+          </View>
+          <View style={{marginTop: 20}}>
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Email"
               editable={false}
               right
-              value="rahmathidayatullah996@gmail.com"
+              value={`${profile.profile.user.email}`}
             />
           </View>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 20}}>
             <CInputTextWithIconLabel
               placeholder="Please input password"
-              label="Gender"
+              label="Jenis Kelamin"
               editable={false}
               right
               value="Laki - laki"
             />
           </View>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 20}}>
             <CInputTextWithIconLabel
               placeholder="Please input password"
-              label="Place Of Birth"
+              label="Tempat Lahir"
               editable={false}
               right
               value="Lampung"
             />
           </View>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 20}}>
             <CInputTextWithIconLabel
               placeholder="Please input password"
-              label="Mobile Phone"
+              label="Nomor HP"
               editable={false}
               right
               value="089630912247"
@@ -122,6 +221,7 @@ const PersonalInfo = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   container: {
     paddingLeft: 14,
@@ -148,20 +248,25 @@ const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    // paddingTop: 15,
     paddingBottom: 15,
-    // marginVertical: 10,
     borderRadius: 16,
     height: 50,
     flex: 1,
-    color: COLORS.bgGrey,
+    color: '#000000',
     fontWeight: '600',
   },
   inputLeft: {
     paddingLeft: 50,
+    color: '#000000',
   },
   inputRight: {
-    // paddingLeft: 15,
+    color: '#000000',
+  },
+  imageProfile: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#0553',
   },
 });
 

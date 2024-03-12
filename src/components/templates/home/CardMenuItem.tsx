@@ -24,9 +24,10 @@ const CardMenuItem = ({item, onPress}: typeCardMenuItem) => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     borderRadius: 8,
-    width: 75,
+    width: 90,
   },
   containerBgTransparent: {
     backgroundColor: COLORS.bgOrangeOpacity,
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   font: {
     marginTop: 4,
     color: COLORS.bgGrey,
-    fontWeight: '600',
+    fontWeight: '500',
   },
 });
 

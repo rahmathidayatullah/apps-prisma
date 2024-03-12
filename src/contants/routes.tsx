@@ -21,6 +21,7 @@ export const routeMenu = {
   HOME: 'Home',
   PROFILE: 'My Profile',
   LIST_ATTENDACE_LOG: 'List Attendace Log',
+  LIST_OVERTIME_LOG: 'List Overtime Log',
   LIST_OF_SUBMISSION: 'List Of Submission',
   TAKE_SEFIE: 'Take Selfie',
   VIEW_CURRENT_LOCATION: 'View Current Location',
@@ -43,11 +44,18 @@ import {COLORS} from '.';
 export const routeMenuItem: MenuItem[] = [
   {
     id: 1,
-    value: 'cuti',
-    label: 'Cuti',
+    value: 'pengajuan',
+    label: 'Pengajuan',
     path: '/',
     icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
   },
+  // {
+  //   id: 3,
+  //   value: 'cuti',
+  //   label: 'Cuti',
+  //   path: '/',
+  //   icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
+  // },
   {
     id: 2,
     value: 'lembur',
@@ -57,11 +65,35 @@ export const routeMenuItem: MenuItem[] = [
       <IconSimpleLineIcons name="clock" size={28} color={COLORS.bgPrimary} />
     ),
   },
+  // {
+  //   id: 4,
+  //   value: 'izin',
+  //   label: 'Izin',
+  //   path: '/settings',
+  //   icon: <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />,
+  // },
+];
+
+export interface typeItemCategorySubmission {
+  id: number;
+  value: string;
+  label: string;
+}
+
+export const categorySubmission: typeItemCategorySubmission[] = [
   {
-    id: 3,
-    value: 'izin',
-    label: 'Izin',
-    path: '/settings',
-    icon: <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />,
+    id: 1,
+    value: 'cuti-tahunan',
+    label: 'Cuti Tahunan',
+  },
+  {
+    id: 1,
+    value: 'izin-sakit',
+    label: 'Izin Sakit',
+  },
+  {
+    id: 1,
+    value: 'lainnya',
+    label: 'Lainnya',
   },
 ];

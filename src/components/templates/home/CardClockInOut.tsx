@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
-import {stateGlobalHome} from '../../../redux/features/home/interface';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+import {stateGlobalProfile} from '../../../redux/features/profile/interface';
 
 interface typeCardClockInOut {
   clockIn?: boolean;
@@ -13,8 +13,8 @@ interface typeCardClockInOut {
 }
 
 const CardClockInOut = ({clockIn, clockOut, onPress}: typeCardClockInOut) => {
-  const {dateClockIn, dateClockOut} = useSelector(
-    (state: stateGlobalHome) => state.home,
+  const profile: any = useSelector(
+    (state: stateGlobalProfile) => state.profile,
   );
   return (
     <TouchableOpacity onPress={onPress} style={styles.cardClockInOut}>
@@ -23,18 +23,22 @@ const CardClockInOut = ({clockIn, clockOut, onPress}: typeCardClockInOut) => {
       </View>
       <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
         <Text style={{fontWeight: 'bold'}}>
-          {clockIn ? 'Clock In' : 'Clock Out'}
+          {clockIn ? 'Absen Masuk' : 'Absen Keluar'}
         </Text>
         <View style={{marginTop: 4}}>
           <View style={styles.containerBadge}>
             <View style={styles.containerBgBadge} />
             <Text style={styles.textBadge}>
               {clockIn
-                ? dateClockIn
-                  ? moment(dateClockIn).format('hh:mm a')
+                ? profile.profile.clockIn
+                  ? // ? moment(profile.profile.clockIn).format('hh:mm a')
+                    // moment(profile.profile.clockIn).format('hh:mm')
+                    profile.profile.clockIn
                   : '- : -'
-                : dateClockOut
-                ? moment(dateClockOut).format('hh:mm a')
+                : profile.profile.clockOut
+                ? // ? moment(profile.profile.clockOut).format('hh:mm a')
+                  // moment(profile.profile.clockOut).format('hh:mm')
+                  profile.profile.clockOut
                 : '- : -'}
             </Text>
           </View>

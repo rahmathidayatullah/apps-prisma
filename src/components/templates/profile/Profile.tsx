@@ -23,11 +23,11 @@ const Profile = () => {
   const dataMenu = [
     {
       id: 1,
-      menu: 'My Info',
+      menu: 'Data Diri',
       subMenu: [
         {
           id: 2,
-          menu: 'Personal Info',
+          menu: 'Informasi Pribadi',
           subMenu: [],
           path: routeMenu.PERSONAL_INFO,
           icon: <IconAntDesign name="user" size={21} color="#6D6D6D" />,
@@ -37,13 +37,13 @@ const Profile = () => {
     },
     {
       id: 3,
-      menu: 'Other',
+      menu: 'Lainnya',
       subMenu: [
         {
           id: 4,
-          menu: 'Logout',
+          menu: 'Keluar',
           subMenu: [],
-          path: routeMenu.LOGIN,
+          path: '',
           icon: <IconSimpleLineIcons name="login" size={21} color="#6D6D6D" />,
         },
       ],
@@ -52,7 +52,7 @@ const Profile = () => {
   ];
 
   const onPressMenu = (itemMenu: any) => {
-    if (itemMenu.menu === 'Logout') {
+    if (itemMenu.menu === 'Keluar') {
       dispatch(logout());
     } else {
       navigation.navigate(itemMenu.path);

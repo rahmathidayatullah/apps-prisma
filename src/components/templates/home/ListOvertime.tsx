@@ -1,19 +1,19 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import CButtonText from '../../atoms/button/ButtonText';
-import {ListItemSubmission} from './ListItemSubmission';
 import {useNavigation} from '@react-navigation/native';
 import {routeMenu} from '../../../contants/routes';
+import {ListItemOvertime} from './ListItemAttendace copy';
 
-export const ListSubmission = () => {
+export const ListOvertime = () => {
   const navigation: any = useNavigation();
   const handleViewAllLogAttendace = () => {
-    navigation.navigate(routeMenu.LIST_OF_SUBMISSION);
+    navigation.navigate(routeMenu.LIST_OVERTIME_LOG);
   };
   return (
     <View style={styles.container}>
       <View style={styles.containerTitleList}>
-        <Text style={styles.textAttendaceLog}>Riwayat Pengajuan</Text>
+        <Text style={styles.textAttendaceLog}>Riwayat Lembur</Text>
         <CButtonText onPress={handleViewAllLogAttendace}>
           Selengkapnya
         </CButtonText>
@@ -21,7 +21,7 @@ export const ListSubmission = () => {
       <View style={{marginTop: 10}}>
         {[1, 2, 3, 4, 5].map(item => (
           <View key={item} style={{marginTop: 12}}>
-            <ListItemSubmission />
+            <ListItemOvertime />
           </View>
         ))}
       </View>
@@ -30,12 +30,13 @@ export const ListSubmission = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingBottom: 20,
+  },
   containerTitleList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // borderWidth: 1,
   },
   textAttendaceLog: {
     fontSize: 16,

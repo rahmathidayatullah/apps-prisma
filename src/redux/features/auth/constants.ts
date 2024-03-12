@@ -1,2 +1,7 @@
-export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+export const START_LOGIN = 'START_LOGIN';
+export const SUCCESS_LOGIN = 'SUCCESS_LOGIN';
+export const ERROR_LOGIN = 'ERROR_LOGIN';
+
+export const START_LOGOUT = 'START_LOGOUT';
+export const SUCCESS_LOGOUT = 'SUCCESS_LOGOUT';
+export const ERROR_LOGOUT = 'ERROR_LOGOUT';

@@ -7,7 +7,7 @@ export default {
   bgPrimary: '#219C90',
 
   // text color body
-  bgGrey: '#585858',
+  bgGrey: '#363636',
 
   // color badge
   // bgOrangeOpacity: '#F29505',
