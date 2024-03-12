@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
 import CInputTextWithIconLabelImage from '../../atoms/input/TextWithIconLabelImage';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconsIon from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
-import {routeMenu} from '../../../contants/routes';
 import CButton from '../../atoms/button/Button';
-import {useDispatch} from 'react-redux';
-import {
-  submitClockIn,
-  submitClockOut,
-} from '../../../redux/features/home/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {submitClockIn} from '../../../redux/features/home/actions';
+import ImagePicker from 'react-native-image-crop-picker';
+import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
+import Geolocation from '@react-native-community/geolocation';
+import {stateGlobalHome} from '../../../redux/features/home/interface';
+import {RESET_STATE_CLOCK_IN} from '../../../redux/features/home/constants';
 
 interface typeFormClockInClockOut {
   clockIn?: boolean;
@@ -19,29 +19,88 @@ interface typeFormClockInClockOut {
 }
 const FormClockInClockOut = ({
   clockIn,
-  clockOut,
   bottomSheetModalRef,
 }: typeFormClockInClockOut) => {
-  const dispatch = useDispatch();
-  const [state, setState] = useState('');
-  const [reason, setReason] = useState('');
-  const navigate: any = useNavigation();
+  const dispatch: any = useDispatch();
+  const {statusClockIn} = useSelector((state: stateGlobalHome) => state.home);
+  const [imageSelfie, setImageSelfie] = useState(null);
+
+  const [placeholderImageSelfie, setPlaceholderImageSelfie] = useState(
+    'Klik untuk foto selfie',
+  );
+  const [latLong, setLatLong] = useState('Loading lokasi ..');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [description, setDescription] = useState('');
 
   const onPressInputCamera = () => {
-    navigate.navigate(routeMenu.TAKE_SEFIE);
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      useFrontCamera: true,
+    }).then((image: any) => {
+      setImageSelfie(image);
+      setPlaceholderImageSelfie('foto.jpg');
+    });
   };
-  const onPressInputLocation = () => {
-    navigate.navigate(routeMenu.VIEW_CURRENT_LOCATION);
+  const handleSubmitClockInClockOut = () => {
+    const payload = {
+      imageSelfie,
+      description,
+      longitude,
+      latitude,
+    };
+    if (clockIn) {
+      dispatch(submitClockIn(payload, true));
+    } else {
+      dispatch(submitClockIn(payload, false));
+    }
+  };
+  const getCurrentPosition = () => {
+    Geolocation.getCurrentPosition(
+      (pos: any) => {
+        const {latitude, longitude} = pos.coords;
+        setLatitude(latitude);
+        setLongitude(longitude);
+        setLatLong(`${latitude}, ${longitude}`);
+      },
+      (error: any) =>
+        Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+      },
+    );
   };
 
-  const handleSubmitClockInClockOut = () => {
-    if (clockIn) {
-      dispatch(submitClockIn());
-      bottomSheetModalRef.current.dismiss();
-    } else {
-      dispatch(submitClockOut());
-      bottomSheetModalRef.current.dismiss();
+  useEffect(() => {
+    getCurrentPosition();
+    if (statusClockIn === 'error') {
+      Alert.alert('Error', 'Something when wrong');
     }
+    if (statusClockIn === 'success') {
+      Alert.alert('Berhasil', 'Berhasil absen masuk');
+      bottomSheetModalRef.current.dismiss();
+      dispatch({
+        type: RESET_STATE_CLOCK_IN,
+      });
+    }
+    return () => {
+      resetState();
+    };
+  }, [statusClockIn]);
+
+  const resetState = () => {
+    setPlaceholderImageSelfie('Klik untuk foto selfie');
+    setLatLong('Loading lokasi ..');
+    setLatitude('');
+    setLongitude('');
+    setDescription('');
+    dispatch({
+      type: RESET_STATE_CLOCK_IN,
+    });
   };
 
   return (
@@ -52,7 +111,9 @@ const FormClockInClockOut = ({
         width: '100%',
       }}>
       <ScrollView style={{paddingBottom: 10}}>
-        <Text style={styles.titleForm}>Clock In</Text>
+        <Text style={styles.titleForm}>{`${
+          clockIn ? 'Absen Masuk' : 'Absen Keluar'
+        }`}</Text>
         <View style={styles.containerForm}>
           <View
             style={{
@@ -61,10 +122,10 @@ const FormClockInClockOut = ({
               paddingHorizontal: 30,
             }}>
             <CInputTextWithIconLabelImage
-              placeholder="Input alasan"
+              placeholder="Ambil foto"
               label="Foto Selfie"
               right
-              value={reason}
+              value={placeholderImageSelfie}
               icon={
                 <IconFeather
                   style={styles.iconInput}
@@ -83,11 +144,11 @@ const FormClockInClockOut = ({
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
-            <CInputTextWithIconLabelImage
-              placeholder="Input alasan"
-              label="View Current Location"
+            <CInputTextWithIconLabel
+              placeholder="Loading lokasi .."
+              label="Lokasi"
               right
-              value={reason}
+              value={latLong}
               icon={
                 <IconsIon
                   style={styles.iconInput}
@@ -96,8 +157,21 @@ const FormClockInClockOut = ({
                   color="#B8B8B8"
                 />
               }
-              onPressInputContainer={onPressInputLocation}
-              onPressInInput={onPressInputLocation}
+              editable={false}
+            />
+          </View>
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              paddingHorizontal: 30,
+            }}>
+            <CInputTextWithIconLabel
+              placeholder="Masukkan deskripsi"
+              label="Deskripsi"
+              right
+              value={description}
+              onChangeText={(nextText: string) => setDescription(nextText)}
             />
           </View>
           <View
@@ -106,7 +180,11 @@ const FormClockInClockOut = ({
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
-            <CButton onPress={handleSubmitClockInClockOut}>Submit</CButton>
+            <CButton onPress={handleSubmitClockInClockOut}>
+              {statusClockIn === 'idle' && 'Absen'}
+              {statusClockIn === 'process' && 'Loading ...'}
+              {statusClockIn === 'success' && 'Berhasil'}
+            </CButton>
           </View>
         </View>
       </ScrollView>

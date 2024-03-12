@@ -1,78 +1,74 @@
-import React, {useEffect} from 'react';
-import {ActivityIndicator, Button, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
-  Camera,
-  useCameraDevice,
-  useCameraPermission,
-} from 'react-native-vision-camera';
+  ActivityIndicator,
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import CButtonText from '../../components/atoms/button/ButtonText';
+
 // import {launchCamera} from 'react-native-image-picker';
 // import CButtonText from '../../components/atoms/button/ButtonText';
 
 const TakeSelfie = () => {
-  // const OpenCameraLib = async () => {
-  //   const options: any = {
-  //     mediaType: 'photo',
-  //     maxWidth: 500,
-  //     maxHeight: 500,
-  //     quality: 1,
-  //     saveToPhotos: true,
-  //   };
+  const [image, setImage] = useState(
+    'https://media.istockphoto.com/id/1222457390/id/foto/bisnis-kecil-owener-stok-foto.jpg?s=2048x2048&w=is&k=20&c=SgzYtSSanXbJ9CLJQifiGfqNaGCKgS4FTCeE6TxdZHs=',
+  );
 
-  //   console.log('PRESS ============>>>>>>>>>> ');
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      useFrontCamera: true,
+    }).then((image: any) => {
+      console.log('image123', image);
+      setImage(image.path);
+    });
+  };
 
-  //   try {
-  //     const res = await launchCamera(options);
-  //     console.log('RESULT ============>>>>>>>>>> ', res);
-  //   } catch (error) {
-  //     console.log('ERROR ============>>>>>>>>>> ', error);
-  //   }
-  // };
+  console.log('=====>>>>>>>>>image', image);
 
-  const {hasPermission, requestPermission} = useCameraPermission();
-  console.log('================>>>>> hasPermission', hasPermission);
-
-  const device = useCameraDevice('front', {
-    physicalDevices: [
-      'ultra-wide-angle-camera',
-      'wide-angle-camera',
-      'telephoto-camera',
-    ],
-  });
-  console.log('================>>>>> device', device);
-
-  useEffect(() => {
-    if (!hasPermission) {
-      requestPermission();
-    }
-  }, [hasPermission]);
-
-  if (!hasPermission) {
-    return <ActivityIndicator />;
-  }
-
-  if (device == null)
-    return (
-      <View>
-        <Text>No Camera </Text>
-      </View>
-    );
+  // useEffect(() => {
+  // openCamera();
+  // }, []);
 
   return (
+    <View style={styles.containerImageProfile}>
+      <Image
+        style={styles.imageProfile}
+        source={{
+          uri: image,
+        }}
+        resizeMode="cover"
+      />
+      <CButtonText onPress={openCamera}>Open camera</CButtonText>
+    </View>
+
     // <View>
     //   <Text>TakeSelfie</Text>
     //   <CButtonText onPress={OpenCameraLib}>Open Camera</CButtonText>
     // </View>
-    <View style={{flex: 1}}>
-      <Camera
-        style={StyleSheet.absoluteFill}
-        device={device}
-        isActive={true}
-        orientation="portrait"
-        photo={true}
-        enableZoomGesture={false}
-      />
-    </View>
+    // <View style={{flex: 1}}></View>
   );
 };
+
+const styles = StyleSheet.create({
+  containerImageProfile: {
+    height: 200,
+    width: 200,
+    overflow: 'hidden',
+    // borderRadius: 100,
+  },
+  imageProfile: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#0553',
+  },
+});
 
 export default TakeSelfie;

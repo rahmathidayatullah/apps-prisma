@@ -11,8 +11,7 @@ import {COLORS} from './src/contants';
 
 const RootNavigation = () => {
   const dispatch: any = useDispatch();
-  const {token} = useSelector((state: stateGlobalAuth) => state.auth);
-  console.log('RootNavigation token', token);
+  const {userData} = useSelector((state: stateGlobalAuth) => state.auth);
   const [loading, setLoading] = React.useState(true);
 
   const init = () => {
@@ -33,7 +32,7 @@ const RootNavigation = () => {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="black" barStyle="light-content" />
-      {token === null ? <AuthNavigator /> : <HomeNaviagator />}
+      {userData.access_token === '' ? <AuthNavigator /> : <HomeNaviagator />}
     </NavigationContainer>
   );
 };

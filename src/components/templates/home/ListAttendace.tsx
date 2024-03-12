@@ -13,8 +13,10 @@ export const ListAttendace = () => {
   return (
     <View style={styles.container}>
       <View style={styles.containerTitleList}>
-        <Text style={styles.textAttendaceLog}>Attendance Log</Text>
-        <CButtonText onPress={handleViewAllLogAttendace}>View All</CButtonText>
+        <Text style={styles.textAttendaceLog}>Riwayat Absensi</Text>
+        <CButtonText onPress={handleViewAllLogAttendace}>
+          Selengkapnya
+        </CButtonText>
       </View>
       <View style={{marginTop: 10}}>
         {[1, 2, 3, 4, 5].map(item => (

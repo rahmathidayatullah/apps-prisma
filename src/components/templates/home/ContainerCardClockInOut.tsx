@@ -14,11 +14,12 @@ const styles = StyleSheet.create({
   containerCardClockInOut: {
     backgroundColor: COLORS.bgSecondary,
     borderRadius: 16,
-    padding: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     position: 'absolute',
-    width: '98%',
-    bottom: '-60%',
-    left: '4.5%',
+    width: '100%',
+    bottom: '-68%',
+    left: '3%',
     // box shadow
     shadowColor: COLORS.bgBlackShadow,
     shadowOffset: {

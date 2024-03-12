@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
+  Alert,
   Dimensions,
   SafeAreaView,
   ScrollView,
@@ -30,19 +31,32 @@ import {
   resetValueBottomSheet,
 } from '../../../redux/features/home/actions';
 import {stateGlobalHome} from '../../../redux/features/home/interface';
-import FormPermission from './FormPermission';
-import FormCuti from './FormCuti';
 import {useNavigation} from '@react-navigation/native';
 import FormClockInClockOut from './FormClockInClockOut';
 import FormClockInClockOutOvertime from './FormClockInClockOutOvertime';
 import moment from 'moment';
+import {stateGlobalAuth} from '../../../redux/features/auth/interface';
+import {ListOvertime} from './ListOvertime';
+import FormSubmission from './FormSubmission';
+import {stateGlobalProfile} from '../../../redux/features/profile/interface';
+import {fetchProfile} from '../../../redux/features/profile/actions';
+import FormOvertime from './FormOvertime';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
-  const {isShowMenuItem, name, role, timeWork, statusWork} = useSelector(
-    (state: stateGlobalHome) => state.home,
-  );
+  const home = useSelector((state: stateGlobalHome) => state.home);
+  const {isShowMenuItem} = home;
+  const auth = useSelector((state: stateGlobalAuth) => state.auth);
+  const {userData} = auth;
+  const profile = useSelector((state: stateGlobalProfile) => state.profile);
+  console.log('home', home);
+  console.log('profile', profile);
+  console.log('auth', auth);
+
+  const newData =
+    typeof userData === 'string' ? JSON.parse(userData) : userData;
+
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['50%'], []);
   // variables
@@ -53,11 +67,18 @@ const TemplateHome = () => {
   }, []);
 
   const handleOnPressMenuItem = (menuItem: string) => {
-    dispatch(onPressMenuItem(menuItem));
-    bottomSheetModalRef.current?.present();
+    if (menuItem === 'clockIn' && profile.profile.clockIn) {
+      Alert.alert('', 'Anda sudah absen masuk');
+    } else if (menuItem === 'clockOut' && profile.profile.clockOut) {
+      Alert.alert('Error', 'Anda sudah absen keluar');
+    } else {
+      dispatch(onPressMenuItem(menuItem));
+      bottomSheetModalRef.current?.present();
+    }
   };
 
   useEffect(() => {
+    dispatch(fetchProfile());
     return () => {
       dispatch(resetValueBottomSheet());
     };
@@ -79,6 +100,14 @@ const TemplateHome = () => {
     value => value === true,
   );
 
+  if (!newData && !profile) {
+    return (
+      <View>
+        <Text>No Data</Text>
+      </View>
+    );
+  }
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <BottomSheetModalProvider>
@@ -90,8 +119,10 @@ const TemplateHome = () => {
 
                 <View style={styles.containerHeadTitleImage}>
                   <View>
-                    <Text style={styles.titleName}>{name}</Text>
-                    <Text style={styles.titleRole}>{role}</Text>
+                    <Text style={styles.titleName}>{newData.user.name}</Text>
+                    <Text style={styles.titleRole}>
+                      {newData.user.role.name}
+                    </Text>
                   </View>
                   <ImageProfile />
                 </View>
@@ -105,12 +136,15 @@ const TemplateHome = () => {
                     }}>
                     <View>
                       <Text style={styles.titleDay}>
-                        Today - {moment().format('DD MMMM YYYY')}
+                        {moment().format('dddd')} -{' '}
+                        {moment().format('DD MMMM YYYY')}
                       </Text>
                       <View style={{marginTop: 9}}>
                         <View style={styles.containerBadge}>
                           <View style={styles.containerBgBadge} />
-                          <Text style={styles.textBadge}>{statusWork}</Text>
+                          <Text style={styles.textBadge}>
+                            {profile.profile.workStatus}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -140,7 +174,8 @@ const TemplateHome = () => {
                             fontSize: 12,
                             fontWeight: '600',
                           }}>
-                          {timeWork}
+                          {newData.user.shift.start_time}
+                          &nbsp; - {newData.user.shift.end_time}
                         </Text>
                       </View>
                     </View>
@@ -183,6 +218,9 @@ const TemplateHome = () => {
               <View style={styles.containerListAttendace}>
                 <ListSubmission />
               </View>
+              <View style={styles.containerListAttendace}>
+                <ListOvertime />
+              </View>
             </View>
             {atLeastOneTrue && <View style={styles.backdrop} />}
             <BottomSheetModal
@@ -192,10 +230,15 @@ const TemplateHome = () => {
               onChange={handleSheetChanges}>
               <BottomSheetView style={styles.contentBottomSheetContainer}>
                 <ScrollView>
-                  {isShowMenuItem.cuti && (
+                  {/* {isShowMenuItem.cuti && (
                     <FormCuti bottomSheetModalRef={bottomSheetModalRef} />
+                  )} */}
+                  {isShowMenuItem.pengajuan && (
+                    <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
                   )}
-                  {isShowMenuItem.lembur && <Text>Form Lembur</Text>}
+                  {isShowMenuItem.lembur && (
+                    <FormOvertime bottomSheetModalRef={bottomSheetModalRef} />
+                  )}
                   {isShowMenuItem.clockIn && (
                     <FormClockInClockOut
                       clockIn
@@ -214,9 +257,9 @@ const TemplateHome = () => {
                   {isShowMenuItem.clockOutOvertime && (
                     <FormClockInClockOutOvertime />
                   )}
-                  {isShowMenuItem.izin && (
+                  {/* {isShowMenuItem.izin && (
                     <FormPermission bottomSheetModalRef={bottomSheetModalRef} />
-                  )}
+                  )} */}
                 </ScrollView>
               </BottomSheetView>
             </BottomSheetModal>
@@ -239,14 +282,15 @@ const styles = StyleSheet.create({
   },
   containerHead: {
     paddingTop: 14,
-    paddingLeft: 14,
+    paddingLeft: 10,
     paddingRight: 14,
     paddingBottom: 100,
     backgroundColor: COLORS.bgPrimary,
   },
   containerBody: {},
   containerHeadTitleImage: {
-    marginTop: 19,
+    marginTop: 5,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -271,8 +315,7 @@ const styles = StyleSheet.create({
     fontSize: deviceWidth < 380 ? 14 : 16,
   },
   containerListAttendace: {
-    paddingLeft: 14,
-    paddingRight: 14,
+    paddingHorizontal: 24,
     marginTop: 38,
   },
   contentBottomSheetContainer: {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {useNavigation} from '@react-navigation/native';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import IconEntypo from 'react-native-vector-icons/Entypo';
 
@@ -10,37 +10,52 @@ import CInputTextWithIconLabel from '../../components/atoms/input/TextWithIconLa
 import CButtonText from '../../components/atoms/button/ButtonText';
 
 import {routeMenu} from '../../contants/routes';
+import {COLORS} from '../../contants';
 
 const ForgotPasswordScreen = () => {
   const navigation: any = useNavigation();
   return (
     <SafeAreaView style={styles.containerSafeArea}>
       <View style={styles.containerView}>
-        <Text style={styles.titleSign}>Forgot Password</Text>
+        <View style={styles.imageLogoContainer}>
+          <Image
+            style={styles.imageLogo}
+            source={require('../../assets/images/logoprisma-01.png')}
+          />
+        </View>
+
+        <Text style={styles.titleSign}>Lupa Password</Text>
 
         <View style={styles.line}></View>
 
         <CInputTextWithIconLabel
-          placeholder="Please input email"
+          placeholder="Masukkan email anda"
           label="Email"
           icon={
             <IconEntypo
               style={styles.iconInput}
               name="email"
-              size={22}
+              size={19}
               color="#B8B8B8"
             />
           }
         />
 
         <View style={{marginTop: 30, flexDirection: 'row'}}>
-          <CButton>Submit</CButton>
+          <CButton>Kirim</CButton>
         </View>
 
-        <View style={{marginTop: 15}}>
-          <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
-            Back to Sign In
-          </CButtonText>
+        <View
+          style={{
+            marginTop: 15,
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <View style={{flex: 1}}>
+            <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
+              Kembali
+            </CButtonText>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -58,15 +73,15 @@ const styles = StyleSheet.create({
     padding: 15,
     position: 'relative',
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     width: '100%',
   },
   titleSign: {
+    marginTop: 50,
     fontSize: 24,
     textAlign: 'center',
-    // color: COLORS.gray,
-    color: '#585858',
+    color: COLORS.bgGrey,
     marginBottom: 16,
     fontWeight: 'bold',
   },
@@ -74,15 +89,24 @@ const styles = StyleSheet.create({
   iconInput: {
     position: 'absolute',
     left: 15,
-    top: '33%',
+    top: '34%',
   },
 
   line: {
-    height: 2,
+    height: 1,
     width: '100%',
-    backgroundColor: '#ECECEC',
-    marginBottom: 20,
-    marginTop: 20,
+    backgroundColor: '#ccc',
+    marginBottom: 50,
+    marginTop: 10,
+  },
+
+  imageLogoContainer: {},
+  imageLogo: {
+    width: 300,
+    height: 100,
+    resizeMode: 'contain',
+    position: 'relative',
+    left: -10,
   },
 });
 

@@ -6,7 +6,7 @@ const Badge = () => {
   return (
     <View style={styles.containerBadge}>
       <View style={styles.containerBgBadge} />
-      <Text style={styles.textBadge}>PT. Prisma Properties</Text>
+      <Text style={styles.textBadge}>Prisma Apps</Text>
     </View>
   );
 };
