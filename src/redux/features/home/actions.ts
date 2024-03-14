@@ -67,7 +67,7 @@ import {
   SUCCESS_SUBMIT_OVERTIME,
 } from './constants';
 import {itemShowMenuItem} from './interface';
-import {postClockIn} from '../../../api/home';
+import {postClockIn, postClockOut, postOvertime} from '../../../api/home';
 import {Alert} from 'react-native';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {fetchProfile} from '../profile/actions';
@@ -319,28 +319,25 @@ export const submitClockIn = (payload: any, clockIn: boolean) => {
     // const nameFileImage = payload.imageSelfie.path.split('/');
     // const fileName = nameFileImage[nameFileImage.length - 1];
     try {
-      const formData = new FormData();
-
       if (clockIn) {
-        formData.append('clockInPhoto', payload.imageSelfie);
-        // formData.append('clockInPhoto', {
-        //   fileName: 'image',
-        //   type: 'image.jpg',
-        //   name: 'image.jpg',
-        //   uri: `${payload.imageSelfie.path}`,
-        // });
-        formData.append('clockInLatitude', `${payload.latitude}`);
-        formData.append('clockInLongitude', `${payload.longitude}`);
-        formData.append('description', `${payload.description}`);
-        const res = await postClockIn(formData);
+        const newPayloadClockIn = {
+          clockInPhoto: `data:${payload.imageSelfie.mime};base64,${payload.imageSelfie.data}`,
+          clockInLongitude: `${payload.longitude ?? ''}`,
+          clockInLatitude: `${payload.latitude ?? ''}`,
+          description: `${payload.description}`,
+        };
+        const res = await postClockIn(newPayloadClockIn);
         console.log('success submitClockIn', res);
         dispatch(fetchProfile());
       } else {
-        formData.append('clockOutPhoto', payload.imageSelfie);
-        formData.append('clockOutLatitude', `${payload.latitude}`);
-        formData.append('clockOutLongitude', `${payload.longitude}`);
-        formData.append('description', `${payload.description}`);
-        const res = await postClockIn(formData);
+        const newPayloadClockOut = {
+          clockOutPhoto: `data:${payload.imageSelfie.mime};base64,${payload.imageSelfie.data}`,
+          clockOutLongitude: `${payload.longitude ?? ''}`,
+          clockOutLatitude: `${payload.latitude ?? ''}`,
+          description: `${payload.description}`,
+        };
+        console.log('newPayloadClockOut', newPayloadClockOut);
+        const res = await postClockOut(newPayloadClockOut);
         console.log('success submitClockOut', res);
         dispatch(fetchProfile());
       }
@@ -729,19 +726,36 @@ export const changeFile1Overtime = (file: any) => {
 };
 
 export const submitOvertime = (payload: any) => {
-  // return async (dispatch: any, getState: any) => {
-  //   dispatch({
-  //     type: START_SUBMIT_OVERTIME,
-  //   });
-  //   try {
-  //     const res = await
-  //     dispatch({
-  //       type: SUCCESS_SUBMIT_OVERTIME,
-  //     });
-  //   } catch (error) {
-  //     dispatch({
-  //       type: ERROR_SUBMIT_OVERTIME,
-  //     });
-  //   }
-  // };
+  return async (dispatch: any, getState: any) => {
+    const newPayloadClockIn = {
+      overtimeFile: `data:${payload.file1Overtime.mime};base64,${payload.file1Overtime.data}`,
+      otherOvertimeFile: '',
+      startTime: `${payload.valueStartDateOvertime}`,
+      endtTime: `${payload.valueEndDateOvertime}`,
+      description: `${payload.description}`,
+    };
+    dispatch({
+      type: START_SUBMIT_OVERTIME,
+    });
+    try {
+      const res = await postOvertime(newPayloadClockIn);
+      console.log('success submitOvertime', res);
+      dispatch(fetchProfile());
+      dispatch({
+        type: SUCCESS_SUBMIT_OVERTIME,
+      });
+    } catch (error: any) {
+      console.log('error submitOvertime', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_SUBMIT_OVERTIME,
+        });
+      }
+    }
+  };
 };

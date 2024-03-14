@@ -5,7 +5,10 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import IconsIon from 'react-native-vector-icons/Ionicons';
 import CButton from '../../atoms/button/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {submitClockIn} from '../../../redux/features/home/actions';
+import {
+  resetValueBottomSheet,
+  submitClockIn,
+} from '../../../redux/features/home/actions';
 import ImagePicker from 'react-native-image-crop-picker';
 import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
 import Geolocation from '@react-native-community/geolocation';
@@ -38,6 +41,7 @@ const FormClockInClockOut = ({
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
       useFrontCamera: true,
     }).then((image: any) => {
       setImageSelfie(image);
@@ -81,8 +85,8 @@ const FormClockInClockOut = ({
       Alert.alert('Error', 'Something when wrong');
     }
     if (statusClockIn === 'success') {
-      Alert.alert('Berhasil', 'Berhasil absen masuk');
-      bottomSheetModalRef.current.dismiss();
+      Alert.alert('Berhasil', 'Berhasil absen');
+      bottomSheetModalRef.current?.dismiss();
       dispatch({
         type: RESET_STATE_CLOCK_IN,
       });
@@ -101,6 +105,7 @@ const FormClockInClockOut = ({
     dispatch({
       type: RESET_STATE_CLOCK_IN,
     });
+    dispatch(resetValueBottomSheet());
   };
 
   return (

@@ -2,12 +2,18 @@ import {configureStore} from '@reduxjs/toolkit';
 import homeReducer from './features/home/reducer';
 import profileReducer from './features/profile/reducer';
 import authReducer from './features/auth/reducer';
+import submissionsReducer from './features/submissions/reducer';
+import overtimesReducer from './features/overtimes/reducer';
+import attendancesReducer from './features/attendances/reducer';
 
 export const store = configureStore({
   reducer: {
     home: homeReducer,
     auth: authReducer,
     profile: profileReducer,
+    submissions: submissionsReducer,
+    overtimes: overtimesReducer,
+    attendances: attendancesReducer,
   },
 });
 

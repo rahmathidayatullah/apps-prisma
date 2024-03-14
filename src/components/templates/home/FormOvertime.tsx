@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Alert, Platform, StyleSheet, Text, View} from 'react-native';
 import CButton from '../../atoms/button/Button';
 import {useNavigation} from '@react-navigation/native';
@@ -23,11 +23,13 @@ import {ScrollView} from 'react-native-gesture-handler';
 import TextWithLabelIconDate from '../../atoms/input/TextWithLabelIconDate';
 import {stateGlobalHome} from '../../../redux/features/home/interface';
 import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
-import moment from 'moment';
 import TextWithLabelIconDateTime from '../../atoms/input/TextWithLabelIconDateTime';
 import CInputTextWithIconLabelFile from '../../atoms/input/TextWithIconLabelFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {REMOVE_FILE1_OVERTIME} from '../../../redux/features/home/constants';
+import {
+  REMOVE_FILE1_OVERTIME,
+  RESET_STATE_OVERTIME,
+} from '../../../redux/features/home/constants';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFeather from 'react-native-vector-icons/Feather';
 
@@ -48,19 +50,11 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
     valueStartTimeOvertime,
     showPickerStartDateOvertime,
     showPickerStartTimeOvertime,
-
     descriptionOvertime,
 
     file1Overtime,
+    statusSubmitOvertime,
   } = useSelector((state: stateGlobalHome) => state.home);
-
-  // console.log('==== >>> valueEndDateOvertime', valueEndDateOvertime);
-  // console.log('==== >>> valueEndTimeOvertime', valueEndTimeOvertime);
-  // console.log('==== >>> valueStartDateOvertime', valueStartDateOvertime);
-  console.log('==== >>> valueStartTimeOvertime', valueStartTimeOvertime);
-  // console.log('==== >>> descriptionOvertime', descriptionOvertime);
-  // console.log('==== >>> selectCategoryOvertime', selectCategoryOvertime);
-  // console.log('==== >>> file1Overtime', file1Overtime);
 
   const handleSubmitOvertime = () => {
     if (valueEndDateOvertime === '' || valueStartDateOvertime === '') {
@@ -72,18 +66,7 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
         descriptionOvertime,
         file1Overtime,
       };
-      console.log('=>>>>>>>>>> payload handleSubmitOvertime', payload);
-
-      Alert.alert(
-        'Payload',
-        `tanggal mulai : ${valueStartDateOvertime}, 
-        tanggal selesai : ${valueEndDateOvertime},  
-        deskripsi : ${descriptionOvertime},`,
-      );
-      // dispatch(resetValueBottomSheet());
-      // bottomSheetModalRef.current?.dismiss();
-      // navigation.navigate(routeMenu.PROFILE);
-      // dispatch(submitOvertime(payload));
+      dispatch(submitOvertime(payload));
     }
   };
   const handleOnChangePickerEndDate = (event: any, selectedDate: string) => {
@@ -108,10 +91,11 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
   };
 
   const onPressUpload1 = () => {
-    ImageCropPicker.openCamera({
+    ImageCropPicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
       useFrontCamera: true,
     })
       .then((image: any) => {
@@ -120,6 +104,29 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
       .catch(() => {
         Alert.alert('Permission', 'Cannot access camera');
       });
+  };
+
+  useEffect(() => {
+    if (statusSubmitOvertime === 'error') {
+      Alert.alert('Error', 'Something when wrong');
+    }
+    if (statusSubmitOvertime === 'success') {
+      Alert.alert('Berhasil', 'Berhasil absen lembur');
+      bottomSheetModalRef.current?.dismiss();
+      dispatch({
+        type: RESET_STATE_OVERTIME,
+      });
+    }
+    return () => {
+      resetState();
+    };
+  }, [statusSubmitOvertime]);
+
+  const resetState = () => {
+    dispatch(resetValueBottomSheet());
+    dispatch({
+      type: RESET_STATE_OVERTIME,
+    });
   };
 
   return (

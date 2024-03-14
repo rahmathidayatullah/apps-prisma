@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const baseURL = 'https://api.dotlike.site';
+
 export async function getProfile() {
   const userData: any = await AsyncStorage.getItem('userData');
   let newUserData = null;
@@ -10,17 +12,9 @@ export async function getProfile() {
     newUserData = JSON.parse(userData);
   }
 
-  return await axios.get('https://api.dotlike.site/users/profile', {
+  return await axios.get(`${baseURL}/users/profile`, {
     headers: {
       Authorization: `Bearer ${newUserData.access_token}`,
     },
   });
 }
-
-// import createAxiosInstance from '../utils/axios';
-// const axiosInstance = createAxiosInstance();
-// const axiosInstance = createAxiosInstance();
-
-// export async function getProfile() {
-//   return await axiosInstance.get('/users/profile');
-// }

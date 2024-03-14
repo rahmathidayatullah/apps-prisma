@@ -97,7 +97,6 @@ export interface initialStateGlobalHome {
 
   descriptionOvertime: string;
   selectCategoryOvertime: string;
-  attachmentFileOvertime: any;
   file1Overtime: null;
 
   statusSubmitOvertime: string;
