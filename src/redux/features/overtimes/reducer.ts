@@ -10,7 +10,11 @@ const statusList = {
 };
 
 const initialState: initialStateGlobalOvertimes = {
+  page: 1,
+  take: 10,
+  order: 'DESC',
   statusListOvertimes: statusList.idle,
+  dataListOvertimes: [],
 };
 
 export default function overtimesReducer(state = initialState, action: any) {
@@ -24,6 +28,7 @@ export default function overtimesReducer(state = initialState, action: any) {
       return {
         ...state,
         statusListOvertimes: statusList.success,
+        dataListOvertimes: action.data,
       };
     case ERROR_OVERTIMES:
       return {

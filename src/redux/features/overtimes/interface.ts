@@ -3,5 +3,9 @@ export interface stateGlobalOvertimes {
 }
 
 export interface initialStateGlobalOvertimes {
+  page: number;
+  take: number;
+  order: string;
   statusListOvertimes: string;
+  dataListOvertimes: any;
 }

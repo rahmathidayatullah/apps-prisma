@@ -1,3 +1,4 @@
+import debounce from 'debounce-promise';
 import {
   START_ATTENDACES,
   SUCCESS_ATTENDACES,
@@ -7,27 +8,43 @@ import {
   ERROR_ATTENDACES_DETAIL,
 } from './constants';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getAttendaces} from '../../../api/attendace';
+
+const debounceGetAttendaces = debounce(getAttendaces, 100);
 
 export const getListAttendances = () => {
-  // return async (dispatch: any, getState:any) => {
-  //   dispatch({
-  //     type: START_ATTENDACES,
-  //   });
-  //   try {
-  //     const {
-  //       data: {data},
-  //     } = await login(email, password);
-  //     dispatch({
-  //       type: SUCCESS_ATTENDACES,
-  //       userData: data,
-  //     });
-  //   } catch (error: any) {
-  //     dispatch({
-  //       type: ERROR_ATTENDACES,
-  //     });
-  //   }
-  // };
+  return async (dispatch: any, getState: any) => {
+    dispatch({
+      type: START_ATTENDACES,
+    });
+
+    const page = getState().attendances.page;
+    const take = getState().attendances.take;
+    const order = getState().attendances.order;
+
+    const params = {
+      page,
+      take,
+      order,
+    };
+
+    try {
+      const {
+        data: {data},
+      } = await debounceGetAttendaces(params);
+      console.log('success fetch getListAttendances', data);
+
+      dispatch({
+        type: SUCCESS_ATTENDACES,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error fetch getListAttendances', error);
+      dispatch({
+        type: ERROR_ATTENDACES,
+      });
+    }
+  };
 };
 
 export const getAttendancesDetail = (id: string) => {

@@ -170,13 +170,11 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
           {/* input start time */}
           <View
             style={{
-              marginTop: 10,
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
             <TextWithLabelIconDateTime
               valueDefaultDate={valueDefaultStartTimeOvertime}
-              // valueDate={valueStartTimeOvertime}
               isShowPicker={
                 Boolean(valueStartDateOvertime) &&
                 !Boolean(valueStartTimeOvertime)
@@ -185,23 +183,13 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
                 dispatch(tooglePickerStartDateOvertime(false))
               }
               onConfirmIOSDate={() => dispatch(confirmIOSStartTimeOvertime())}
-              // onPressInInput={() =>
-              //   dispatch(tooglePickerStartDateOvertime(true))
-              // }
-              // isRight
-              // onPressInputContainer={() =>
-              //   dispatch(tooglePickerStartDateOvertime(true))
-              // }
               onChangeDatePicker={handleOnChangePickerStartTime}
-              // placeholder="Masukkan time mulai"
-              // label="Time mulai"
             />
           </View>
 
           {/* input end date */}
           <View
             style={{
-              marginTop: 10,
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
@@ -227,13 +215,11 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
           {/* input end time */}
           <View
             style={{
-              marginTop: 10,
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
             <TextWithLabelIconDateTime
               valueDefaultDate={valueDefaultEndTimeOvertime}
-              // valueDate={valueEndTimeOvertime}
               isShowPicker={
                 Boolean(valueEndDateOvertime) && !Boolean(valueEndTimeOvertime)
               }
@@ -241,14 +227,7 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
                 dispatch(tooglePickerEndDateOvertime(false))
               }
               onConfirmIOSDate={() => dispatch(confirmIOSEndTimeOvertime())}
-              // onPressInInput={() => dispatch(tooglePickerEndDateOvertime(true))}
-              // isRight
-              // onPressInputContainer={() =>
-              //   dispatch(tooglePickerEndDateOvertime(true))
-              // }
               onChangeDatePicker={handleOnChangeEndTime}
-              // placeholder="Masukkan time selesai"
-              // label="Time selesai"
             />
           </View>
 
@@ -256,7 +235,6 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
 
           <View
             style={{
-              marginTop: 10,
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>

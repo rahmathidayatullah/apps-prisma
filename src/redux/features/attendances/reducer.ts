@@ -17,8 +17,12 @@ const statusList = {
 };
 
 const initialState: initialStateGlobalAttendaces = {
+  page: 1,
+  take: 10,
+  order: 'DESC',
   statusListAttendaces: statusList.idle,
   statusAttendacesDetail: statusList.idle,
+  dataListAttendaces: [],
 };
 
 export default function attendacesReducer(state = initialState, action: any) {
@@ -32,6 +36,7 @@ export default function attendacesReducer(state = initialState, action: any) {
       return {
         ...state,
         statusListAttendaces: statusList.success,
+        dataListAttendaces: action.data,
       };
     case ERROR_ATTENDACES:
       return {
