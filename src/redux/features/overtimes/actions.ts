@@ -1,24 +1,40 @@
+import debounce from 'debounce-promise';
 import {START_OVERTIMES, SUCCESS_OVERTIMES, ERROR_OVERTIMES} from './constants';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getOvertimes} from '../../../api/overtime';
+
+const debounceOvertimes = debounce(getOvertimes, 100);
 
 export const getListOvertimes = () => {
-  // return async (dispatch: any, getState:any) => {
-  //   dispatch({
-  //     type: START_OVERTIMES,
-  //   });
-  //   try {
-  //     const {
-  //       data: {data},
-  //     } = await login(email, password);
-  //     dispatch({
-  //       type: SUCCESS_OVERTIMES,
-  //       userData: data,
-  //     });
-  //   } catch (error: any) {
-  //     dispatch({
-  //       type: ERROR_OVERTIMES,
-  //     });
-  //   }
-  // };
+  return async (dispatch: any, getState: any) => {
+    dispatch({
+      type: START_OVERTIMES,
+    });
+
+    const page = getState().overtimes.page;
+    const take = getState().overtimes.take;
+    const order = getState().overtimes.order;
+
+    const params = {
+      page,
+      take,
+      order,
+    };
+
+    try {
+      const {
+        data: {data},
+      } = await debounceOvertimes(params);
+      console.log('success fetch getListOvertimes', data);
+      dispatch({
+        type: SUCCESS_OVERTIMES,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error fetch getListOvertimes', error);
+      dispatch({
+        type: ERROR_OVERTIMES,
+      });
+    }
+  };
 };

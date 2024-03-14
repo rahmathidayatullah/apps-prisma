@@ -4,19 +4,17 @@ import {COLORS} from '../../../contants';
 
 export const ListItemOvertime = () => {
   const dataItem = {
-    status: 'Work Shift',
-    date: '02 Feb',
-    clockIn: '08:00',
-    clockOut: '17:00',
+    startTime: '02 Feb 18:00',
+    endTime: '02 Feb 21:00',
+    jam: '2 jam',
+    status: 'Pending',
   };
   return (
     <View style={styles.container}>
-      <View>
-        <Text>{dataItem.date}</Text>
-        <Text>{dataItem.status}</Text>
-      </View>
-      <Text>{dataItem.clockIn}</Text>
-      <Text>{dataItem.clockOut}</Text>
+      <Text>{dataItem.startTime}</Text>
+      <Text>{dataItem.endTime}</Text>
+      <Text>{dataItem.jam}</Text>
+      <Text>{dataItem.status}</Text>
     </View>
   );
 };

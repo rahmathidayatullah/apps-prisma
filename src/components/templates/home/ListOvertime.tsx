@@ -3,7 +3,7 @@ import {StyleSheet, View, Text} from 'react-native';
 import CButtonText from '../../atoms/button/ButtonText';
 import {useNavigation} from '@react-navigation/native';
 import {routeMenu} from '../../../contants/routes';
-import {ListItemOvertime} from './ListItemAttendace copy';
+import {ListItemOvertime} from './ListItemOvertime';
 
 export const ListOvertime = () => {
   const navigation: any = useNavigation();
