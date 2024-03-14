@@ -66,6 +66,7 @@ import {
   START_SUBMIT_SUBMISSION,
   SUCCESS_SUBMIT_SUBMISSION,
   ERROR_SUBMIT_SUBMISSION,
+  RESET_STATE_OVERTIME,
 } from './constants';
 import {initialStateGlobalHome} from './interface';
 
@@ -172,7 +173,6 @@ const initialState: initialStateGlobalHome = {
 
   descriptionOvertime: '',
   selectCategoryOvertime: '',
-  attachmentFileOvertime: [],
   file1Overtime: null,
   statusSubmitOvertime: statusList.idle,
 
@@ -574,6 +574,12 @@ export default function homeReducer(state = initialState, action: any) {
       return {
         ...state,
         statusSubmitOvertime: statusList.error,
+      };
+
+    case RESET_STATE_OVERTIME:
+      return {
+        ...state,
+        statusSubmitOvertime: statusList.idle,
       };
 
     default:

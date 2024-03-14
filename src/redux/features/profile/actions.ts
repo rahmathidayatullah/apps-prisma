@@ -16,6 +16,7 @@ export const fetchProfile = () => {
       const {
         data: {data},
       } = await getProfile();
+      console.log('fetch redux profile', data);
       dispatch({
         type: SUCCESS_FETCH_PROFILE,
         profile: data,

@@ -3,7 +3,6 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
 import {useSelector} from 'react-redux';
-import moment from 'moment';
 import {stateGlobalProfile} from '../../../redux/features/profile/interface';
 
 interface typeCardClockInOut {
@@ -13,9 +12,7 @@ interface typeCardClockInOut {
 }
 
 const CardClockInOut = ({clockIn, clockOut, onPress}: typeCardClockInOut) => {
-  const profile: any = useSelector(
-    (state: stateGlobalProfile) => state.profile,
-  );
+  const profile = useSelector((state: stateGlobalProfile) => state.profile);
   return (
     <TouchableOpacity onPress={onPress} style={styles.cardClockInOut}>
       <View style={{transform: clockOut ? [{rotateY: '180deg'}] : ''}}>
