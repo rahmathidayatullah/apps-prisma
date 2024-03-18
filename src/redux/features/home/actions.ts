@@ -71,6 +71,7 @@ import {postClockIn, postClockOut, postOvertime} from '../../../api/home';
 import {Alert} from 'react-native';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {fetchProfile} from '../profile/actions';
+import {postSubmission} from '../../../api/submission';
 
 export const onPressMenuItem = (menuItem: any) => {
   return (dispatch: any, getState: any) => {
@@ -521,21 +522,52 @@ export const changeFile2Submission = (file: any) => {
 };
 
 export const submitSubmission = (payload: any) => {
-  // return async (dispatch: any, getState: any) => {
-  //   dispatch({
-  //     type: START_SUBMIT_SUBMISSION,
-  //   });
-  //   try {
-  //     const res = await
-  //     dispatch({
-  //       type: SUCCESS_SUBMIT_SUBMISSION,
-  //     });
-  //   } catch (error) {
-  //     dispatch({
-  //       type: ERROR_SUBMIT_SUBMISSION,
-  //     });
-  //   }
-  // };
+  console.log('payload submitSubmission', payload);
+  return async (dispatch: any) => {
+    dispatch({
+      type: START_SUBMIT_SUBMISSION,
+    });
+
+    const file1 = payload.file1Submission
+      ? `data:${payload.file1Submission.mime};base64,${payload.file1Submission.data}`
+      : '';
+    const file2 = payload.file2Submission
+      ? `data:${payload.file2Submission.mime};base64,${payload.file2Submission.data}`
+      : '';
+
+    const newPayload = {
+      startDate: moment(payload.valueStartDateSubmission, 'DD-MM-YYYY').format(
+        'YYYY-MM-DD',
+      ),
+      endDate: moment(payload.valueEndDateSubmission, 'DD-MM-YYYY').format(
+        'YYYY-MM-DD',
+      ),
+      submissionFile: file1 ?? '',
+      otherSubmissionFile: file2 ?? '',
+      description: payload.descriptionSubmission ?? '',
+      submissionCategoryId: payload.selectCategorySubmission ?? '',
+    };
+    try {
+      const res = await postSubmission(newPayload);
+      console.log('success submitSubmission', res);
+      dispatch(fetchProfile());
+      dispatch({
+        type: SUCCESS_SUBMIT_SUBMISSION,
+      });
+    } catch (error: any) {
+      console.log('error submitSubmission', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_SUBMIT_SUBMISSION,
+        });
+      }
+    }
+  };
 };
 
 // ========================================== lembur/overtime
@@ -726,13 +758,23 @@ export const changeFile1Overtime = (file: any) => {
 };
 
 export const submitOvertime = (payload: any) => {
-  return async (dispatch: any, getState: any) => {
+  return async (dispatch: any) => {
     const newPayloadClockIn = {
-      overtimeFile: `data:${payload.file1Overtime.mime};base64,${payload.file1Overtime.data}`,
+      overtimeFile: payload.file1Overtime
+        ? `data:${payload.file1Overtime.mime};base64,${payload.file1Overtime.data}`
+        : '',
       otherOvertimeFile: '',
-      startTime: `${payload.valueStartDateOvertime}`,
-      endtTime: `${payload.valueEndDateOvertime}`,
-      description: `${payload.description}`,
+      startTime: payload.valueStartDateOvertime
+        ? moment(payload.valueStartDateOvertime, 'DD-MM-YYYY hh:mm:ss').format(
+            'YYYY-MM-DD hh:mm:ss',
+          )
+        : '',
+      endTime: payload.valueEndDateOvertime
+        ? moment(payload.valueEndDateOvertime, 'DD-MM-YYYY hh:mm:ss').format(
+            'YYYY-MM-DD hh:mm:ss',
+          )
+        : '',
+      description: payload.description ?? '',
     };
     dispatch({
       type: START_SUBMIT_OVERTIME,

@@ -9,6 +9,8 @@ import {
 } from './constants';
 
 import {getAttendaces} from '../../../api/attendace';
+import {SUCCESS_LOGOUT} from '../auth/constants';
+import {Alert} from 'react-native';
 
 const debounceGetAttendaces = debounce(getAttendaces, 100);
 
@@ -40,9 +42,16 @@ export const getListAttendances = () => {
       });
     } catch (error: any) {
       console.log('error fetch getListAttendances', error);
-      dispatch({
-        type: ERROR_ATTENDACES,
-      });
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_ATTENDACES,
+        });
+      }
     }
   };
 };

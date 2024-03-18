@@ -22,10 +22,12 @@ const ImageProfile = () => {
 
 const styles = StyleSheet.create({
   containerImageProfile: {
-    height: 70,
-    width: 70,
+    height: 60,
+    width: 60,
     overflow: 'hidden',
     borderRadius: 100,
+    borderWidth: 1,
+    borderColor: 'white',
   },
   imageProfile: {
     flex: 1,

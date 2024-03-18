@@ -5,25 +5,18 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import IconsIon from 'react-native-vector-icons/Ionicons';
 import CButton from '../../atoms/button/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  resetValueBottomSheet,
-  submitClockIn,
-} from '../../../redux/features/home/actions';
+import {submitClockIn} from '../../../redux/features/home/actions';
 import ImagePicker from 'react-native-image-crop-picker';
 import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
 import Geolocation from '@react-native-community/geolocation';
 import {stateGlobalHome} from '../../../redux/features/home/interface';
-import {RESET_STATE_CLOCK_IN} from '../../../redux/features/home/constants';
 
 interface typeFormClockInClockOut {
   clockIn?: boolean;
   clockOut?: boolean;
   bottomSheetModalRef?: any;
 }
-const FormClockInClockOut = ({
-  clockIn,
-  bottomSheetModalRef,
-}: typeFormClockInClockOut) => {
+const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
   const dispatch: any = useDispatch();
   const {statusClockIn} = useSelector((state: stateGlobalHome) => state.home);
   const [imageSelfie, setImageSelfie] = useState(null);
@@ -81,20 +74,10 @@ const FormClockInClockOut = ({
 
   useEffect(() => {
     getCurrentPosition();
-    if (statusClockIn === 'error') {
-      Alert.alert('Error', 'Something when wrong');
-    }
-    if (statusClockIn === 'success') {
-      Alert.alert('Berhasil', 'Berhasil absen');
-      bottomSheetModalRef.current?.dismiss();
-      dispatch({
-        type: RESET_STATE_CLOCK_IN,
-      });
-    }
     return () => {
       resetState();
     };
-  }, [statusClockIn]);
+  }, []);
 
   const resetState = () => {
     setPlaceholderImageSelfie('Klik untuk foto selfie');
@@ -102,10 +85,6 @@ const FormClockInClockOut = ({
     setLatitude('');
     setLongitude('');
     setDescription('');
-    dispatch({
-      type: RESET_STATE_CLOCK_IN,
-    });
-    dispatch(resetValueBottomSheet());
   };
 
   return (
@@ -185,10 +164,11 @@ const FormClockInClockOut = ({
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
-            <CButton onPress={handleSubmitClockInClockOut}>
+            <CButton
+              disabled={statusClockIn === 'process'}
+              onPress={handleSubmitClockInClockOut}>
               {statusClockIn === 'idle' && 'Absen'}
               {statusClockIn === 'process' && 'Loading ...'}
-              {statusClockIn === 'success' && 'Berhasil'}
             </CButton>
           </View>
         </View>

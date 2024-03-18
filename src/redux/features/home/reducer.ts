@@ -44,6 +44,10 @@ import {
   CHANGE_FILE2_SUBMISSION,
   REMOVE_FILE1_SUBMISSION,
   REMOVE_FILE2_SUBMISSION,
+  START_SUBMIT_SUBMISSION,
+  SUCCESS_SUBMIT_SUBMISSION,
+  ERROR_SUBMIT_SUBMISSION,
+  RESET_STATE_SUBMISSION,
 
   // lembur/overtime
   TOOGLE_PICKER_END_DATE_OVERTIME,
@@ -63,9 +67,6 @@ import {
   START_SUBMIT_OVERTIME,
   SUCCESS_SUBMIT_OVERTIME,
   ERROR_SUBMIT_OVERTIME,
-  START_SUBMIT_SUBMISSION,
-  SUCCESS_SUBMIT_SUBMISSION,
-  ERROR_SUBMIT_SUBMISSION,
   RESET_STATE_OVERTIME,
 } from './constants';
 import {initialStateGlobalHome} from './interface';
@@ -146,7 +147,6 @@ const initialState: initialStateGlobalHome = {
 
   descriptionSubmission: '',
   selectCategorySubmission: '',
-  attachmentFileSubmission: [],
   file1Submission: null,
   file2Submission: null,
 
@@ -444,6 +444,34 @@ export default function homeReducer(state = initialState, action: any) {
         statusSubmitSubmission: statusList.error,
       };
 
+    case RESET_STATE_SUBMISSION:
+      return {
+        ...state,
+        statusSubmitSubmission: statusList.idle,
+        valueDefaultEndDateSubmission: new Date(),
+        valueEndDateSubmission: '',
+
+        valueDefaultEndTimeSubmission: new Date(),
+        valueEndTimeSubmission: '',
+
+        showPickerEndDateSubmission: false,
+        showPickerEndTimeSubmission: false,
+
+        valueDefaultStartDateSubmission: new Date(),
+        valueStartDateSubmission: '',
+
+        valueDefaultStartTimeSubmission: new Date(),
+        valueStartTimeSubmission: '',
+
+        showPickerStartDateSubmission: false,
+        showPickerStartTimeSubmission: false,
+
+        descriptionSubmission: '',
+        selectCategorySubmission: '',
+        file1Submission: null,
+        file2Submission: null,
+      };
+
     // ==================================== clockin/clockout
 
     case START_CLOCK_IN:
@@ -580,6 +608,27 @@ export default function homeReducer(state = initialState, action: any) {
       return {
         ...state,
         statusSubmitOvertime: statusList.idle,
+        valueDefaultEndDateOvertime: new Date(),
+        valueEndDateOvertime: '',
+
+        valueDefaultEndTimeOvertime: new Date(),
+        valueEndTimeOvertime: '',
+
+        showPickerEndDateOvertime: false,
+        showPickerEndTimeOvertime: false,
+
+        valueDefaultStartDateOvertime: new Date(),
+        valueStartDateOvertime: '',
+
+        valueDefaultStartTimeOvertime: new Date(),
+        valueStartTimeOvertime: '',
+
+        showPickerStartDateOvertime: false,
+        showPickerStartTimeOvertime: false,
+
+        descriptionOvertime: '',
+        selectCategoryOvertime: '',
+        file1Overtime: null,
       };
 
     default:

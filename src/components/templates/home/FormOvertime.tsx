@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Alert, Platform, StyleSheet, Text, View} from 'react-native';
 import CButton from '../../atoms/button/Button';
 import {useNavigation} from '@react-navigation/native';
@@ -104,29 +104,6 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
       .catch(() => {
         Alert.alert('Permission', 'Cannot access camera');
       });
-  };
-
-  useEffect(() => {
-    if (statusSubmitOvertime === 'error') {
-      Alert.alert('Error', 'Something when wrong');
-    }
-    if (statusSubmitOvertime === 'success') {
-      Alert.alert('Berhasil', 'Berhasil absen lembur');
-      bottomSheetModalRef.current?.dismiss();
-      dispatch({
-        type: RESET_STATE_OVERTIME,
-      });
-    }
-    return () => {
-      resetState();
-    };
-  }, [statusSubmitOvertime]);
-
-  const resetState = () => {
-    dispatch(resetValueBottomSheet());
-    dispatch({
-      type: RESET_STATE_OVERTIME,
-    });
   };
 
   return (
@@ -289,7 +266,12 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
-            <CButton onPress={handleSubmitOvertime}>Absen</CButton>
+            <CButton
+              disabled={statusSubmitOvertime === 'process'}
+              onPress={handleSubmitOvertime}>
+              {statusSubmitOvertime === 'idle' && 'Absen'}
+              {statusSubmitOvertime === 'process' && 'Loading ...'}
+            </CButton>
           </View>
         </View>
       </ScrollView>

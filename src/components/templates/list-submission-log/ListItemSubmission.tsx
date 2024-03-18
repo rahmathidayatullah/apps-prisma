@@ -1,18 +1,37 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {COLORS} from '../../../contants';
+import moment from 'moment';
 
-export const ListItemSubmission = () => {
-  const dataItem = {
-    status: 'Approve',
-    date: '01 Feb',
-    category: 'Izin',
-  };
+interface typeListItemSubmission {
+  item: any;
+}
+
+export const ListItemSubmission = ({item}: typeListItemSubmission) => {
+  // const dataItem = {
+  //   status: 'Approve',
+  //   date: '01 Feb',
+  //   category: 'Izin',
+  // };
   return (
     <View style={styles.container}>
-      <Text>{dataItem.date}</Text>
+      {/* <Text>{dataItem.date}</Text>
       <Text>{dataItem.category}</Text>
-      <Text>{dataItem.status}</Text>
+      <Text>{dataItem.status}</Text> */}
+
+      <View style={{flexDirection: 'row', gap: 10}}>
+        <Text>
+          {item.startDate
+            ? moment(item.startDate).format('DD MMM YY')
+            : '- : -'}
+        </Text>
+        <Text>-</Text>
+        <Text>
+          {item.endDate ? moment(item.endDate).format('DD MMM YY') : '- : -'}
+        </Text>
+      </View>
+      <Text>{item.submissionCategory.name}</Text>
+      <Text>{item.status || '-'}</Text>
     </View>
   );
 };

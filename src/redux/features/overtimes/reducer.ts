@@ -11,7 +11,7 @@ const statusList = {
 
 const initialState: initialStateGlobalOvertimes = {
   page: 1,
-  take: 10,
+  take: 1000,
   order: 'DESC',
   statusListOvertimes: statusList.idle,
   dataListOvertimes: [],

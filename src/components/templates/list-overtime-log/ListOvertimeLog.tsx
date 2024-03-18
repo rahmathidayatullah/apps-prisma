@@ -77,8 +77,8 @@ const TemplateListOvertimeLog = () => {
 
   if (statusListOvertimes === 'error') {
     return (
-      <View>
-        <Text>Something when wrong</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+        <Text>Somthing when wrong</Text>
       </View>
     );
   }

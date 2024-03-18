@@ -18,6 +18,7 @@ interface typeInputTextWithIcon {
   value?: string;
   onPressInputContainer?: any;
   onPressIcon?: any;
+  label2?: any;
 }
 
 const CInputTextWithIconLabelFile = ({
@@ -30,10 +31,12 @@ const CInputTextWithIconLabelFile = ({
   value,
   onPressInputContainer,
   onPressIcon,
+  label2,
 }: typeInputTextWithIcon) => {
   return (
     <View style={[styles.containerInputIconLabel, stylesProps]}>
       <Text style={{color: COLORS.bgGrey}}>{label}</Text>
+      <Text style={{color: COLORS.bgGrey, fontSize: 10}}>{label2}</Text>
       <View style={styles.containerInput}>
         {right ? (
           <TouchableOpacity

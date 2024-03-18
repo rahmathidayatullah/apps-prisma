@@ -2,6 +2,8 @@ import debounce from 'debounce-promise';
 import {START_OVERTIMES, SUCCESS_OVERTIMES, ERROR_OVERTIMES} from './constants';
 
 import {getOvertimes} from '../../../api/overtime';
+import {SUCCESS_LOGOUT} from '../auth/constants';
+import {Alert} from 'react-native';
 
 const debounceOvertimes = debounce(getOvertimes, 100);
 
@@ -32,9 +34,16 @@ export const getListOvertimes = () => {
       });
     } catch (error: any) {
       console.log('error fetch getListOvertimes', error);
-      dispatch({
-        type: ERROR_OVERTIMES,
-      });
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_OVERTIMES,
+        });
+      }
     }
   };
 };
