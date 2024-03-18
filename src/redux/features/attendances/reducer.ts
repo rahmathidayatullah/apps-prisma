@@ -18,7 +18,7 @@ const statusList = {
 
 const initialState: initialStateGlobalAttendaces = {
   page: 1,
-  take: 10,
+  take: 1000,
   order: 'DESC',
   statusListAttendaces: statusList.idle,
   statusAttendacesDetail: statusList.idle,

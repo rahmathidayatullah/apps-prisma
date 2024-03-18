@@ -1,3 +1,8 @@
+import debounce from 'debounce-promise';
+
+import {Alert} from 'react-native';
+import {getCategorySubmission, getSubmissions} from '../../../api/submission';
+import {SUCCESS_LOGOUT} from '../auth/constants';
 import {
   START_SUBMISSIONS,
   SUCCESS_SUBMISSIONS,
@@ -5,29 +10,88 @@ import {
   START_SUBMISSIONS_DETAIL,
   SUCCESS_SUBMISSIONS_DETAIL,
   ERROR_SUBMISSIONS_DETAIL,
+  START_CATEGORY_SUBMISSIONS,
+  SUCCESS_CATEGORY_SUBMISSIONS,
+  ERROR_CATEGORY_SUBMISSIONS,
 } from './constants';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+const debounceGetSubmissions = debounce(getSubmissions, 100);
 
 export const getListSubmissions = () => {
-  // return async (dispatch: any, getState:any) => {
-  //   dispatch({
-  //     type: START_SUBMISSIONS,
-  //   });
-  //   try {
-  //     const {
-  //       data: {data},
-  //     } = await login(email, password);
-  //     dispatch({
-  //       type: SUCCESS_SUBMISSIONS,
-  //       userData: data,
-  //     });
-  //   } catch (error: any) {
-  //     dispatch({
-  //       type: ERROR_SUBMISSIONS,
-  //     });
-  //   }
-  // };
+  return async (dispatch: any, getState: any) => {
+    dispatch({
+      type: START_SUBMISSIONS,
+    });
+
+    const page = getState().submissions.page;
+    const take = getState().submissions.take;
+    const order = getState().submissions.order;
+
+    const params = {
+      page,
+      take,
+      order,
+    };
+
+    try {
+      const {
+        data: {data},
+      } = await debounceGetSubmissions(params);
+      console.log('success fetch getListSubmissions', data);
+      dispatch({
+        type: SUCCESS_SUBMISSIONS,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error fetch getListSubmissions', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_SUBMISSIONS,
+        });
+      }
+    }
+  };
+};
+
+export const getListCategorySubmission = () => {
+  return async (dispatch: any) => {
+    dispatch({
+      type: START_CATEGORY_SUBMISSIONS,
+    });
+    try {
+      const {
+        data: {data},
+      } = await getCategorySubmission();
+      const newData = data.map((item: any) => {
+        return {
+          label: item.name,
+          value: `${item.id}`,
+        };
+      });
+      console.log('success fetch getListCategorySubmission', newData);
+      dispatch({
+        type: SUCCESS_CATEGORY_SUBMISSIONS,
+        data: newData,
+      });
+    } catch (error: any) {
+      console.log('error fetch getListCategorySubmission', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_CATEGORY_SUBMISSIONS,
+        });
+      }
+    }
+  };
 };
 
 export const getSubmissionsDetail = (id: string) => {

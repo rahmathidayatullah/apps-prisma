@@ -1,9 +1,17 @@
-import React from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
-import {ListItemSubmission} from '../../../components/templates/home/ListItemSubmission';
+import React, {useEffect} from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import {ListItemSubmission} from './ListItemSubmission';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../contants';
 import {useDispatch, useSelector} from 'react-redux';
+import {getListSubmissions} from '../../../redux/features/submissions/actions';
 
 interface typeInputTextWithIcon {
   placeholder: string;
@@ -48,32 +56,31 @@ const CInputTextWithIconLabel = ({
 };
 
 const TemplateListOfSubmission = () => {
-  //     const dispatch: any = useDispatch();
-  //   const overtimes = useSelector((state: any) => state.overtimes);
+  const dispatch: any = useDispatch();
+  const submissions = useSelector((state: any) => state.submissions);
 
-  //   const {dataListOvertimes, page, take, order, statusListOvertimes} = overtimes;
+  const {dataListSubmissions, page, take, order, statusListSubmissions} =
+    submissions;
 
-  //   console.log('dataListOvertimes', dataListOvertimes);
+  useEffect(() => {
+    dispatch(getListSubmissions());
+  }, [page, take, order]);
 
-  //   useEffect(() => {
-  //     dispatch(getListOvertimes());
-  //   }, [page, take, order]);
+  if (statusListSubmissions === 'process') {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+        <ActivityIndicator size="large" color={COLORS.bgPrimary} />
+      </View>
+    );
+  }
 
-  //   if (statusListOvertimes === 'process') {
-  //     return (
-  //       <View>
-  //         <Text>Loading ...</Text>
-  //       </View>
-  //     );
-  //   }
-
-  //   if (statusListOvertimes === 'error') {
-  //     return (
-  //       <View>
-  //         <Text>Something when wrong</Text>
-  //       </View>
-  //     );
-  //   }
+  if (statusListSubmissions === 'error') {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+        <Text>Somthing when wrong</Text>
+      </View>
+    );
+  }
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -91,12 +98,16 @@ const TemplateListOfSubmission = () => {
             // onChangeText={(newText: string) => setEmail(newText)}
           />
         </View>
-        <View style={{marginTop: 10}}>
-          {[1, 2, 3, 4, 5].map(item => (
-            <View key={item} style={{marginTop: 12}}>
-              <ListItemSubmission />
-            </View>
-          ))}
+        <View>
+          {dataListSubmissions.length === 0 ? (
+            <Text>Data Kosong</Text>
+          ) : (
+            dataListSubmissions.map((item: any) => (
+              <View key={item.id} style={{marginTop: 12}}>
+                <ListItemSubmission item={item} />
+              </View>
+            ))
+          )}
         </View>
       </View>
     </ScrollView>

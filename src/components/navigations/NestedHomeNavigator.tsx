@@ -8,6 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TakeSelfie from '../../screens/home/TakeSelfie';
 import ViewCurrentLocation from '../../screens/home/ViewCurrentLocation';
 import ListOvertimeLog from '../../screens/home/ListOvertimeLog';
+import ListOfAnnouncement from '../../screens/home/ListOfAnnouncement';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,13 @@ export default function NestedHomeNaviagator() {
           component={ListOvertimeLog}
           options={{
             title: 'Riwayat Lembur',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.LIST_OF_ANNOUCEMENT}
+          component={ListOfAnnouncement}
+          options={{
+            title: 'Pengumuman',
           }}
         />
         <Stack.Screen name={routeMenu.TAKE_SEFIE} component={TakeSelfie} />

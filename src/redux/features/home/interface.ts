@@ -70,7 +70,6 @@ export interface initialStateGlobalHome {
 
   descriptionSubmission: string;
   selectCategorySubmission: string;
-  attachmentFileSubmission: string | string[];
 
   file1Submission: any;
   file2Submission: any;

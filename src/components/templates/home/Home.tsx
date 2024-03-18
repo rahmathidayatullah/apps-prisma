@@ -1,7 +1,8 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   Dimensions,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -14,7 +15,11 @@ import CardClockInOut from '../../../components/templates/home/CardClockInOut';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {COLORS} from '../../../contants';
 import ImageProfile from '../../../components/templates/home/ImageProfile';
-import {routeMenuItem} from '../../../contants/routes';
+import {
+  listAnnouncement,
+  routeMenu,
+  routeMenuItem,
+} from '../../../contants/routes';
 import {MenuItem} from './inteface';
 import CardMenuItem from './CardMenuItem';
 import {ListAttendace} from './ListAttendace';
@@ -41,18 +46,38 @@ import FormSubmission from './FormSubmission';
 import {stateGlobalProfile} from '../../../redux/features/profile/interface';
 import {fetchProfile} from '../../../redux/features/profile/actions';
 import FormOvertime from './FormOvertime';
+import {
+  RESET_STATE_CLOCK_IN,
+  RESET_STATE_OVERTIME,
+  RESET_STATE_SUBMISSION,
+} from '../../../redux/features/home/constants';
+import CButtonText from '../../atoms/button/ButtonText';
+import LinearGradient from 'react-native-linear-gradient';
+import CardSubmission from './CardSubmission';
+import CardOvertime from './CardOvertime';
+import 'moment/locale/id';
+import ListAnnoucement from './ListAnnoucement';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
   const home = useSelector((state: stateGlobalHome) => state.home);
-  const {isShowMenuItem} = home;
+  const {
+    isShowMenuItem,
+    statusClockIn,
+    statusSubmitSubmission,
+    statusSubmitOvertime,
+  } = home;
   const auth = useSelector((state: stateGlobalAuth) => state.auth);
   const {userData} = auth;
   const profile = useSelector((state: stateGlobalProfile) => state.profile);
   console.log('home', home);
   console.log('profile', profile);
   console.log('auth', auth);
+
+  const [greeting, setGreeting] = useState('');
+  const [greeting2, setGreeting2] = useState('');
+  const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
 
   const newData =
     typeof userData === 'string' ? JSON.parse(userData) : userData;
@@ -79,8 +104,45 @@ const TemplateHome = () => {
 
   useEffect(() => {
     dispatch(fetchProfile());
+
+    const timerID = setInterval(() => {
+      setCurrentTime(moment().format('HH:mm'));
+    }, 1000); // Update every second
+
+    const updateGreeting = () => {
+      const currentTime = moment();
+      const currentHour = currentTime.hour();
+
+      let newGreeting = '';
+      let newGreeting2 = '';
+      if (currentHour >= 4 && currentHour < 10) {
+        newGreeting = 'Selamat pagi';
+        newGreeting2 = 'semangat bekerja hari ini';
+      } else if (currentHour >= 10 && currentHour < 15) {
+        newGreeting = 'Selamat siang';
+        newGreeting2 = 'semangat bekerja hari ini';
+      } else if (currentHour >= 15 && currentHour < 18) {
+        newGreeting = 'Selamat sore';
+        newGreeting2 = 'semangat bekerja hari ini';
+      } else {
+        newGreeting = 'Selamat malam';
+        newGreeting2 = 'selamat beristirahat :)';
+      }
+
+      setGreeting(newGreeting);
+      setGreeting2(newGreeting2);
+    };
+
+    // Update greeting initially
+    updateGreeting();
+
+    // Update greeting every minute
+    const intervalId = setInterval(updateGreeting, 60000);
+
     return () => {
       dispatch(resetValueBottomSheet());
+      clearInterval(intervalId);
+      clearInterval(timerID);
     };
   }, []);
 
@@ -95,6 +157,46 @@ const TemplateHome = () => {
     // Cleanup function
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    if (statusClockIn === 'success') {
+      Alert.alert('Berhasil', 'Berhasil absen');
+      bottomSheetModalRef?.current?.dismiss();
+      dispatch({
+        type: RESET_STATE_CLOCK_IN,
+      });
+      dispatch(resetValueBottomSheet());
+    }
+
+    if (statusClockIn === 'error') {
+      Alert.alert('Error', 'Something when wrong');
+    }
+
+    if (statusSubmitSubmission === 'error') {
+      Alert.alert('Error', 'Something when wrong');
+    }
+
+    if (statusSubmitSubmission === 'success') {
+      Alert.alert('Berhasil', 'Berhasil membuat pengajuan');
+      bottomSheetModalRef.current?.dismiss();
+      dispatch({
+        type: RESET_STATE_SUBMISSION,
+      });
+      dispatch(resetValueBottomSheet());
+    }
+
+    if (statusSubmitOvertime === 'error') {
+      Alert.alert('Error', 'Something when wrong');
+    }
+    if (statusSubmitOvertime === 'success') {
+      Alert.alert('Berhasil', 'Berhasil absen lembur');
+      bottomSheetModalRef.current?.dismiss();
+      dispatch({
+        type: RESET_STATE_OVERTIME,
+      });
+      dispatch(resetValueBottomSheet());
+    }
+  }, [statusClockIn, statusSubmitSubmission, statusSubmitOvertime]);
 
   const atLeastOneTrue = Object.values(isShowMenuItem).some(
     value => value === true,
@@ -114,47 +216,74 @@ const TemplateHome = () => {
         <SafeAreaView style={styles.safeArea}>
           <ScrollView>
             <View style={styles.container}>
-              <View style={styles.containerHead}>
-                <Badge />
+              {/* <View style={styles.containerHead}> */}
+              <LinearGradient
+                start={{x: 0.5, y: 0.1}}
+                end={{x: 0.5, y: 0.9}}
+                // locations={[0, 0.9, 0.9]}
+                colors={['#219C90', '#219C90', '#FBB03B']}
+                // style={styles.linearGradient}
+                style={styles.containerHead}>
+                {/* <Badge /> */}
 
                 <View style={styles.containerHeadTitleImage}>
+                  <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
+                    <ImageProfile />
+                    <View>
+                      <Text style={styles.titleName}>{newData.user.name}</Text>
+                      <Text style={styles.titleRole}>
+                        {newData.user.role.name}
+                      </Text>
+                      <Text style={styles.titleRole}>
+                        PT Prisma Inti Propertindo
+                      </Text>
+                    </View>
+                  </View>
                   <View>
-                    <Text style={styles.titleName}>{newData.user.name}</Text>
-                    <Text style={styles.titleRole}>
-                      {newData.user.role.name}
+                    <Text
+                      style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
+                      {moment().format('dddd')},{' '}
+                      {moment().format('DD MMMM YYYY')}
+                    </Text>
+                    <Text
+                      style={{
+                        textAlign: 'right',
+                        fontSize: 10,
+                        color: 'white',
+                      }}>
+                      {currentTime} WIB
                     </Text>
                   </View>
-                  <ImageProfile />
                 </View>
 
                 <ContainerCardClockInOut>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-end',
+                      flexDirection: 'column',
                     }}>
-                    <View>
+                    <View style={{paddingVertical: 10}}>
                       <Text style={styles.titleDay}>
-                        {moment().format('dddd')} -{' '}
-                        {moment().format('DD MMMM YYYY')}
+                        {/* <Text style={styles.titleDay}> */}
+                        {greeting} {newData.user.name}, {greeting2}
                       </Text>
-                      <View style={{marginTop: 9}}>
-                        <View style={styles.containerBadge}>
-                          <View style={styles.containerBgBadge} />
-                          <Text style={styles.textBadge}>
-                            {profile.profile.workStatus}
-                          </Text>
-                        </View>
-                      </View>
                     </View>
                     <View
                       style={{
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         justifyContent: 'space-between',
                         alignItems: 'flex-start',
                         gap: 4,
+                        width: '100%',
+                        marginTop: 10,
                       }}>
+                      <View>
+                        <View style={styles.containerBadge}>
+                          <View style={styles.containerBgBadge} />
+                          <Text style={styles.textBadge}>
+                            {profile.profile.workStatus || 'Work Shift'}
+                          </Text>
+                        </View>
+                      </View>
                       <View
                         style={{
                           flexDirection: 'row',
@@ -165,12 +294,14 @@ const TemplateHome = () => {
                         <IconMaterialIcons
                           name="access-alarm"
                           size={24}
-                          color="white"
+                          // color="white"
+                          color={COLORS.bgPrimary}
                         />
 
                         <Text
                           style={{
-                            color: 'white',
+                            // color: 'white',
+                            color: COLORS.bgPrimary,
                             fontSize: 12,
                             fontWeight: '600',
                           }}>
@@ -182,10 +313,10 @@ const TemplateHome = () => {
                   </View>
                   <View
                     style={{
-                      marginTop: 16,
+                      marginTop: 8,
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                      gap: 14,
+                      gap: 8,
                     }}>
                     <CardClockInOut
                       clockIn
@@ -196,22 +327,39 @@ const TemplateHome = () => {
                       onPress={() => handleOnPressMenuItem('clockOut')}
                     />
                   </View>
+                  <View
+                    style={{
+                      marginTop: 8,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      gap: 8,
+                    }}>
+                    <CardOvertime
+                      onPress={() => handleOnPressMenuItem('lembur')}
+                    />
+                    <CardSubmission
+                      onPress={() => handleOnPressMenuItem('pengajuan')}
+                    />
+                  </View>
                 </ContainerCardClockInOut>
-              </View>
+              </LinearGradient>
+              {/* </View> */}
+
               <View
                 style={{
-                  marginTop: 90,
+                  marginTop: 180,
                   flexDirection: 'row',
                   justifyContent: 'space-around',
                 }}>
-                {routeMenuItem.map((item: MenuItem) => (
+                {/* {routeMenuItem.map((item: MenuItem) => (
                   <CardMenuItem
                     onPress={() => handleOnPressMenuItem(item.value)}
                     key={item.id}
                     item={item}
                   />
-                ))}
+                ))} */}
               </View>
+              <ListAnnoucement />
               <View style={styles.containerListAttendace}>
                 <ListAttendace />
               </View>
@@ -290,9 +438,9 @@ const styles = StyleSheet.create({
   containerBody: {},
   containerHeadTitleImage: {
     marginTop: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 2,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     position: 'relative',
   },
@@ -303,19 +451,21 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   titleRole: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 14,
+    fontWeight: '400',
     color: 'white',
     marginTop: 2,
     letterSpacing: 1,
   },
   titleDay: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: deviceWidth < 380 ? 14 : 16,
+    // color: 'white',
+    color: COLORS.bgPrimary,
+    fontWeight: '500',
+    fontSize: deviceWidth < 380 ? 12 : 14,
+    textAlign: 'center',
   },
   containerListAttendace: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 12,
     marginTop: 38,
   },
   contentBottomSheetContainer: {
@@ -343,7 +493,8 @@ const styles = StyleSheet.create({
   },
   containerBgBadge: {
     // backgroundColor: COLORS.bgOrangeOpacity,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
+    backgroundColor: COLORS.bgPrimary,
     // opacity: 0.08,
     position: 'absolute',
     top: 0,
@@ -354,7 +505,25 @@ const styles = StyleSheet.create({
   textBadge: {
     fontSize: 12,
     fontWeight: '500',
-    color: COLORS.bgPrimary,
+    // color: COLORS.bgPrimary,
+    color: '#ffffff',
+  },
+
+  // liniear gradient
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+    height: 200,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    margin: 10,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
   },
 });
 

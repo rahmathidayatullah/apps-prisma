@@ -12,7 +12,7 @@ export async function getSubmissions(params: any) {
     newUserData = JSON.parse(userData);
   }
 
-  return await axios.get(`${baseURL}/submissions`, {
+  return await axios.get(`${baseURL}/submissions/mine`, {
     headers: {
       params,
       Authorization: `Bearer ${newUserData.access_token}`,
@@ -29,6 +29,36 @@ export async function getSubmissionsById(id: string) {
   }
 
   return await axios.get(`${baseURL}/submissions/${id}`, {
+    headers: {
+      Authorization: `Bearer ${newUserData.access_token}`,
+    },
+  });
+}
+
+export async function getCategorySubmission() {
+  const userData: any = await AsyncStorage.getItem('userData');
+  let newUserData = null;
+
+  if (typeof userData === 'string') {
+    newUserData = JSON.parse(userData);
+  }
+
+  return await axios.get(`${baseURL}/submission-categories`, {
+    headers: {
+      Authorization: `Bearer ${newUserData.access_token}`,
+    },
+  });
+}
+
+export async function postSubmission(body: any) {
+  const userData: any = await AsyncStorage.getItem('userData');
+  let newUserData = null;
+
+  if (typeof userData === 'string') {
+    newUserData = JSON.parse(userData);
+  }
+
+  return await axios.post(`${baseURL}/submissions`, body, {
     headers: {
       Authorization: `Bearer ${newUserData.access_token}`,
     },

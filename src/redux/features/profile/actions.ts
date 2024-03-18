@@ -17,11 +17,27 @@ export const fetchProfile = () => {
         data: {data},
       } = await getProfile();
       console.log('fetch redux profile', data);
+      let newData = {
+        profile: {
+          clockIn: null,
+          clockOut: null,
+          workStatus: null,
+          user: {
+            name: '',
+            role: {
+              name: '',
+            },
+            email: '',
+          },
+        },
+      };
+
       dispatch({
         type: SUCCESS_FETCH_PROFILE,
-        profile: data,
+        profile: data || newData,
       });
     } catch (error: any) {
+      console.log('error fetch redux profile', error);
       if (error.response?.status === 401) {
         Alert.alert(error.code, error.response?.data?.message);
         dispatch({

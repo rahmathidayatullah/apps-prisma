@@ -7,6 +7,7 @@ interface typeListItemOvertime {
     startTime: string | null;
     endTime: string | null;
     status: string;
+    totalTime?: string;
   };
 }
 
@@ -15,7 +16,7 @@ export const ListItemOvertime = ({item}: typeListItemOvertime) => {
     <View style={styles.container}>
       <Text>{item.startTime ?? '- : -'}</Text>
       <Text>{item.endTime ?? '- : -'}</Text>
-      <Text>2 jam</Text>
+      <Text>{item.totalTime ?? '-'}</Text>
       <Text>{item.status ?? '-'}</Text>
     </View>
   );

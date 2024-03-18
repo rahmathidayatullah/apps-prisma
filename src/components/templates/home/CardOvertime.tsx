@@ -2,45 +2,28 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
-import {useSelector} from 'react-redux';
-import {stateGlobalProfile} from '../../../redux/features/profile/interface';
-import IconClockIn from '../../atoms/svg/clockIn';
-import IconClockOut from '../../atoms/svg/clockOut';
+import IconOvertime from '../../atoms/svg/overtime';
 
-interface typeCardClockInOut {
-  clockIn?: boolean;
-  clockOut?: boolean;
+interface typeCardSubmission {
   onPress?: any;
 }
 
-const CardClockInOut = ({clockIn, clockOut, onPress}: typeCardClockInOut) => {
-  const profile = useSelector((state: stateGlobalProfile) => state.profile);
+const CardOvertime = ({onPress}: typeCardSubmission) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.cardClockInOut}>
       <View>
-        {/* <IconSimpleLineIcons name="login" size={28} color="white" /> */}
-        {clockIn ? <IconClockOut /> : <IconClockIn />}
+        <IconOvertime />
       </View>
       <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-        <Text style={{fontWeight: 'bold', color: 'white'}}>
-          {clockIn ? 'Absen Masuk' : 'Absen Keluar'}
-        </Text>
+        <Text style={{fontWeight: 'bold', color: 'white'}}>Absen Lembur</Text>
         <View>
           <View style={styles.containerBadge}>
             {/* <View style={styles.containerBgBadge} /> */}
-            <Text style={styles.textBadge}>
-              {clockIn
-                ? profile.profile.clockIn
-                  ? // ? moment(profile.profile.clockIn).format('hh:mm a')
-                    // moment(profile.profile.clockIn).format('hh:mm')
-                    profile.profile.clockIn
-                  : '- : -'
-                : profile.profile.clockOut
-                ? // ? moment(profile.profile.clockOut).format('hh:mm a')
-                  // moment(profile.profile.clockOut).format('hh:mm')
-                  profile.profile.clockOut
-                : '- : -'}
-            </Text>
+            <Text style={styles.textBadge}>18:00:00</Text>
+            <Text style={styles.textBadge}>-</Text>
+            <Text style={styles.textBadge}>21:00:00</Text>
+            {/* <Text style={styles.textBadge}>- : -</Text>
+            <Text style={styles.textBadge}>- : -</Text> */}
           </View>
         </View>
       </View>
@@ -69,6 +52,8 @@ const styles = StyleSheet.create({
     // paddingLeft: 6,
     paddingRight: 6,
     alignSelf: 'flex-start',
+    flexDirection: 'row',
+    gap: 6,
   },
   containerBgBadge: {
     backgroundColor: COLORS.bgOrangeOpacity,
@@ -87,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardClockInOut;
+export default CardOvertime;

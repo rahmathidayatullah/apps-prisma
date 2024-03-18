@@ -1,6 +1,6 @@
 import axios from 'axios';
 // import {routeMenu} from '../contants/routes';
-const baseURL = 'http://api.dotlike.site';
+const baseURL = 'https://api.dotlike.site';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

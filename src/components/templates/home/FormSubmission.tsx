@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Alert, Platform, StyleSheet, Text, View} from 'react-native';
 import CButton from '../../atoms/button/Button';
 import {useNavigation} from '@react-navigation/native';
 import {typeItemCategorySubmission} from '../../../contants/routes';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  changeCategorySubmission,
   changeFile1Submission,
   changeFile2Submission,
   confirmIOSEndDateSubmission,
@@ -16,6 +15,7 @@ import {
   submitSubmission,
   tooglePickerEndDateSubmission,
   tooglePickerStartDateSubmission,
+  changeCategorySubmission,
 } from '../../../redux/features/home/actions';
 import {ScrollView} from 'react-native-gesture-handler';
 import TextWithLabelIconDate from '../../atoms/input/TextWithLabelIconDate';
@@ -30,6 +30,8 @@ import {
   REMOVE_FILE2_SUBMISSION,
 } from '../../../redux/features/home/constants';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import {stateGlobalSubmissions} from '../../../redux/features/submissions/interface';
+// import {getListCategorySubmission} from '../../../redux/features/submissions/actions';
 
 const FormSubmission = ({bottomSheetModalRef}: any) => {
   const navigation: any = useNavigation();
@@ -43,20 +45,20 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
     valueStartDateSubmission,
     showPickerStartDateSubmission,
 
-    descriptionSubmission,
     selectCategorySubmission,
+
+    descriptionSubmission,
 
     file1Submission,
     file2Submission,
+
+    statusSubmitSubmission,
   } = useSelector((state: stateGlobalHome) => state.home);
 
-  // console.log('==== >>> valueEndDateSubmission', valueEndDateSubmission);
-  // console.log('==== >>> valueEndTimeSubmission', valueEndTimeSubmission);
-  // console.log('==== >>> valueStartDateSubmission', valueStartDateSubmission);
-  // console.log('==== >>> valueStartTimeSubmission', valueStartTimeSubmission);
-  // console.log('==== >>> descriptionSubmission', descriptionSubmission);
-  // console.log('==== >>> selectCategorySubmission', selectCategorySubmission);
-  // console.log('==== >>> file1Submission', file1Submission);
+  // const submissions = useSelector(
+  //   (state: stateGlobalSubmissions) => state.submissions,
+  // );
+  // const {listCategorySubmission} = submissions;
 
   const handleSubmitSubmission = () => {
     if (
@@ -74,16 +76,7 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
         file1Submission,
         file2Submission,
       };
-      console.log('payload handleSubmitSubmission', payload);
-
-      Alert.alert(
-        'Payload',
-        `tanggal mulai : ${valueStartDateSubmission}, 
-        tanggal selesai : ${valueEndDateSubmission},  
-        deskripsi : ${descriptionSubmission}, 
-        kategori : ${selectCategorySubmission}`,
-      );
-      // dispatch(submitSubmission(payload));
+      dispatch(submitSubmission(payload));
     }
   };
   const handleOnChangePickerEndDate = (event: any, selectedDate: string) => {
@@ -95,6 +88,7 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
     event: {type: string},
     selectedDate: string,
   ) => {
+    console.log('selectedDate handleOnChangePickerStartDate', selectedDate);
     dispatch(
       onChangePickerStartDateSubmission(event.type, Platform, selectedDate),
     );
@@ -109,21 +103,43 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
       width: 300,
       height: 400,
       cropping: true,
-    }).then((image: any) => {
-      dispatch(changeFile1Submission(image));
-      console.log('==== >>> openGallery 2', image);
-    });
+      includeBase64: true,
+    })
+      .then((image: any) => {
+        dispatch(changeFile1Submission(image));
+      })
+      .catch(() => {
+        Alert.alert('Permission', 'Cannot file manager');
+      });
   };
   const onPressUpload2 = () => {
     ImageCropPicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,
-    }).then((image: any) => {
-      dispatch(changeFile2Submission(image));
-      console.log('==== >>> openGallery 1', image);
-    });
+      includeBase64: true,
+    })
+      .then((image: any) => {
+        dispatch(changeFile2Submission(image));
+      })
+      .catch(() => {
+        Alert.alert('Permission', 'Cannot file manager');
+      });
   };
+
+  // useEffect(() => {
+  //   // dispatch(getListCategorySubmission());
+  //   return () => {
+  //     resetState();
+  //   };
+  // }, []);
+
+  // const resetState = () => {
+  //   dispatch(resetValueBottomSheet());
+  //   dispatch({
+  //     type: RESET_STATE_SUBMISSION,
+  //   });
+  // };
 
   return (
     <View
@@ -278,7 +294,15 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
             }}>
             <CInputTextWithIconLabelFile
               placeholder="Upload file pendukung 1"
-              label="Upload file 1"
+              // label="Upload file"
+              label={`${
+                selectCategorySubmission === '1'
+                  ? 'Upload form Cuti'
+                  : selectCategorySubmission === '2'
+                  ? 'Upload foto berobat'
+                  : 'Upload file pendukung (optional)'
+              }`}
+              // label2="( foto bukti : form cuti,surat sakit dll )"
               right
               value={file1Submission ? 'file1.png' : ''}
               onPressInputContainer={onPressUpload1}
@@ -313,7 +337,13 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
             }}>
             <CInputTextWithIconLabelFile
               placeholder="Upload file pendukung 2"
-              label="Upload file 2"
+              // label="Upload file 2"
+
+              label={`${
+                selectCategorySubmission === '2'
+                  ? 'Upload surat keterangan dokter'
+                  : 'Upload file pendukung (optional)'
+              }`}
               right
               value={file2Submission ? 'file2.png' : ''}
               onPressInputContainer={onPressUpload2}
@@ -362,7 +392,10 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
-            <CButton onPress={handleSubmitSubmission}>Submit</CButton>
+            <CButton onPress={handleSubmitSubmission}>
+              {statusSubmitSubmission === 'idle' && 'Kirim'}
+              {statusSubmitSubmission === 'process' && 'Loading ...'}
+            </CButton>
           </View>
         </View>
       </ScrollView>
