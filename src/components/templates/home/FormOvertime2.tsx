@@ -5,20 +5,27 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import IconsIon from 'react-native-vector-icons/Ionicons';
 import CButton from '../../atoms/button/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {submitClockIn} from '../../../redux/features/home/actions';
+import {
+  submitClockIn,
+  submitOvertimeClockInOut,
+} from '../../../redux/features/home/actions';
 import ImagePicker from 'react-native-image-crop-picker';
 import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
 import Geolocation from '@react-native-community/geolocation';
 import {stateGlobalHome} from '../../../redux/features/home/interface';
+import {stateGlobalProfile} from '../../../redux/features/profile/interface';
 
 interface typeFormClockInClockOut {
   clockIn?: boolean;
   clockOut?: boolean;
   bottomSheetModalRef?: any;
 }
-const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
+const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
   const dispatch: any = useDispatch();
-  const {statusClockIn} = useSelector((state: stateGlobalHome) => state.home);
+  const {statusSubmitOvertime} = useSelector(
+    (state: stateGlobalHome) => state.home,
+  );
+  const profile = useSelector((state: stateGlobalProfile) => state.profile);
   const [imageSelfie, setImageSelfie] = useState(null);
 
   const [placeholderImageSelfie, setPlaceholderImageSelfie] = useState(
@@ -53,12 +60,27 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
       Alert.alert('Pastikan foto selfie dan lokasi terisi');
     }
 
-    if (clockIn) {
-      dispatch(submitClockIn(payload, true));
+    if (
+      profile.profile.overtime.clockIn === null &&
+      profile.profile.overtime.clockOut === null
+    ) {
+      dispatch(
+        submitOvertimeClockInOut(payload, true, profile.profile.overtime.id),
+      );
     } else {
-      dispatch(submitClockIn(payload, false));
+      dispatch(
+        submitOvertimeClockInOut(payload, false, profile.profile.overtime.id),
+      );
     }
   };
+
+  // const handleErrorGetLocation = (error: any) => {
+  //   getCurrentPosition();
+  //   return Alert.alert(
+  //     'Gagal mengambil lokasi, silahkan tunggu sampai lokasi ditemukan',
+  //     JSON.stringify(error),
+  //   );
+  // };
   const getCurrentPosition = () => {
     Geolocation.getCurrentPosition(
       (pos: any) => {
@@ -69,6 +91,7 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
       },
       (error: any) =>
         Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      // handleErrorGetLocation(error),
       {
         enableHighAccuracy: true,
         timeout: 20000,
@@ -100,9 +123,7 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
         width: '100%',
       }}>
       <ScrollView style={{paddingBottom: 10}}>
-        <Text style={styles.titleForm}>{`${
-          clockIn ? 'Absen Masuk' : 'Absen Keluar'
-        }`}</Text>
+        <Text style={styles.titleForm}>Form Lembur</Text>
         <View style={styles.containerForm}>
           <View
             style={{
@@ -170,10 +191,10 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
               paddingHorizontal: 30,
             }}>
             <CButton
-              disabled={statusClockIn === 'process'}
+              disabled={statusSubmitOvertime === 'process'}
               onPress={handleSubmitClockInClockOut}>
-              {statusClockIn === 'idle' && 'Absen'}
-              {statusClockIn === 'process' && 'Loading ...'}
+              {statusSubmitOvertime === 'idle' && 'Absen Lembur'}
+              {statusSubmitOvertime === 'process' && 'Loading ...'}
             </CButton>
           </View>
         </View>
@@ -222,4 +243,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormClockInClockOut;
+export default FormOvertime2;

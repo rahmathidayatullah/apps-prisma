@@ -14,6 +14,11 @@ const statusList: typeStatusList = {
 const initialState: initialStateGlobalProfile = {
   status: statusList.idle,
   profile: {
+    overtime: {
+      clockIn: null,
+      clockOut: null,
+      id: null,
+    },
     clockIn: null,
     clockOut: null,
     workStatus: null,

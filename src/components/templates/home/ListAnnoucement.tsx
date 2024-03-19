@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CButtonText from '../../atoms/button/ButtonText';
 import {listAnnouncement, routeMenu} from '../../../contants/routes';
 import {COLORS} from '../../../contants';
@@ -7,7 +7,11 @@ import {useNavigation} from '@react-navigation/native';
 
 const ListAnnoucement = () => {
   const navigation: any = useNavigation();
-
+  const handleDetail = (item: any) => {
+    navigation.navigate(routeMenu.DETAIL_ANNOUCEMENT, {
+      itemId: item.id,
+    });
+  };
   return (
     <View style={styles.containerAnnouncement}>
       <View style={styles.wrapTitleAnnouncement}>
@@ -20,7 +24,10 @@ const ListAnnoucement = () => {
       <View style={styles.wrapListItemAnnouncement}>
         {listAnnouncement.map((item: any) => {
           return (
-            <View style={styles.wrapItemAnnouncement} key={item.id}>
+            <TouchableOpacity
+              style={styles.wrapItemAnnouncement}
+              key={item.id}
+              onPress={() => handleDetail(item)}>
               <View style={styles.containerImgAnnouncement}>
                 <Image style={styles.imgAnnouncement} source={item.img} />
               </View>
@@ -30,7 +37,7 @@ const ListAnnoucement = () => {
                 </Text>
                 <Text style={{fontSize: 11}}>{item.description}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </View>

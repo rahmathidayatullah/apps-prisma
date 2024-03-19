@@ -9,6 +9,7 @@ import TakeSelfie from '../../screens/home/TakeSelfie';
 import ViewCurrentLocation from '../../screens/home/ViewCurrentLocation';
 import ListOvertimeLog from '../../screens/home/ListOvertimeLog';
 import ListOfAnnouncement from '../../screens/home/ListOfAnnouncement';
+import DetailAnnoucement from '../../screens/home/DetailAnnoucement';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,13 @@ export default function NestedHomeNaviagator() {
           component={ListOfAnnouncement}
           options={{
             title: 'Pengumuman',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.DETAIL_ANNOUCEMENT}
+          component={DetailAnnoucement}
+          options={{
+            title: 'Detail Pengumuman',
           }}
         />
         <Stack.Screen name={routeMenu.TAKE_SEFIE} component={TakeSelfie} />

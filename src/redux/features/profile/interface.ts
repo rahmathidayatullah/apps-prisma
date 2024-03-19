@@ -12,6 +12,11 @@ export interface typeStatusList {
 export interface initialStateGlobalProfile {
   status: string;
   profile: {
+    overtime: {
+      clockIn: string | null;
+      clockOut: string | null;
+      id: string | null;
+    };
     clockIn?: string | null;
     clockOut?: string | null;
     workStatus?: any;

@@ -3,6 +3,7 @@ import {
   Alert,
   Dimensions,
   Image,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -24,10 +25,11 @@ import {MenuItem} from './inteface';
 import CardMenuItem from './CardMenuItem';
 import {ListAttendace} from './ListAttendace';
 import {ListSubmission} from './ListSubmission';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+// import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
+  BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
@@ -57,6 +59,8 @@ import CardSubmission from './CardSubmission';
 import CardOvertime from './CardOvertime';
 import 'moment/locale/id';
 import ListAnnoucement from './ListAnnoucement';
+import FormOvertime2 from './FormOvertime2';
+import CardMenuItem2 from './CardMenuItem2';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
@@ -70,6 +74,8 @@ const TemplateHome = () => {
   } = home;
   const auth = useSelector((state: stateGlobalAuth) => state.auth);
   const {userData} = auth;
+  const newData =
+    typeof userData === 'string' ? JSON.parse(userData) : userData;
   const profile = useSelector((state: stateGlobalProfile) => state.profile);
   console.log('home', home);
   console.log('profile', profile);
@@ -78,9 +84,6 @@ const TemplateHome = () => {
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
-
-  const newData =
-    typeof userData === 'string' ? JSON.parse(userData) : userData;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['50%'], []);
@@ -95,7 +98,13 @@ const TemplateHome = () => {
     if (menuItem === 'clockIn' && profile.profile.clockIn) {
       Alert.alert('', 'Anda sudah absen masuk');
     } else if (menuItem === 'clockOut' && profile.profile.clockOut) {
-      Alert.alert('Error', 'Anda sudah absen keluar');
+      Alert.alert('', 'Anda sudah absen keluar');
+    } else if (
+      menuItem === 'lembur' &&
+      profile.profile.overtime.clockIn &&
+      profile.profile.overtime.clockOut
+    ) {
+      Alert.alert('', 'Anda sudah absen lembur');
     } else {
       dispatch(onPressMenuItem(menuItem));
       bottomSheetModalRef.current?.present();
@@ -109,8 +118,9 @@ const TemplateHome = () => {
       setCurrentTime(moment().format('HH:mm'));
     }, 1000); // Update every second
 
+    const currentTime = moment();
+
     const updateGreeting = () => {
-      const currentTime = moment();
       const currentHour = currentTime.hour();
 
       let newGreeting = '';
@@ -159,6 +169,9 @@ const TemplateHome = () => {
   }, [navigation]);
 
   useEffect(() => {
+    if (profile.status === 'success') {
+      setRefresh(false);
+    }
     if (statusClockIn === 'success') {
       Alert.alert('Berhasil', 'Berhasil absen');
       bottomSheetModalRef?.current?.dismiss();
@@ -196,7 +209,12 @@ const TemplateHome = () => {
       });
       dispatch(resetValueBottomSheet());
     }
-  }, [statusClockIn, statusSubmitSubmission, statusSubmitOvertime]);
+  }, [
+    profile.status,
+    statusClockIn,
+    statusSubmitSubmission,
+    statusSubmitOvertime,
+  ]);
 
   const atLeastOneTrue = Object.values(isShowMenuItem).some(
     value => value === true,
@@ -210,211 +228,237 @@ const TemplateHome = () => {
     );
   }
 
+  const [refresh, setRefresh] = useState(false);
+  const pullMe = () => {
+    dispatch(fetchProfile());
+  };
+
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <BottomSheetModalProvider>
-        <SafeAreaView style={styles.safeArea}>
-          <ScrollView>
-            <View style={styles.container}>
-              {/* <View style={styles.containerHead}> */}
+    // <GestureHandlerRootView style={{flex: 1}}>
+    <BottomSheetModalProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+          }>
+          <View style={styles.container}>
+            <View style={styles.containerHead}>
               <LinearGradient
                 start={{x: 0.5, y: 0.1}}
                 end={{x: 0.5, y: 0.9}}
-                // locations={[0, 0.9, 0.9]}
                 colors={['#219C90', '#219C90', '#FBB03B']}
-                // style={styles.linearGradient}
-                style={styles.containerHead}>
-                {/* <Badge /> */}
-
-                <View style={styles.containerHeadTitleImage}>
-                  <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
-                    <ImageProfile />
-                    <View>
-                      <Text style={styles.titleName}>{newData.user.name}</Text>
-                      <Text style={styles.titleRole}>
-                        {newData.user.role.name}
-                      </Text>
-                      <Text style={styles.titleRole}>
-                        PT Prisma Inti Propertindo
-                      </Text>
-                    </View>
-                  </View>
+                // style={styles.containerHead}>
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              />
+              {/* <View style={styles.containerHead}> */}
+              <View style={styles.containerHeadTitleImage}>
+                <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
+                  <ImageProfile />
                   <View>
-                    <Text
-                      style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
-                      {moment().format('dddd')},{' '}
-                      {moment().format('DD MMMM YYYY')}
+                    <Text style={styles.titleName}>{newData.user.name}</Text>
+                    <Text style={styles.titleRole}>
+                      {newData.user.role.name}
                     </Text>
-                    <Text
-                      style={{
-                        textAlign: 'right',
-                        fontSize: 10,
-                        color: 'white',
-                      }}>
-                      {currentTime} WIB
+                    <Text style={styles.titleRole}>
+                      PT Prisma Inti Propertindo
                     </Text>
                   </View>
                 </View>
+                <View>
+                  <Text
+                    style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
+                    {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
+                  </Text>
+                  <Text
+                    style={{
+                      textAlign: 'right',
+                      fontSize: 10,
+                      color: 'white',
+                    }}>
+                    {currentTime} WIB
+                  </Text>
+                </View>
+              </View>
 
-                <ContainerCardClockInOut>
+              <ContainerCardClockInOut>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                  }}>
+                  <View style={{paddingVertical: 10}}>
+                    <Text style={styles.titleDay}>
+                      {greeting} {newData.user.name}, {greeting2}
+                    </Text>
+                  </View>
                   <View
                     style={{
-                      flexDirection: 'column',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: 4,
+                      width: '100%',
+                      marginTop: 10,
                     }}>
-                    <View style={{paddingVertical: 10}}>
-                      <Text style={styles.titleDay}>
-                        {/* <Text style={styles.titleDay}> */}
-                        {greeting} {newData.user.name}, {greeting2}
-                      </Text>
-                    </View>
+                    {/* <View>
+                      <View style={styles.containerBadge}>
+                        <View style={styles.containerBgBadge} />
+                        <Text style={styles.textBadge}>
+                          {profile.profile.workStatus || 'Work Shift'}
+                        </Text>
+                      </View>
+                    </View> */}
                     <View
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        alignItems: 'flex-start',
+                        alignItems: 'center',
                         gap: 4,
-                        width: '100%',
-                        marginTop: 10,
                       }}>
-                      <View>
-                        <View style={styles.containerBadge}>
-                          <View style={styles.containerBgBadge} />
-                          <Text style={styles.textBadge}>
-                            {profile.profile.workStatus || 'Work Shift'}
-                          </Text>
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          gap: 4,
-                        }}>
-                        <IconMaterialIcons
-                          name="access-alarm"
-                          size={24}
-                          // color="white"
-                          color={COLORS.bgPrimary}
-                        />
+                      <IconMaterialIcons
+                        name="access-alarm"
+                        size={24}
+                        color={COLORS.bgPrimary}
+                      />
 
-                        <Text
-                          style={{
-                            // color: 'white',
-                            color: COLORS.bgPrimary,
-                            fontSize: 12,
-                            fontWeight: '600',
-                          }}>
-                          {newData.user.shift.start_time}
-                          &nbsp; - {newData.user.shift.end_time}
-                        </Text>
-                      </View>
+                      <Text
+                        style={{
+                          color: COLORS.bgPrimary,
+                          fontSize: 12,
+                          fontWeight: '600',
+                        }}>
+                        {newData.user.shift.start_time}
+                        &nbsp; - {newData.user.shift.end_time}
+                      </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      marginTop: 8,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      gap: 8,
-                    }}>
-                    <CardClockInOut
-                      clockIn
-                      onPress={() => handleOnPressMenuItem('clockIn')}
-                    />
-                    <CardClockInOut
-                      clockOut
-                      onPress={() => handleOnPressMenuItem('clockOut')}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      marginTop: 8,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      gap: 8,
-                    }}>
-                    <CardOvertime
-                      onPress={() => handleOnPressMenuItem('lembur')}
-                    />
-                    <CardSubmission
-                      onPress={() => handleOnPressMenuItem('pengajuan')}
-                    />
-                  </View>
-                </ContainerCardClockInOut>
-              </LinearGradient>
-              {/* </View> */}
-
-              <View
-                style={{
-                  marginTop: 180,
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                }}>
-                {/* {routeMenuItem.map((item: MenuItem) => (
-                  <CardMenuItem
-                    onPress={() => handleOnPressMenuItem(item.value)}
-                    key={item.id}
-                    item={item}
+                </View>
+                <View
+                  style={{
+                    marginTop: 8,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: 8,
+                  }}>
+                  <CardClockInOut
+                    clockIn
+                    onPress={() => handleOnPressMenuItem('clockIn')}
                   />
-                ))} */}
-              </View>
-              <ListAnnoucement />
-              <View style={styles.containerListAttendace}>
-                <ListAttendace />
-              </View>
-              <View style={styles.containerListAttendace}>
-                <ListSubmission />
-              </View>
-              <View style={styles.containerListAttendace}>
-                <ListOvertime />
-              </View>
+                  <CardClockInOut
+                    clockOut
+                    onPress={() => handleOnPressMenuItem('clockOut')}
+                  />
+                </View>
+                <View
+                  style={{
+                    marginTop: 8,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: 8,
+                  }}>
+                  <CardOvertime
+                    onPress={() => handleOnPressMenuItem('lembur')}
+                  />
+                  <CardSubmission
+                    onPress={() => handleOnPressMenuItem('pengajuan')}
+                  />
+                </View>
+              </ContainerCardClockInOut>
+              {/* <View
+                style={{
+                  position: 'absolute',
+                  backgroundColor: 'red',
+                  height: 100,
+                  width: 100,
+                  bottom: -10,
+                }}></View> */}
+              {/* </LinearGradient> */}
             </View>
-            {atLeastOneTrue && <View style={styles.backdrop} />}
-            <BottomSheetModal
-              ref={bottomSheetModalRef}
-              index={0}
-              snapPoints={snapPoints}
-              onChange={handleSheetChanges}>
-              <BottomSheetView style={styles.contentBottomSheetContainer}>
-                <ScrollView>
-                  {/* {isShowMenuItem.cuti && (
+            {/* </View> */}
+
+            <ScrollView
+              horizontal
+              style={{
+                marginTop: 180,
+                flexDirection: 'row',
+                // justifyContent: 'space-around',
+                gap: 10,
+                // flexWrap: 'wrap',
+                marginBottom: 20,
+                // paddingHorizontal: 8,
+                overflow: 'scroll',
+                width: '100%',
+                paddingBottom: 10,
+              }}>
+              {routeMenuItem.map((item: MenuItem) => (
+                <CardMenuItem2
+                  // onPress={() => handleOnPressMenuItem(item.value)}
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </ScrollView>
+            <ListAnnoucement />
+            <View style={styles.containerListAttendace}>
+              <ListAttendace />
+            </View>
+            <View style={styles.containerListAttendace}>
+              <ListSubmission />
+            </View>
+            <View style={styles.containerListAttendace}>
+              <ListOvertime />
+            </View>
+          </View>
+          {atLeastOneTrue && <View style={styles.backdrop} />}
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}>
+            <BottomSheetScrollView style={styles.contentBottomSheetContainer}>
+              {/* <ScrollView> */}
+              {/* {isShowMenuItem.cuti && (
                     <FormCuti bottomSheetModalRef={bottomSheetModalRef} />
                   )} */}
-                  {isShowMenuItem.pengajuan && (
-                    <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
-                  )}
-                  {isShowMenuItem.lembur && (
-                    <FormOvertime bottomSheetModalRef={bottomSheetModalRef} />
-                  )}
-                  {isShowMenuItem.clockIn && (
-                    <FormClockInClockOut
-                      clockIn
-                      bottomSheetModalRef={bottomSheetModalRef}
-                    />
-                  )}
-                  {isShowMenuItem.clockOut && (
-                    <FormClockInClockOut
-                      clockOut
-                      bottomSheetModalRef={bottomSheetModalRef}
-                    />
-                  )}
-                  {isShowMenuItem.clockInOvertime && (
-                    <FormClockInClockOutOvertime />
-                  )}
-                  {isShowMenuItem.clockOutOvertime && (
-                    <FormClockInClockOutOvertime />
-                  )}
-                  {/* {isShowMenuItem.izin && (
+              {isShowMenuItem.pengajuan && (
+                <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
+              )}
+              {isShowMenuItem.lembur && (
+                <FormOvertime2 bottomSheetModalRef={bottomSheetModalRef} />
+              )}
+              {isShowMenuItem.clockIn && (
+                <FormClockInClockOut
+                  clockIn
+                  bottomSheetModalRef={bottomSheetModalRef}
+                />
+              )}
+              {isShowMenuItem.clockOut && (
+                <FormClockInClockOut
+                  clockOut
+                  bottomSheetModalRef={bottomSheetModalRef}
+                />
+              )}
+              {isShowMenuItem.clockInOvertime && (
+                <FormClockInClockOutOvertime />
+              )}
+              {isShowMenuItem.clockOutOvertime && (
+                <FormClockInClockOutOvertime />
+              )}
+              {/* {isShowMenuItem.izin && (
                     <FormPermission bottomSheetModalRef={bottomSheetModalRef} />
                   )} */}
-                </ScrollView>
-              </BottomSheetView>
-            </BottomSheetModal>
-          </ScrollView>
-        </SafeAreaView>
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+              {/* </ScrollView> */}
+            </BottomSheetScrollView>
+          </BottomSheetModal>
+        </ScrollView>
+      </SafeAreaView>
+    </BottomSheetModalProvider>
+    // </GestureHandlerRootView>
   );
 };
 
@@ -434,6 +478,7 @@ const styles = StyleSheet.create({
     paddingRight: 14,
     paddingBottom: 100,
     backgroundColor: COLORS.bgPrimary,
+    position: 'relative',
   },
   containerBody: {},
   containerHeadTitleImage: {
@@ -470,7 +515,7 @@ const styles = StyleSheet.create({
   },
   contentBottomSheetContainer: {
     flex: 1,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
 
   backdrop: {

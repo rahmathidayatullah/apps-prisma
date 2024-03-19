@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,12 +8,17 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Button,
+  Alert,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {stateGlobalProfile} from '../../redux/features/profile/interface';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import {useNavigation} from '@react-navigation/native';
+import {COLORS} from '../../contants';
+import CButtonText from '../../components/atoms/button/ButtonText';
 
 interface typeInputTextWithIcon {
   placeholder: string;
@@ -133,6 +138,7 @@ const CInputTextWithIconLabelImage = ({
 };
 
 const PersonalInfo = () => {
+  const navigation = useNavigation();
   const profile = useSelector((state: stateGlobalProfile) => state.profile);
   const [urlImage, setUrlImage] = useState(
     'https://picsum.photos/seed/696/3000/2000',
@@ -147,6 +153,22 @@ const PersonalInfo = () => {
       setUrlImage(image.path);
     });
   };
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const updateData = () => {
+    setIsEdit(!isEdit);
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <CButtonText onPress={updateData}>
+          {isEdit ? 'Simpan' : 'Ubah'}
+        </CButtonText>
+      ),
+    });
+  }, [navigation, isEdit]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
@@ -162,7 +184,7 @@ const PersonalInfo = () => {
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Nama Lengkap"
-              editable={false}
+              editable={isEdit}
               right
               value={profile.profile.user.name}
             />
@@ -171,7 +193,7 @@ const PersonalInfo = () => {
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Jabatan"
-              editable={false}
+              editable={isEdit}
               right
               value={profile.profile.user.role.name}
             />
@@ -180,7 +202,7 @@ const PersonalInfo = () => {
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Email"
-              editable={false}
+              editable={isEdit}
               right
               value={`${profile.profile.user.email}`}
             />
@@ -189,7 +211,7 @@ const PersonalInfo = () => {
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Jenis Kelamin"
-              editable={false}
+              editable={isEdit}
               right
               value="Laki - laki"
             />
@@ -198,7 +220,7 @@ const PersonalInfo = () => {
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Tempat Lahir"
-              editable={false}
+              editable={isEdit}
               right
               value="Lampung"
             />
@@ -207,7 +229,7 @@ const PersonalInfo = () => {
             <CInputTextWithIconLabel
               placeholder="Please input password"
               label="Nomor HP"
-              editable={false}
+              editable={isEdit}
               right
               value="089630912247"
             />

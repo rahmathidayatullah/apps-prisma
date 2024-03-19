@@ -34,3 +34,33 @@ export async function patchOvertimes(body: any, id: string) {
     },
   });
 }
+
+export async function patchOvertimesClockIn(body: any) {
+  const userData: any = await AsyncStorage.getItem('userData');
+  let newUserData = null;
+
+  if (typeof userData === 'string') {
+    newUserData = JSON.parse(userData);
+  }
+
+  return await axios.patch(`${baseURL}/overtimes/clock-in`, body, {
+    headers: {
+      Authorization: `Bearer ${newUserData.access_token}`,
+    },
+  });
+}
+
+export async function patchOvertimesClockOut(body: any) {
+  const userData: any = await AsyncStorage.getItem('userData');
+  let newUserData = null;
+
+  if (typeof userData === 'string') {
+    newUserData = JSON.parse(userData);
+  }
+
+  return await axios.patch(`${baseURL}/overtimes/clock-out`, body, {
+    headers: {
+      Authorization: `Bearer ${newUserData.access_token}`,
+    },
+  });
+}

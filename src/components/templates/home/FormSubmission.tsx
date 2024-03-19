@@ -104,13 +104,12 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
       height: 400,
       cropping: true,
       includeBase64: true,
-    })
-      .then((image: any) => {
-        dispatch(changeFile1Submission(image));
-      })
-      .catch(() => {
-        Alert.alert('Permission', 'Cannot file manager');
-      });
+    }).then((image: any) => {
+      dispatch(changeFile1Submission(image));
+    });
+    // .catch(() => {
+    //   Alert.alert('Permission', 'Cannot file manager');
+    // });
   };
   const onPressUpload2 = () => {
     ImageCropPicker.openPicker({
@@ -118,13 +117,12 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
       height: 400,
       cropping: true,
       includeBase64: true,
-    })
-      .then((image: any) => {
-        dispatch(changeFile2Submission(image));
-      })
-      .catch(() => {
-        Alert.alert('Permission', 'Cannot file manager');
-      });
+    }).then((image: any) => {
+      dispatch(changeFile2Submission(image));
+    });
+    // .catch(() => {
+    //   Alert.alert('Permission', 'Cannot file manager');
+    // });
   };
 
   // useEffect(() => {

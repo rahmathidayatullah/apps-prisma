@@ -72,6 +72,10 @@ import {Alert} from 'react-native';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {fetchProfile} from '../profile/actions';
 import {postSubmission} from '../../../api/submission';
+import {
+  patchOvertimesClockIn,
+  patchOvertimesClockOut,
+} from '../../../api/overtime';
 
 export const onPressMenuItem = (menuItem: any) => {
   return (dispatch: any, getState: any) => {
@@ -571,6 +575,59 @@ export const submitSubmission = (payload: any) => {
 };
 
 // ========================================== lembur/overtime
+
+export const submitOvertimeClockInOut = (
+  payload: any,
+  clockIn: boolean,
+  id: string | null,
+) => {
+  return async (dispatch: any) => {
+    dispatch({
+      type: START_SUBMIT_OVERTIME,
+    });
+    // const nameFileImage = payload.imageSelfie.path.split('/');
+    // const fileName = nameFileImage[nameFileImage.length - 1];
+    try {
+      if (clockIn) {
+        const newPayloadClockIn = {
+          clockInPhoto: `data:${payload.imageSelfie.mime};base64,${payload.imageSelfie.data}`,
+          clockInLongitude: `${payload.longitude ?? ''}`,
+          clockInLatitude: `${payload.latitude ?? ''}`,
+          description: `${payload.description}`,
+        };
+
+        console.log('newPayloadClockInLembur', newPayloadClockIn);
+        const res = await patchOvertimesClockIn(newPayloadClockIn);
+        console.log('success submitOvertimeClockInOut', res);
+        dispatch(fetchProfile());
+      } else {
+        const newPayloadClockOut = {
+          clockOutPhoto: `data:${payload.imageSelfie.mime};base64,${payload.imageSelfie.data}`,
+          clockOutLongitude: `${payload.longitude ?? ''}`,
+          clockOutLatitude: `${payload.latitude ?? ''}`,
+          description: `${payload.description}`,
+          id: id,
+        };
+        console.log('newPayloadClockOutLembur', newPayloadClockOut);
+        const res = await patchOvertimesClockOut(newPayloadClockOut);
+        console.log('success submitOvertimeClockInOut', res);
+        dispatch(fetchProfile());
+      }
+      dispatch({type: SUCCESS_SUBMIT_OVERTIME});
+    } catch (error: any) {
+      console.log('error submitOvertimeClockInOut', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({type: ERROR_SUBMIT_OVERTIME});
+      }
+    }
+  };
+};
+
 export const tooglePickerEndDateOvertime = (valueOvertime: boolean) => {
   return {
     type: TOOGLE_PICKER_END_DATE_OVERTIME,

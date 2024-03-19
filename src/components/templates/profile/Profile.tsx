@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -14,12 +14,20 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {routeMenu} from '../../../contants/routes';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../../redux/features/auth/actions';
+import LinearGradient from 'react-native-linear-gradient';
+import {stateGlobalAuth} from '../../../redux/features/auth/interface';
+import moment from 'moment';
 
 const Profile = () => {
   const navigation: any = useNavigation();
   const dispatch: any = useDispatch();
+  const auth = useSelector((state: stateGlobalAuth) => state.auth);
+  const {userData} = auth;
+  const newData =
+    typeof userData === 'string' ? JSON.parse(userData) : userData;
+
   const dataMenu = [
     {
       id: 1,
@@ -58,22 +66,52 @@ const Profile = () => {
       navigation.navigate(itemMenu.path);
     }
   };
+
+  const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
+
+  useEffect(() => {
+    const timerID = setInterval(() => {
+      setCurrentTime(moment().format('HH:mm'));
+    }, 1000); // Update every second
+    return () => {
+      clearInterval(timerID);
+    };
+  }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
         <View style={{paddingBottom: 10}}>
-          <View style={styles.containerHead}>
-            <View>
-              <Badge />
-              <View style={styles.containerHeadTitleImage}>
-                <View>
-                  <Text style={styles.titleName}>Rahmat Hidayatullah</Text>
-                  <Text style={styles.titleRole}>Karyawan</Text>
-                </View>
+          <LinearGradient
+            start={{x: 0.5, y: 0.1}}
+            end={{x: 0.5, y: 0.9}}
+            colors={['#219C90', '#219C90', '#FBB03B']}
+            style={styles.containerHead}>
+            <View style={styles.containerHeadTitleImage}>
+              <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
                 <ImageProfile />
+                <View>
+                  <Text style={styles.titleName}>{newData.user.name}</Text>
+                  <Text style={styles.titleRole}>{newData.user.role.name}</Text>
+                  <Text style={styles.titleRole}>
+                    PT Prisma Inti Propertindo
+                  </Text>
+                </View>
+              </View>
+              <View>
+                <Text style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
+                  {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'right',
+                    fontSize: 10,
+                    color: 'white',
+                  }}>
+                  {currentTime} WIB
+                </Text>
               </View>
             </View>
-          </View>
+          </LinearGradient>
 
           <View style={{paddingHorizontal: 10, paddingTop: 10}}>
             <View
@@ -140,11 +178,18 @@ const styles = StyleSheet.create({
   },
 
   containerHeadTitleImage: {
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'space-between',
+    // position: 'relative',
+    // width: '100%',
+
+    marginTop: 5,
+    paddingHorizontal: 2,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     position: 'relative',
-    width: '100%',
   },
 
   titleName: {
@@ -154,8 +199,8 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   titleRole: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 14,
+    fontWeight: '400',
     color: 'white',
     marginTop: 2,
     letterSpacing: 1,
@@ -163,12 +208,18 @@ const styles = StyleSheet.create({
 
   container: {},
   containerHead: {
-    paddingHorizontal: 20,
-    paddingVertical: 24,
+    // paddingHorizontal: 20,
+    // paddingVertical: 24,
+    // backgroundColor: COLORS.bgPrimary,
+    // flexDirection: 'column',
+    // justifyContent: 'space-between',
+    // alignItems: 'flex-start',
+
+    paddingTop: 14,
+    paddingLeft: 10,
+    paddingRight: 14,
+    paddingBottom: 60,
     backgroundColor: COLORS.bgPrimary,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
   },
   line: {
     height: 2,
