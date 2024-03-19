@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     // box shadow android
     elevation: 4,
+    zIndex: 1,
   },
 });
 

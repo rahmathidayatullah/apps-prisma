@@ -1,13 +1,14 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../../../contants';
 
 interface typeOfListItemAnnoucement {
   item: any;
+  onPress?: any;
 }
-const ListItemAnnoucement = ({item}: typeOfListItemAnnoucement) => {
+const ListItemAnnoucement = ({item, onPress}: typeOfListItemAnnoucement) => {
   return (
-    <View style={styles.wrapItemAnnouncement} key={item.id}>
+    <TouchableOpacity style={styles.wrapItemAnnouncement} onPress={onPress}>
       <View style={styles.containerImgAnnouncement}>
         <Image style={styles.imgAnnouncement} source={item.img} />
       </View>
@@ -15,7 +16,7 @@ const ListItemAnnoucement = ({item}: typeOfListItemAnnoucement) => {
         <Text style={{fontSize: 13, fontWeight: '600'}}>{item.title}</Text>
         <Text style={{fontSize: 11}}>{item.description}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

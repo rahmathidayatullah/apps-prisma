@@ -8,6 +8,7 @@ import HomeNaviagator from './src/components/navigations/HomeNavigator';
 import {ActivityIndicator, StatusBar, View} from 'react-native';
 import {initAuth} from './src/redux/features/auth/actions';
 import {COLORS} from './src/contants';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const RootNavigation = () => {
   const dispatch: any = useDispatch();
@@ -39,9 +40,11 @@ const RootNavigation = () => {
 
 function App() {
   return (
-    <Provider store={store}>
-      <RootNavigation />
-    </Provider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <Provider store={store}>
+        <RootNavigation />
+      </Provider>
+    </GestureHandlerRootView>
   );
 }
 

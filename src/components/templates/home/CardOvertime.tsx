@@ -3,12 +3,16 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
 import IconOvertime from '../../atoms/svg/overtime';
+import {stateGlobalProfile} from '../../../redux/features/profile/interface';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 
 interface typeCardSubmission {
   onPress?: any;
 }
 
 const CardOvertime = ({onPress}: typeCardSubmission) => {
+  const profile = useSelector((state: stateGlobalProfile) => state.profile);
   return (
     <TouchableOpacity onPress={onPress} style={styles.cardClockInOut}>
       <View>
@@ -19,9 +23,25 @@ const CardOvertime = ({onPress}: typeCardSubmission) => {
         <View>
           <View style={styles.containerBadge}>
             {/* <View style={styles.containerBgBadge} /> */}
-            <Text style={styles.textBadge}>18:00:00</Text>
+            <Text style={styles.textBadge}>
+              {profile.profile.overtime.clockIn
+                ? moment(
+                    profile.profile.overtime.clockIn,
+                    'DD-MM-YYYY hh:mm:ss',
+                  ).format('hh:mm')
+                : '-:-'}
+              {/* 18:00 */}
+            </Text>
             <Text style={styles.textBadge}>-</Text>
-            <Text style={styles.textBadge}>21:00:00</Text>
+            <Text style={styles.textBadge}>
+              {profile.profile.overtime.clockOut
+                ? moment(
+                    profile.profile.overtime.clockOut,
+                    'DD-MM-YYYY hh:mm:ss',
+                  ).format('hh:mm')
+                : '-:-'}
+              {/* 21:00 */}
+            </Text>
             {/* <Text style={styles.textBadge}>- : -</Text>
             <Text style={styles.textBadge}>- : -</Text> */}
           </View>

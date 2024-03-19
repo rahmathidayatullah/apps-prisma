@@ -24,6 +24,7 @@ export const routeMenu = {
   LIST_OVERTIME_LOG: 'List Overtime Log',
   LIST_OF_SUBMISSION: 'List Of Submission',
   LIST_OF_ANNOUCEMENT: 'List Of Annoucement',
+  DETAIL_ANNOUCEMENT: 'Detail Annoucement',
   TAKE_SEFIE: 'Take Selfie',
   VIEW_CURRENT_LOCATION: 'View Current Location',
 
@@ -41,38 +42,94 @@ import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {MenuItem} from '../components/templates/home/inteface';
 import {COLORS} from '.';
+import IconClockIn from '../components/atoms/svg/clockIn';
+import IconOvertime2 from '../components/atoms/svg/overtime2';
+import IconPenjualan from '../components/atoms/svg/penjualan';
+import IconAkad from '../components/atoms/svg/akad';
+import IconHome from '../components/atoms/svg/home';
+import IconLogistik from '../components/atoms/svg/logistik';
 
+// export const routeMenuItem: MenuItem[] = [
+//   {
+//     id: 1,
+//     value: 'pengajuan',
+//     label: 'Pengajuan',
+//     path: '/',
+//     icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
+//   },
+//   // {
+//   //   id: 3,
+//   //   value: 'cuti',
+//   //   label: 'Cuti',
+//   //   path: '/',
+//   //   icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
+//   // },
+//   {
+//     id: 2,
+//     value: 'lembur',
+//     label: 'Lembur',
+//     path: '/profile',
+//     icon: (
+//       <IconSimpleLineIcons name="clock" size={28} color={COLORS.bgPrimary} />
+//     ),
+//   },
+//   // {
+//   //   id: 4,
+//   //   value: 'izin',
+//   //   label: 'Izin',
+//   //   path: '/settings',
+//   //   icon: <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />,
+//   // },
+// ];
 export const routeMenuItem: MenuItem[] = [
   {
     id: 1,
     value: 'pengajuan',
-    label: 'Pengajuan',
+    label: 'Kehadiran',
     path: '/',
-    icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
+    icon: (
+      // <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />
+      <IconOvertime2 />
+    ),
   },
-  // {
-  //   id: 3,
-  //   value: 'cuti',
-  //   label: 'Cuti',
-  //   path: '/',
-  //   icon: <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />,
-  // },
+  {
+    id: 3,
+    value: 'cuti',
+    label: 'Penjualan',
+    path: '/',
+    icon: <IconPenjualan />,
+    // <IconFeather name="calendar" size={28} color={COLORS.bgPrimary} />
+  },
   {
     id: 2,
     value: 'lembur',
-    label: 'Lembur',
+    label: 'List Persiapan Akad',
     path: '/profile',
     icon: (
-      <IconSimpleLineIcons name="clock" size={28} color={COLORS.bgPrimary} />
+      // <IconSimpleLineIcons name="clock" size={28} color={COLORS.bgPrimary} />
+      <IconAkad />
     ),
   },
-  // {
-  //   id: 4,
-  //   value: 'izin',
-  //   label: 'Izin',
-  //   path: '/settings',
-  //   icon: <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />,
-  // },
+  {
+    id: 4,
+    value: 'izin',
+    label: 'Progress Rumah',
+    path: '/settings',
+    icon: (
+      // <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />
+      <IconHome />
+    ),
+  },
+  {
+    id: 5,
+    value: 'izin',
+    label: 'Management Logistik',
+    path: '/settings',
+    icon: (
+      // <IconAntDesign name="message1" size={28} color={COLORS.bgPrimary} />
+      <IconLogistik />
+    ),
+  },
 ];
 
 export interface typeItemCategorySubmission {
