@@ -32,16 +32,10 @@ const FormPermission = ({bottomSheetModalRef}: any) => {
     reason,
   } = useSelector((state: stateGlobalHome) => state.home);
 
-  console.log('showPickerEndDatePermission', showPickerEndDatePermission);
-  console.log('showPickerStartDatePermission', showPickerStartDatePermission);
-
   const handleSubmitPermission = () => {
     // dispatch(resetValueBottomSheet());
     // bottomSheetModalRef.current?.dismiss();
     // navigation.navigate(routeMenu.PROFILE);
-    console.log('valueEndDatePermission', valueEndDatePermission);
-    console.log('valueStartDatePermission', valueStartDatePermission);
-    console.log('reason', reason);
   };
   const handleOnChangePickerEndDate = (
     event: {type: string},

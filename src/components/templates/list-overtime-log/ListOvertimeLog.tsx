@@ -1,55 +1,75 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getListOvertimes} from '../../../redux/features/overtimes/actions';
 import {ListItemOvertime} from './ListItemOvertime';
+import {getListOvertimes} from '../../../redux/features/overtimes/actions';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../contants';
+import CalendarPicker from 'react-native-calendar-picker';
 
 interface typeInputTextWithIcon {
   placeholder: string;
   icon?: any;
+  icon2?: any;
   right?: boolean;
   stylesProps?: any;
   onChangeText?: any;
   value?: string;
   editable?: boolean;
+  onPressInputContainer?: any;
+  isValueExist?: boolean;
+  clearValue?: any;
 }
 
 const CInputTextWithIconLabel = ({
   placeholder,
   icon,
+  icon2,
   right,
   stylesProps,
   onChangeText,
   value,
-  editable = true,
+  editable = false,
+  onPressInputContainer,
+  isValueExist = false,
+  clearValue,
 }: typeInputTextWithIcon) => {
   return (
     <View style={[styles.containerInputIconLabel, stylesProps]}>
       <View style={styles.containerInput}>
-        {right ? (
-          <View style={{position: 'absolute', top: '32%', right: '15%'}}>
-            {icon}
-          </View>
-        ) : (
-          <View>{icon}</View>
+        {isValueExist && (
+          <TouchableOpacity
+            onPress={clearValue}
+            style={{position: 'absolute', top: '35%', right: '13%', zIndex: 1}}>
+            {icon2}
+          </TouchableOpacity>
         )}
-        <TextInput
-          editable={editable}
-          placeholderTextColor="#ccc"
-          style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
-          placeholder={placeholder}
-          onChangeText={onChangeText}
-          value={value}
-        />
+
+        <View style={{position: 'absolute', top: '35%', left: '1%', zIndex: 1}}>
+          {icon}
+        </View>
+
+        <TouchableOpacity
+          onPress={onPressInputContainer}
+          style={{width: '100%'}}>
+          <TextInput
+            editable={editable}
+            placeholderTextColor="#ccc"
+            style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
+            placeholder={placeholder}
+            onChangeText={onChangeText}
+            value={value}
+            onPressIn={onPressInputContainer}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -61,7 +81,39 @@ const TemplateListOvertimeLog = () => {
 
   const {dataListOvertimes, page, take, order, statusListOvertimes} = overtimes;
 
-  console.log('dataListOvertimes', dataListOvertimes);
+  const [selectedStartDate, setSelectedStartDate] = useState<any>('');
+  const [selectedEndDate, setSelectedEndDate] = useState<any>('');
+  const [showCalender, setShowCalender] = useState<any>(false);
+
+  const handleClearValue = () => {
+    setSelectedStartDate('');
+    setSelectedEndDate('');
+  };
+  const onPressInputContainer = () => {
+    setShowCalender(!showCalender);
+  };
+  const onDateChange = (date: any, type: any) => {
+    // console.log(JSON.stringify(date));
+    const newDate = JSON.stringify(date);
+    const newDate1 = newDate.substring(1, newDate.length - 1);
+    const dates = newDate1.split('T');
+    const date1 = dates[0].split('-');
+    const day = date1[2];
+    const month = date1[1];
+    const year = date1[0];
+    // console.log(day + '-' + month + '-' + year);
+
+    if (type == 'END_DATE') {
+      if (day == undefined) {
+        setSelectedEndDate('');
+      } else {
+        setShowCalender(false);
+        setSelectedEndDate(day + '/' + month + '/' + year);
+      }
+    } else {
+      setSelectedStartDate(day + '/' + month + '/' + year);
+    }
+  };
 
   useEffect(() => {
     dispatch(getListOvertimes());
@@ -77,8 +129,15 @@ const TemplateListOvertimeLog = () => {
 
   if (statusListOvertimes === 'error') {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-        <Text>Somthing when wrong</Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignContent: 'center',
+          width: '100%',
+          height: '100%',
+        }}>
+        <Text style={{textAlign: 'center'}}>Somthing when wrong</Text>
       </View>
     );
   }
@@ -87,6 +146,7 @@ const TemplateListOvertimeLog = () => {
       <View style={styles.container}>
         <View style={styles.containerTitleList}>
           <CInputTextWithIconLabel
+            onPressInputContainer={onPressInputContainer}
             placeholder="Filter By Start date - End date"
             icon={
               <IconAntDesign
@@ -96,8 +156,35 @@ const TemplateListOvertimeLog = () => {
                 color="#B8B8B8"
               />
             }
+            icon2={
+              <IconAntDesign
+                style={styles.iconInput}
+                name="closecircleo"
+                size={19}
+                color="#B8B8B8"
+              />
+            }
+            clearValue={handleClearValue}
+            value={`${
+              selectedStartDate ? `${selectedStartDate} - ` : ''
+            }${selectedEndDate}`}
+            isValueExist={selectedStartDate && selectedStartDate}
           />
         </View>
+        {showCalender ? (
+          <View>
+            <CalendarPicker
+              startFromMonday={true}
+              allowRangeSelection={true}
+              todayBackgroundColor="#f2e6ff"
+              selectedDayColor="#7300e6"
+              selectedDayTextColor="#FFFFFF"
+              onDateChange={onDateChange}
+            />
+          </View>
+        ) : (
+          ''
+        )}
         <View>
           {dataListOvertimes.length === 0 ? (
             <Text>Data Kosong</Text>
@@ -157,7 +244,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     // box shadow android
-    elevation: 2,
+    elevation: 0.1,
   },
   inputLeft: {
     paddingLeft: 50,

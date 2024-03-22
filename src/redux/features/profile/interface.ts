@@ -21,11 +21,21 @@ export interface initialStateGlobalProfile {
     clockOut?: string | null;
     workStatus?: any;
     user: {
-      name: string;
+      name: string | null;
       role: {
-        name: string;
+        name: string | null;
       };
-      email: string;
+      email: string | null;
+      phoneNumber: string | null;
+      emergencyContact: string | null;
+      address: string | null;
+      // gender: string | null;
+      npwp: string | null;
+      no_nrp: string | null;
+      nik: string | null;
+      photo?: string | undefined;
     };
   };
+  dataUpdateProfile?: any;
+  statusUpdateProfile: string;
 }

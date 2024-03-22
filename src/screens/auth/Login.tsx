@@ -27,11 +27,8 @@ const LoginScreen = () => {
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
 
-  // const {statusLogin, userData, error, response, response2, response3} =
-  const {statusLogin} = useSelector((state: stateGlobalAuth) => state.auth);
-
-  // console.log('statusLogin', statusLogin);
-  // console.log('userData', userData);
+  const {statusLogin, userData, error, response, response2, response3} =
+    useSelector((state: stateGlobalAuth) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,17 +37,25 @@ const LoginScreen = () => {
     dispatch(postLogin(email, password));
   };
   return (
-    <ScrollView style={{flex: 1, marginTop: 60}}>
+    <ScrollView style={{flex: 1}}>
       <SafeAreaView style={styles.containerSafeArea}>
         <View style={styles.containerView}>
           <View style={styles.imageLogoContainer}>
             <Image
               style={styles.imageLogo}
-              source={require('../../assets/images/logoprisma-01.png')}
+              source={require('../../assets/images/logoPrismaApps-03.png')}
             />
           </View>
 
-          <Text style={styles.titleSign}>Masuk</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              // borderWidth: 1,
+              // borderColor: '#000',
+            }}>
+            <Text style={styles.titleSign}>Masuk</Text>
+          </View>
 
           <View style={styles.line}></View>
 
@@ -96,12 +101,12 @@ const LoginScreen = () => {
           </View>
 
           {/* start ===================== debug */}
-          {/* {userData && (
+          {userData && (
             <View style={{marginTop: 15, flexDirection: 'row'}}>
               <Text>userData :{JSON.stringify(userData)}</Text>
             </View>
-          )} */}
-          {/* <View style={{marginTop: 15, flexDirection: 'row'}}>
+          )}
+          <View style={{marginTop: 15, flexDirection: 'row'}}>
             <Text>error :{error}</Text>
           </View>
           <View style={{marginTop: 15, flexDirection: 'row'}}>
@@ -112,7 +117,7 @@ const LoginScreen = () => {
           </View>
           <View style={{marginTop: 15, flexDirection: 'row'}}>
             <Text>response3 :{response3}</Text>
-          </View> */}
+          </View>
           {/* end ===================== debug */}
 
           <View
@@ -145,14 +150,14 @@ const styles = StyleSheet.create({
     padding: 15,
     position: 'relative',
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
   },
   titleSign: {
-    marginTop: 50,
+    marginTop: 30,
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: 'left',
     color: COLORS.bgGrey,
     marginBottom: 16,
     fontWeight: 'bold',
@@ -169,13 +174,19 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     marginTop: 10,
   },
-  imageLogoContainer: {},
-  imageLogo: {
+  imageLogoContainer: {
+    flex: 1,
     width: 300,
-    height: 100,
+    height: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageLogo: {
+    width: '100%',
+    height: '100%',
     resizeMode: 'contain',
     position: 'relative',
-    left: -10,
   },
 });
 

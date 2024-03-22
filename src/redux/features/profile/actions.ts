@@ -1,8 +1,12 @@
-import {getProfile} from '../../../api/user';
+import {getProfile, patchProfile} from '../../../api/user';
 import {
   START_FETCH_PROFILE,
   ERROR_FETCH_PROFILE,
   SUCCESS_FETCH_PROFILE,
+  START_UPDATE_PROFILE,
+  ERROR_UPDATE_PROFILE,
+  SUCCESS_UPDATE_PROFILE,
+  RESET_FORM_PROFILE,
 } from './constants';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {Alert} from 'react-native';
@@ -13,28 +17,41 @@ export const fetchProfile = () => {
       type: START_FETCH_PROFILE,
     });
     try {
-      const {
-        data: {data},
-      } = await getProfile();
-      console.log('fetch redux profile', data);
-      let newData = {
-        profile: {
+      const res: any = await getProfile();
+      console.log('res', res);
+      let newData: any;
+      if (res.data.data) {
+        newData = res.data.data;
+      } else {
+        newData = {
+          overtime: {
+            clockIn: null,
+            clockOut: null,
+            id: null,
+          },
           clockIn: null,
           clockOut: null,
           workStatus: null,
           user: {
-            name: '',
+            name: null,
             role: {
-              name: '',
+              name: null,
             },
-            email: '',
+            email: null,
+            phoneNumber: null,
+            emergencyContact: null,
+            address: null,
+            // gender:  null,
+            npwp: null,
+            no_nrp: null,
+            nik: null,
+            photo: undefined,
           },
-        },
-      };
-
+        };
+      }
       dispatch({
         type: SUCCESS_FETCH_PROFILE,
-        profile: data || newData,
+        profile: newData,
       });
     } catch (error: any) {
       console.log('error fetch redux profile', error);
@@ -46,6 +63,38 @@ export const fetchProfile = () => {
       } else {
         dispatch({type: ERROR_FETCH_PROFILE});
       }
+    }
+  };
+};
+
+export const updateProfile = (body: any) => {
+  return async (dispatch: any, getState: any) => {
+    dispatch({type: START_UPDATE_PROFILE});
+
+    const dataBody = {
+      photo: body.photo
+        ? `data:${body.photo.mime};base64,${body.photo.data}`
+        : null,
+      name: body.name,
+      // roleName: '',
+      email: body.email,
+      phoneNumber: body.phoneNumber,
+      emergencyContact: body.emergencyContact,
+      address: body.address,
+      npwp: body.npwp,
+      no_nrp: body.no_nrp,
+      nik: body.nik,
+    };
+    console.log('body update profile', body);
+    try {
+      const {
+        data: {data},
+      } = await patchProfile(dataBody);
+      console.log('success put updateProfile', data);
+      dispatch({type: SUCCESS_UPDATE_PROFILE});
+    } catch (error) {
+      console.log('error put updateProfile', error);
+      dispatch({type: ERROR_UPDATE_PROFILE});
     }
   };
 };

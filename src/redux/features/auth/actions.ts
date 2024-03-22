@@ -42,6 +42,7 @@ export const postLogin = (email: string, password: string | number) => {
         userData: data,
       });
     } catch (error: any) {
+      console.log('error', error);
       dispatch({
         type: ERROR_LOGIN,
         error: JSON.stringify(error),

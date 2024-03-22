@@ -21,7 +21,7 @@ const createAxiosInstance = () => {
 
       // console.log('=======>>>>>>>>>>> ada token', newUserData);
       if (newUserData) {
-        console.log('=======>>>>>>>>>>> ada token');
+        // console.log('=======>>>>>>>>>>> ada token');
         config.headers.Authorization = `Bearer ${newUserData.access_token}`;
       }
       return config;
@@ -39,7 +39,7 @@ const createAxiosInstance = () => {
       if (error.response.status === 401) {
         // Perform logout or token refresh, etc.
         // Example: Redirect to login screen
-        console.log('=====================>>>>>>> error 401');
+        // console.log('=====================>>>>>>> error 401');
         // AsyncStorage.clear();
         // navigation.navigate(routeMenu.LOGIN);
       }

@@ -25,17 +25,9 @@ const TakeSelfie = () => {
       cropping: true,
       useFrontCamera: true,
     }).then((image: any) => {
-      console.log('image123', image);
       setImage(image.path);
     });
   };
-
-  console.log('=====>>>>>>>>>image', image);
-
-  // useEffect(() => {
-  // openCamera();
-  // }, []);
-
   return (
     <View style={styles.containerImageProfile}>
       <Image
@@ -47,12 +39,6 @@ const TakeSelfie = () => {
       />
       <CButtonText onPress={openCamera}>Open camera</CButtonText>
     </View>
-
-    // <View>
-    //   <Text>TakeSelfie</Text>
-    //   <CButtonText onPress={OpenCameraLib}>Open Camera</CButtonText>
-    // </View>
-    // <View style={{flex: 1}}></View>
   );
 };
 
