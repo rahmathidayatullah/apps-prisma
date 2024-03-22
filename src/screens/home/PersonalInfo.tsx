@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,54 +8,45 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  Button,
   Alert,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {stateGlobalProfile} from '../../redux/features/profile/interface';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {useNavigation} from '@react-navigation/native';
-import {COLORS} from '../../contants';
 import CButtonText from '../../components/atoms/button/ButtonText';
+import {
+  fetchProfile,
+  updateProfile,
+} from '../../redux/features/profile/actions';
+import {RESET_FORM_PROFILE} from '../../redux/features/profile/constants';
+import {baseURL} from '../../api/user';
 
-interface typeInputTextWithIcon {
+interface typeInputText {
   placeholder: string;
   label: string;
-  icon?: any;
-  right?: boolean;
-  stylesProps?: any;
   onChangeText?: any;
   value?: string;
   editable?: boolean;
 }
 
-const CInputTextWithIconLabel = ({
+const CInputText = ({
   placeholder,
   label,
-  icon,
-  right,
-  stylesProps,
   onChangeText,
   value,
   editable = true,
-}: typeInputTextWithIcon) => {
+}: typeInputText) => {
   return (
-    <View style={[styles.containerInputIconLabel, stylesProps]}>
+    <View style={[styles.containerInputIconLabel]}>
       <Text style={{color: '#AFAFAF', fontWeight: '500'}}>{label}</Text>
       <View style={styles.containerInput}>
-        {right ? (
-          <View style={{position: 'absolute', top: '32%', right: '15%'}}>
-            {icon}
-          </View>
-        ) : (
-          <View>{icon}</View>
-        )}
         <TextInput
           editable={editable}
           placeholderTextColor="#ccc"
-          style={[styles.input, right ? styles.inputRight : styles.inputLeft]}
+          style={styles.input}
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}
@@ -65,16 +56,13 @@ const CInputTextWithIconLabel = ({
   );
 };
 
-interface typeCInputTextWithIconLabelImage {
+interface typeCInputImage {
   label: string;
-  url?: string;
+  url?: any;
   changeImage?: any;
+  isEdit: boolean;
 }
-const CInputTextWithIconLabelImage = ({
-  label,
-  url,
-  changeImage,
-}: typeCInputTextWithIconLabelImage) => {
+const CInputImage = ({label, url, changeImage, isEdit}: typeCInputImage) => {
   return (
     <View
       style={[
@@ -102,7 +90,7 @@ const CInputTextWithIconLabelImage = ({
             <Image
               style={styles.imageProfile}
               source={{
-                uri: url,
+                uri: `${baseURL}/${url.path}`,
               }}
               resizeMode="cover"
             />
@@ -113,7 +101,8 @@ const CInputTextWithIconLabelImage = ({
                 position: 'absolute',
                 top: '33%',
                 left: '33%',
-              }}>
+              }}
+              disabled={!isEdit}>
               <IconFeather name="camera" size={22} color="#B8B8B8" />
             </TouchableOpacity>
           )}
@@ -126,7 +115,9 @@ const CInputTextWithIconLabelImage = ({
               position: 'absolute',
               top: '75%',
               left: '15%',
-            }}>
+              display: `${isEdit ? 'flex' : 'none'}`,
+            }}
+            disabled={!isEdit}>
             <IconAntDesign name="edit" size={22} color="#B8B8B8" />
           </TouchableOpacity>
         ) : (
@@ -137,101 +128,248 @@ const CInputTextWithIconLabelImage = ({
   );
 };
 
+interface typeForm {
+  photo?: string | undefined;
+  name?: string;
+  roleName?: string;
+  email?: string;
+  phoneNumber?: string;
+  emergencyContact?: string;
+  address?: string;
+  // gender?:string,
+  npwp?: string;
+  no_nrp?: string;
+  nik?: string;
+  // no_rek?:string,
+}
 const PersonalInfo = () => {
+  const dispatch: any = useDispatch();
   const navigation = useNavigation();
   const profile = useSelector((state: stateGlobalProfile) => state.profile);
-  const [urlImage, setUrlImage] = useState(
-    'https://picsum.photos/seed/696/3000/2000',
-  );
+
+  const {statusUpdateProfile} = profile;
+
   const changeImage = () => {
     ImageCropPicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,
-      useFrontCamera: true,
+      includeBase64: true,
     }).then((image: any) => {
-      setUrlImage(image.path);
+      setForm({...form, photo: image});
     });
   };
 
   const [isEdit, setIsEdit] = useState(false);
 
+  const [form, setForm] = useState<typeForm>({
+    photo: undefined,
+    name: '',
+    roleName: '',
+    email: '',
+    phoneNumber: '',
+    emergencyContact: '',
+    address: '',
+    // gender:"",
+    npwp: '',
+    no_nrp: '',
+    nik: '',
+    // no_rek:"",
+  });
+
   const updateData = () => {
-    setIsEdit(!isEdit);
+    if (isEdit) {
+      dispatch(updateProfile(form));
+    } else {
+      setIsEdit(true);
+    }
   };
+
+  const resetForm = () => {
+    setForm({
+      photo: undefined,
+      name: '',
+      roleName: '',
+      email: '',
+      phoneNumber: '',
+      emergencyContact: '',
+      address: '',
+      // gender:"",
+      npwp: '',
+      no_nrp: '',
+      nik: '',
+      // no_rek:"",
+    });
+  };
+
+  useEffect(() => {
+    if (statusUpdateProfile === 'success') {
+      Alert.alert('Berhasil', 'Data profile berhasil di update');
+      dispatch({type: RESET_FORM_PROFILE});
+      setIsEdit(false);
+      dispatch(fetchProfile());
+    } else if (profile.status === 'success') {
+      setForm({
+        name: profile.profile.user.name || '-',
+        email: profile.profile.user.email || '-',
+        roleName: profile.profile.user.role.name || '-',
+        phoneNumber: profile.profile.user.phoneNumber || '-',
+        emergencyContact: profile.profile.user.emergencyContact || '-',
+        address: profile.profile.user.address || '-',
+        npwp: profile.profile.user.npwp || '-',
+        no_nrp: profile.profile.user.no_nrp || '-',
+        nik: profile.profile.user.nik || '-',
+        photo: profile.profile.user.photo || undefined,
+      });
+    }
+    return () => {
+      resetForm();
+    };
+  }, [profile.status, statusUpdateProfile]);
+
+  useEffect(() => {
+    dispatch(fetchProfile());
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <CButtonText onPress={updateData}>
-          {isEdit ? 'Simpan' : 'Ubah'}
+        <CButtonText
+          onPress={updateData}
+          disabled={statusUpdateProfile === 'process'}>
+          {statusUpdateProfile === 'process'
+            ? 'loading . .'
+            : isEdit
+            ? 'Simpan'
+            : 'Ubah'}
         </CButtonText>
       ),
     });
-  }, [navigation, isEdit]);
+  }, [navigation, isEdit, form, statusUpdateProfile]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
         <View style={styles.container}>
           <View style={{marginTop: 10}}>
-            <CInputTextWithIconLabelImage
+            <CInputImage
               changeImage={changeImage}
               label="Foto Profile"
-              url={urlImage}
+              url={form.photo}
+              isEdit={isEdit}
             />
           </View>
           <View style={{marginTop: 20}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
+            <CInputText
+              placeholder="Masukkan nama lengkap"
               label="Nama Lengkap"
               editable={isEdit}
-              right
-              value={profile.profile.user.name}
+              value={form.name}
+              onChangeText={(newText: string) =>
+                setForm({...form, name: newText})
+              }
             />
           </View>
           <View style={{marginTop: 20}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
+            <CInputText
+              placeholder="Masukkan jabatan"
               label="Jabatan"
-              editable={isEdit}
-              right
-              value={profile.profile.user.role.name}
+              editable={false}
+              value={form.roleName}
             />
           </View>
+
           <View style={{marginTop: 20}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
+            <CInputText
+              placeholder="Masukkan email"
               label="Email"
               editable={isEdit}
-              right
-              value={`${profile.profile.user.email}`}
+              value={form.email}
+              onChangeText={(newText: string) =>
+                setForm({...form, email: newText})
+              }
             />
           </View>
           <View style={{marginTop: 20}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
-              label="Jenis Kelamin"
-              editable={isEdit}
-              right
-              value="Laki - laki"
-            />
-          </View>
-          <View style={{marginTop: 20}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
-              label="Tempat Lahir"
-              editable={isEdit}
-              right
-              value="Lampung"
-            />
-          </View>
-          <View style={{marginTop: 20}}>
-            <CInputTextWithIconLabel
-              placeholder="Please input password"
+            <CInputText
+              placeholder="Masukkan nomor hp"
               label="Nomor HP"
               editable={isEdit}
-              right
-              value="089630912247"
+              value={form.phoneNumber}
+              onChangeText={(newText: string) =>
+                setForm({...form, phoneNumber: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan nomor darurat"
+              label="Nomor Darurat"
+              editable={isEdit}
+              value={form.emergencyContact}
+              onChangeText={(newText: string) =>
+                setForm({...form, emergencyContact: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan alamat"
+              label="Alamat"
+              editable={isEdit}
+              value={form.address}
+              onChangeText={(newText: string) =>
+                setForm({...form, address: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan jenis kelamin"
+              label="Jenis Kelamin"
+              editable={isEdit}
+              value="Belum ada"
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan NPWP"
+              label="NPWP"
+              editable={isEdit}
+              value={form.npwp}
+              onChangeText={(newText: string) =>
+                setForm({...form, npwp: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan NRP"
+              label="NRP"
+              editable={isEdit}
+              value={form.no_nrp}
+              onChangeText={(newText: string) =>
+                setForm({...form, no_nrp: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan NIK"
+              label="NIK"
+              editable={isEdit}
+              value={form.nik}
+              onChangeText={(newText: string) =>
+                setForm({...form, nik: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan No Rek"
+              label="No Rek"
+              editable={isEdit}
+              // value={profile.profile.user. || '-'}
+              value="Belum ada"
             />
           </View>
         </View>
@@ -250,16 +388,6 @@ const styles = StyleSheet.create({
     paddingRight: 14,
     marginTop: 18,
   },
-  containerTitleList: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  textAttendaceLog: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-
   containerInputIconLabel: {
     width: '100%',
   },
@@ -276,13 +404,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: '#000000',
     fontWeight: '600',
-  },
-  inputLeft: {
-    paddingLeft: 50,
-    color: '#000000',
-  },
-  inputRight: {
-    color: '#000000',
   },
   imageProfile: {
     flex: 1,

@@ -77,9 +77,9 @@ const TemplateHome = () => {
   const newData =
     typeof userData === 'string' ? JSON.parse(userData) : userData;
   const profile = useSelector((state: stateGlobalProfile) => state.profile);
-  console.log('home', home);
-  console.log('profile', profile);
-  console.log('auth', auth);
+  // console.log('home', home);
+  // console.log('profile', profile);
+  // console.log('auth', auth);
 
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');

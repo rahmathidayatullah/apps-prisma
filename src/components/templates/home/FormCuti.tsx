@@ -33,8 +33,6 @@ const FormCuti = ({bottomSheetModalRef}: any) => {
     // dispatch(resetValueBottomSheet());
     // bottomSheetModalRef.current?.dismiss();
     // navigation.navigate(routeMenu.LIST_ATTENDACE_LOG);
-    console.log('valueEndDate', valueEndDate);
-    console.log('valueStartDate', valueStartDate);
   };
   const handleOnChangePickerEndDate = (
     event: {type: string},

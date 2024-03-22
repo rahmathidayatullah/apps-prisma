@@ -88,7 +88,6 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
     event: {type: string},
     selectedDate: string,
   ) => {
-    console.log('selectedDate handleOnChangePickerStartDate', selectedDate);
     dispatch(
       onChangePickerStartDateSubmission(event.type, Platform, selectedDate),
     );

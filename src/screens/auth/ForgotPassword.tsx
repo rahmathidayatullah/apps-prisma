@@ -1,7 +1,14 @@
 import React from 'react';
 
 import {useNavigation} from '@react-navigation/native';
-import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from 'react-native';
 
 import IconEntypo from 'react-native-vector-icons/Entypo';
 
@@ -15,50 +22,60 @@ import {COLORS} from '../../contants';
 const ForgotPasswordScreen = () => {
   const navigation: any = useNavigation();
   return (
-    <SafeAreaView style={styles.containerSafeArea}>
-      <View style={styles.containerView}>
-        <View style={styles.imageLogoContainer}>
-          <Image
-            style={styles.imageLogo}
-            source={require('../../assets/images/logoprisma-01.png')}
-          />
-        </View>
-
-        <Text style={styles.titleSign}>Lupa Password</Text>
-
-        <View style={styles.line}></View>
-
-        <CInputTextWithIconLabel
-          placeholder="Masukkan email anda"
-          label="Email"
-          icon={
-            <IconEntypo
-              style={styles.iconInput}
-              name="email"
-              size={19}
-              color="#B8B8B8"
+    <ScrollView style={{flex: 1}}>
+      <SafeAreaView style={styles.containerSafeArea}>
+        <View style={styles.containerView}>
+          <View style={styles.imageLogoContainer}>
+            <Image
+              style={styles.imageLogo}
+              source={require('../../assets/images/logoPrismaApps-03.png')}
             />
-          }
-        />
+          </View>
 
-        <View style={{marginTop: 30, flexDirection: 'row'}}>
-          <CButton>Kirim</CButton>
-        </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              // borderWidth: 1,
+              // borderColor: '#000',
+            }}>
+            <Text style={styles.titleSign}>Lupa Password</Text>
+          </View>
 
-        <View
-          style={{
-            marginTop: 15,
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
-          <View style={{flex: 1}}>
-            <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
-              Kembali
-            </CButtonText>
+          <View style={styles.line}></View>
+
+          <CInputTextWithIconLabel
+            placeholder="Masukkan email anda"
+            label="Email"
+            icon={
+              <IconEntypo
+                style={styles.iconInput}
+                name="email"
+                size={19}
+                color="#B8B8B8"
+              />
+            }
+          />
+
+          <View style={{marginTop: 30, flexDirection: 'row'}}>
+            <CButton>Kirim</CButton>
+          </View>
+
+          <View
+            style={{
+              marginTop: 15,
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
+            <View style={{flex: 1}}>
+              <CButtonText onPress={() => navigation.navigate(routeMenu.LOGIN)}>
+                Kembali
+              </CButtonText>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -100,13 +117,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  imageLogoContainer: {},
-  imageLogo: {
+  imageLogoContainer: {
+    flex: 1,
     width: 300,
-    height: 100,
+    height: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageLogo: {
+    width: '100%',
+    height: '100%',
     resizeMode: 'contain',
     position: 'relative',
-    left: -10,
   },
 });
 

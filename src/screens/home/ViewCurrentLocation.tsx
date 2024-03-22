@@ -15,7 +15,6 @@ const ViewCurrentLocation = () => {
       (pos: any) => {
         const {latitude, longitude} = pos.coords;
         setPosition(JSON.stringify(pos));
-        console.log('JSON.stringify(pos)', JSON.stringify(pos));
         setLatitude(latitude);
         setLongitude(longitude);
       },

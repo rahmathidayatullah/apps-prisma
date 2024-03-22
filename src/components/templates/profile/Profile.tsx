@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {COLORS} from '../../../contants';
-import Badge from '../../atoms/badge/Badge';
+// import Badge from '../../atoms/badge/Badge';
 import ImageProfile from '../home/ImageProfile';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
