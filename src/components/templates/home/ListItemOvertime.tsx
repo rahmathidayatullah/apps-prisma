@@ -2,7 +2,12 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {COLORS} from '../../../contants';
 
-export const ListItemOvertime = () => {
+interface typeListItemOvertime {
+  item: any;
+}
+
+export const ListItemOvertime = ({item}: typeListItemOvertime) => {
+  console.log('item', item);
   const dataItem = {
     startTime: '02 Feb 18:00',
     endTime: '02 Feb 21:00',
@@ -10,11 +15,25 @@ export const ListItemOvertime = () => {
     status: 'Pending',
   };
   return (
-    <View style={styles.container}>
-      <Text>{dataItem.startTime}</Text>
-      <Text>{dataItem.endTime}</Text>
-      <Text>{dataItem.jam}</Text>
-      <Text>{dataItem.status}</Text>
+    <View
+      style={[
+        styles.container,
+        item.status === 'Reject'
+          ? {backgroundColor: COLORS.bgRedList}
+          : {backgroundColor: COLORS.bgGreyList},
+      ]}>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.startTime ?? '- : -'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.endTime ?? '- : -'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.totalTime ?? '-'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.status ?? '-'}
+      </Text>
     </View>
   );
 };

@@ -48,12 +48,25 @@ const CInputTextWithIconLabel = ({
         {isValueExist && (
           <TouchableOpacity
             onPress={clearValue}
-            style={{position: 'absolute', top: '35%', right: '13%', zIndex: 1}}>
+            style={{
+              position: 'absolute',
+              top: '35%',
+              right: '1%',
+              zIndex: 1,
+              width: 30,
+              height: 30,
+            }}>
             {icon2}
           </TouchableOpacity>
         )}
 
-        <View style={{position: 'absolute', top: '35%', left: '1%', zIndex: 1}}>
+        <View
+          style={{
+            position: 'absolute',
+            top: '35%',
+            left: '1%',
+            zIndex: 1,
+          }}>
           {icon}
         </View>
 
@@ -158,12 +171,7 @@ const TemplateListAttendaceLog = () => {
               />
             }
             icon2={
-              <IconAntDesign
-                style={styles.iconInput}
-                name="closecircleo"
-                size={19}
-                color="#B8B8B8"
-              />
+              <IconAntDesign name="closecircleo" size={19} color="#B8B8B8" />
             }
             clearValue={handleClearValue}
             value={`${

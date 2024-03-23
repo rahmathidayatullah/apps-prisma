@@ -14,20 +14,33 @@ interface typeListItemAttendace {
 }
 export const ListItemAttendace = ({item}: typeListItemAttendace) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        item.status === 'Reject'
+          ? {backgroundColor: COLORS.bgRedList}
+          : {backgroundColor: COLORS.bgGreyList},
+      ]}>
       <View>
-        <Text>{moment(item.date).format('DD MMM')}</Text>
-        <Text>{item.status}</Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+          {moment(item.date).format('DD MMM')}
+        </Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+          {item.status}
+        </Text>
       </View>
-      <Text>{item.clockIn ?? '- : -'}</Text>
-      <Text>{item.clockOut ?? '- : -'}</Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.clockIn ?? '- : -'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.clockOut ?? '- : -'}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.bgGreyList,
     paddingVertical: 12,
     paddingHorizontal: 14,
     flexDirection: 'row',

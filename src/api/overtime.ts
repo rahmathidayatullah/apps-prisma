@@ -12,9 +12,25 @@ export async function getOvertimes(params: any) {
     newUserData = JSON.parse(userData);
   }
 
-  return await axios.get(`${baseURL}/overtimes/mine`, {
+  return await axios.get(`${baseURL}/overtimes`, {
+    params,
     headers: {
-      params,
+      Authorization: `Bearer ${newUserData.access_token}`,
+    },
+  });
+}
+
+export async function getOvertimesMine(params: any) {
+  const userData: any = await AsyncStorage.getItem('userData');
+  let newUserData = null;
+
+  if (typeof userData === 'string') {
+    newUserData = JSON.parse(userData);
+  }
+
+  return await axios.get(`${baseURL}/overtimes/mine`, {
+    params,
+    headers: {
       Authorization: `Bearer ${newUserData.access_token}`,
     },
   });

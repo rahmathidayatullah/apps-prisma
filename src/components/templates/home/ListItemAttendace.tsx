@@ -1,8 +1,13 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {COLORS} from '../../../contants';
+import moment from 'moment';
 
-export const ListItemAttendace = () => {
+interface typeListItemAttendace {
+  item: any;
+}
+
+export const ListItemAttendace = ({item}: typeListItemAttendace) => {
   const dataItem = {
     status: 'Work Shift',
     date: '02 Feb',
@@ -10,13 +15,27 @@ export const ListItemAttendace = () => {
     clockOut: '17:00',
   };
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        item.status === 'Reject'
+          ? {backgroundColor: COLORS.bgRedList}
+          : {backgroundColor: COLORS.bgGreyList},
+      ]}>
       <View>
-        <Text>{dataItem.date}</Text>
-        <Text>{dataItem.status}</Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+          {moment(item.date).format('DD MMM')}
+        </Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+          {item.status}
+        </Text>
       </View>
-      <Text>{dataItem.clockIn}</Text>
-      <Text>{dataItem.clockOut}</Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.clockIn ?? '- : -'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.clockOut ?? '- : -'}
+      </Text>
     </View>
   );
 };

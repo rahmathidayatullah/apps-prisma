@@ -21,4 +21,7 @@ export default {
 
   // backgournd color list
   bgGreyList: '#F8F8F8',
+
+  // backgournd color status reject
+  bgRedList: '#FF5B5B',
 };

@@ -34,6 +34,9 @@ import {
 } from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getListAttendancesMine,
+  getListOvertimesMine,
+  getListSubmissionsMine,
   onPressMenuItem,
   resetValueBottomSheet,
 } from '../../../redux/features/home/actions';
@@ -71,6 +74,14 @@ const TemplateHome = () => {
     statusClockIn,
     statusSubmitSubmission,
     statusSubmitOvertime,
+
+    statusListAttendaceMine,
+    statusListOvertimesMine,
+    statusListSubmissionsMine,
+
+    dataAttendaceMine,
+    dataOvertimesMine,
+    datSubmissionsMine,
   } = home;
   const auth = useSelector((state: stateGlobalAuth) => state.auth);
   const {userData} = auth;
@@ -80,6 +91,23 @@ const TemplateHome = () => {
   // console.log('home', home);
   // console.log('profile', profile);
   // console.log('auth', auth);
+
+  console.log(
+    ' =======>>>>>>>> statusListAttendaceMine',
+    statusListAttendaceMine,
+  );
+  console.log(
+    ' =======>>>>>>>> statusListOvertimesMine',
+    statusListOvertimesMine,
+  );
+  console.log(
+    ' =======>>>>>>>> statusListSubmissionsMine',
+    statusListSubmissionsMine,
+  );
+
+  console.log(' =======>>>>>>>> dataAttendaceMine', dataAttendaceMine);
+  console.log(' =======>>>>>>>> dataOvertimesMine', dataOvertimesMine);
+  console.log(' =======>>>>>>>> datSubmissionsMine', datSubmissionsMine);
 
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');
@@ -113,6 +141,10 @@ const TemplateHome = () => {
 
   useEffect(() => {
     dispatch(fetchProfile());
+
+    dispatch(getListAttendancesMine());
+    dispatch(getListOvertimesMine());
+    dispatch(getListSubmissionsMine());
 
     const timerID = setInterval(() => {
       setCurrentTime(moment().format('HH:mm'));
@@ -182,11 +214,11 @@ const TemplateHome = () => {
     }
 
     if (statusClockIn === 'error') {
-      Alert.alert('Error', 'Something when wrong');
+      Alert.alert('Peringantan', 'Terjadi kesalahan');
     }
 
     if (statusSubmitSubmission === 'error') {
-      Alert.alert('Error', 'Something when wrong');
+      Alert.alert('Peringantan', 'Terjadi kesalahan');
     }
 
     if (statusSubmitSubmission === 'success') {
@@ -199,7 +231,7 @@ const TemplateHome = () => {
     }
 
     if (statusSubmitOvertime === 'error') {
-      Alert.alert('Error', 'Something when wrong');
+      Alert.alert('Peringantan', 'Terjadi kesalahan');
     }
     if (statusSubmitOvertime === 'success') {
       Alert.alert('Berhasil', 'Berhasil absen lembur');
@@ -231,6 +263,9 @@ const TemplateHome = () => {
   const [refresh, setRefresh] = useState(false);
   const pullMe = () => {
     dispatch(fetchProfile());
+    dispatch(getListAttendancesMine());
+    dispatch(getListOvertimesMine());
+    dispatch(getListSubmissionsMine());
   };
 
   return (
@@ -405,13 +440,22 @@ const TemplateHome = () => {
             </ScrollView>
             <ListAnnoucement />
             <View style={styles.containerListAttendace}>
-              <ListAttendace />
+              <ListAttendace
+                dataAttendaceMine={dataAttendaceMine}
+                loading={statusListAttendaceMine === 'process'}
+              />
             </View>
             <View style={styles.containerListAttendace}>
-              <ListSubmission />
+              <ListSubmission
+                datSubmissionsMine={datSubmissionsMine}
+                loading={statusListSubmissionsMine === 'process'}
+              />
             </View>
             <View style={styles.containerListAttendace}>
-              <ListOvertime />
+              <ListOvertime
+                dataOvertimesMine={dataOvertimesMine}
+                loading={statusListOvertimesMine === 'process'}
+              />
             </View>
           </View>
           {atLeastOneTrue && <View style={styles.backdrop} />}

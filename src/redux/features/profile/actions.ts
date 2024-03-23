@@ -18,7 +18,7 @@ export const fetchProfile = () => {
     });
     try {
       const res: any = await getProfile();
-      console.log('res', res);
+      console.log('success fetch redux profile', res);
       let newData: any;
       if (res.data.data) {
         newData = res.data.data;
@@ -72,18 +72,15 @@ export const updateProfile = (body: any) => {
     dispatch({type: START_UPDATE_PROFILE});
 
     const dataBody = {
-      photo: body.photo
-        ? `data:${body.photo.mime};base64,${body.photo.data}`
-        : null,
       name: body.name,
-      // roleName: '',
       email: body.email,
+      password: body.password,
       phoneNumber: body.phoneNumber,
       emergencyContact: body.emergencyContact,
       address: body.address,
-      npwp: body.npwp,
-      no_nrp: body.no_nrp,
-      nik: body.nik,
+      photo: body.photo
+        ? `data:${body.photo.mime};base64,${body.photo.data}`
+        : null,
     };
     console.log('body update profile', body);
     try {

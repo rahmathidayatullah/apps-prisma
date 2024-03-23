@@ -14,31 +14,36 @@ export const ListItemSubmission = ({item}: typeListItemSubmission) => {
   //   category: 'Izin',
   // };
   return (
-    <View style={styles.container}>
-      {/* <Text>{dataItem.date}</Text>
-      <Text>{dataItem.category}</Text>
-      <Text>{dataItem.status}</Text> */}
-
+    <View
+      style={[
+        styles.container,
+        item.status === 'Reject'
+          ? {backgroundColor: COLORS.bgRedList}
+          : {backgroundColor: COLORS.bgGreyList},
+      ]}>
       <View style={{flexDirection: 'row', gap: 10}}>
-        <Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
           {item.startDate
             ? moment(item.startDate).format('DD MMM YY')
             : '- : -'}
         </Text>
-        <Text>-</Text>
-        <Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>-</Text>
+        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
           {item.endDate ? moment(item.endDate).format('DD MMM YY') : '- : -'}
         </Text>
       </View>
-      <Text>{item.submissionCategory.name}</Text>
-      <Text>{item.status || '-'}</Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.submissionCategory.name}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.status ?? '-'}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.bgGreyList,
     paddingVertical: 12,
     paddingHorizontal: 14,
     flexDirection: 'row',

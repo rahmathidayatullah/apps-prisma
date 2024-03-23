@@ -34,6 +34,12 @@ export interface initialStateGlobalProfile {
       no_nrp: string | null;
       nik: string | null;
       photo?: string | undefined;
+      gender: string | null;
+      password: string | null;
+
+      bank_name: string | null;
+      account_number: string | null;
+      account_name: string | null;
     };
   };
   dataUpdateProfile?: any;

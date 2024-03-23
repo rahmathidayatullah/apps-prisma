@@ -21,7 +21,7 @@ const statusList = {
 
 const initialState: initialStateGlobalSubmissions = {
   page: 1,
-  take: 1000,
+  take: 100,
   order: 'DESC',
   statusListSubmissions: statusList.idle,
   statusSubmissionsDetail: statusList.idle,
