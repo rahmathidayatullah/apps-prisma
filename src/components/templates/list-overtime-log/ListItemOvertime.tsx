@@ -13,18 +13,31 @@ interface typeListItemOvertime {
 
 export const ListItemOvertime = ({item}: typeListItemOvertime) => {
   return (
-    <View style={styles.container}>
-      <Text>{item.startTime ?? '- : -'}</Text>
-      <Text>{item.endTime ?? '- : -'}</Text>
-      <Text>{item.totalTime ?? '-'}</Text>
-      <Text>{item.status ?? '-'}</Text>
+    <View
+      style={[
+        styles.container,
+        item.status === 'Reject'
+          ? {backgroundColor: COLORS.bgRedList}
+          : {backgroundColor: COLORS.bgGreyList},
+      ]}>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.startTime ?? '- : -'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.endTime ?? '- : -'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.totalTime ?? '-'}
+      </Text>
+      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        {item.status ?? '-'}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.bgGreyList,
     paddingVertical: 12,
     paddingHorizontal: 14,
     flexDirection: 'row',

@@ -391,6 +391,8 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
             }}>
             <CButton onPress={handleSubmitSubmission}>
               {statusSubmitSubmission === 'idle' && 'Kirim'}
+              {statusSubmitSubmission === 'error' && 'Kirim'}
+              {statusSubmitSubmission === 'success' && 'Kirim'}
               {statusSubmitSubmission === 'process' && 'Loading ...'}
             </CButton>
           </View>

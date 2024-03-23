@@ -12,9 +12,25 @@ export async function getSubmissions(params: any) {
     newUserData = JSON.parse(userData);
   }
 
-  return await axios.get(`${baseURL}/submissions/mine`, {
+  return await axios.get(`${baseURL}/submissions`, {
+    params,
     headers: {
-      params,
+      Authorization: `Bearer ${newUserData.access_token}`,
+    },
+  });
+}
+
+export async function getSubmissionsMine(params: any) {
+  const userData: any = await AsyncStorage.getItem('userData');
+  let newUserData = null;
+
+  if (typeof userData === 'string') {
+    newUserData = JSON.parse(userData);
+  }
+
+  return await axios.get(`${baseURL}/submissions/mine`, {
+    params,
+    headers: {
       Authorization: `Bearer ${newUserData.access_token}`,
     },
   });

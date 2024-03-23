@@ -89,8 +89,7 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
         setLongitude(longitude);
         setLatLong(`${latitude}, ${longitude}`);
       },
-      (error: any) =>
-        Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      (error: any) => Alert.alert('Pastikan deteksi lokasi di aktifkan'),
       // handleErrorGetLocation(error),
       {
         enableHighAccuracy: true,
@@ -194,6 +193,8 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
               disabled={statusSubmitOvertime === 'process'}
               onPress={handleSubmitClockInClockOut}>
               {statusSubmitOvertime === 'idle' && 'Absen Lembur'}
+              {statusSubmitOvertime === 'error' && 'Absen Lembur'}
+              {statusSubmitOvertime === 'success' && 'Absen Lembur'}
               {statusSubmitOvertime === 'process' && 'Loading ...'}
             </CButton>
           </View>

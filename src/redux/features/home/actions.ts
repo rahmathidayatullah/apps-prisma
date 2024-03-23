@@ -65,17 +65,156 @@ import {
   START_SUBMIT_OVERTIME,
   ERROR_SUBMIT_OVERTIME,
   SUCCESS_SUBMIT_OVERTIME,
+
+  // mine
+  START_OVERTIME_MINE,
+  SUCCESS_OVERTIME_MINE,
+  ERROR_OVERTIME_MINE,
+  START_SUBMISSION_MINE,
+  SUCCESS_SUBMISSION_MINE,
+  ERROR_SUBMISSION_MINE,
+  START_ATTENDACE_MINE,
+  SUCCESS_ATTENDACE_MINE,
+  ERROR_ATTENDACE_MINE,
 } from './constants';
 import {itemShowMenuItem} from './interface';
 import {postClockIn, postClockOut, postOvertime} from '../../../api/home';
 import {Alert} from 'react-native';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {fetchProfile} from '../profile/actions';
-import {postSubmission} from '../../../api/submission';
+import {getSubmissionsMine, postSubmission} from '../../../api/submission';
 import {
+  getOvertimesMine,
   patchOvertimesClockIn,
   patchOvertimesClockOut,
 } from '../../../api/overtime';
+import {getAttendacesMine} from '../../../api/attendace';
+
+export const getListAttendancesMine = () => {
+  return async (dispatch: any, getState: any) => {
+    dispatch({
+      type: START_ATTENDACE_MINE,
+    });
+
+    const page = getState().home.pageAttendaceMine;
+    const take = getState().home.takeAttendaceMine;
+    const order = getState().home.orderAttendaceMine;
+
+    const params = {
+      page,
+      take,
+      order,
+    };
+
+    try {
+      const {
+        data: {data},
+      } = await getAttendacesMine(params);
+      console.log('success fetch getListAttendancesMine', data);
+
+      dispatch({
+        type: SUCCESS_ATTENDACE_MINE,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error fetch getListAttendancesMine', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_ATTENDACE_MINE,
+        });
+      }
+    }
+  };
+};
+
+export const getListOvertimesMine = () => {
+  return async (dispatch: any, getState: any) => {
+    dispatch({
+      type: START_OVERTIME_MINE,
+    });
+
+    const page = getState().home.pageOvertimesMine;
+    const take = getState().home.takeOvertimesMine;
+    const order = getState().home.orderOvertimesMine;
+
+    const params = {
+      page,
+      take,
+      order,
+    };
+
+    try {
+      const {
+        data: {data},
+      } = await getOvertimesMine(params);
+      console.log('success fetch getLisOvertimessMine', data);
+
+      dispatch({
+        type: SUCCESS_OVERTIME_MINE,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error fetch getLisOvertimessMine', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_OVERTIME_MINE,
+        });
+      }
+    }
+  };
+};
+
+export const getListSubmissionsMine = () => {
+  return async (dispatch: any, getState: any) => {
+    dispatch({
+      type: START_SUBMISSION_MINE,
+    });
+
+    const page = getState().home.pageSubmissionsMine;
+    const take = getState().home.takeSubmissionsMine;
+    const order = getState().home.orderSubmissionsMine;
+
+    const params = {
+      page,
+      take,
+      order,
+    };
+
+    try {
+      const {
+        data: {data},
+      } = await getSubmissionsMine(params);
+      console.log('success fetch getLisSubmissionsMine', data);
+
+      dispatch({
+        type: SUCCESS_SUBMISSION_MINE,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error fetch getLisSubmissionsMine', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_SUBMISSION_MINE,
+        });
+      }
+    }
+  };
+};
 
 export const onPressMenuItem = (menuItem: any) => {
   return (dispatch: any, getState: any) => {

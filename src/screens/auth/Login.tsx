@@ -101,7 +101,7 @@ const LoginScreen = () => {
           </View>
 
           {/* start ===================== debug */}
-          {userData && (
+          {/* {userData && (
             <View style={{marginTop: 15, flexDirection: 'row'}}>
               <Text>userData :{JSON.stringify(userData)}</Text>
             </View>
@@ -117,7 +117,7 @@ const LoginScreen = () => {
           </View>
           <View style={{marginTop: 15, flexDirection: 'row'}}>
             <Text>response3 :{response3}</Text>
-          </View>
+          </View> */}
           {/* end ===================== debug */}
 
           <View

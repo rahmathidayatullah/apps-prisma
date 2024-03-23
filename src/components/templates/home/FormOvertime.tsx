@@ -97,13 +97,12 @@ const FormOvertime = ({bottomSheetModalRef}: any) => {
       cropping: true,
       includeBase64: true,
       useFrontCamera: true,
-    })
-      .then((image: any) => {
-        dispatch(changeFile1Overtime(image));
-      })
-      .catch(() => {
-        Alert.alert('Permission', 'Cannot access camera');
-      });
+    }).then((image: any) => {
+      dispatch(changeFile1Overtime(image));
+    });
+    // .catch(() => {
+    //   Alert.alert('Permission', 'Batal akses kamera');
+    // });
   };
 
   return (

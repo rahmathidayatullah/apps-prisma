@@ -67,8 +67,7 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
         setLongitude(longitude);
         setLatLong(`${latitude}, ${longitude}`);
       },
-      (error: any) =>
-        Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      (error: any) => Alert.alert('Pastikan deteksi lokasi di aktifkan'),
       {
         enableHighAccuracy: true,
         timeout: 20000,
@@ -173,6 +172,8 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
               disabled={statusClockIn === 'process'}
               onPress={handleSubmitClockInClockOut}>
               {statusClockIn === 'idle' && 'Absen'}
+              {statusClockIn === 'error' && 'Absen'}
+              {statusClockIn === 'success' && 'Absen'}
               {statusClockIn === 'process' && 'Loading ...'}
             </CButton>
           </View>

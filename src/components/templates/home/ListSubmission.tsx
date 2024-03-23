@@ -1,11 +1,20 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
 import CButtonText from '../../atoms/button/ButtonText';
 import {ListItemSubmission} from './ListItemSubmission';
 import {useNavigation} from '@react-navigation/native';
 import {routeMenu} from '../../../contants/routes';
+import {COLORS} from '../../../contants';
 
-export const ListSubmission = () => {
+interface typeListSubmission {
+  datSubmissionsMine: any;
+  loading?: boolean;
+}
+
+export const ListSubmission = ({
+  datSubmissionsMine,
+  loading = true,
+}: typeListSubmission) => {
   const navigation: any = useNavigation();
   const handleViewAllLogAttendace = () => {
     navigation.navigate(routeMenu.LIST_OF_SUBMISSION);
@@ -14,16 +23,44 @@ export const ListSubmission = () => {
     <View style={styles.container}>
       <View style={styles.containerTitleList}>
         <Text style={styles.textAttendaceLog}>Riwayat Pengajuan</Text>
-        <CButtonText onPress={handleViewAllLogAttendace}>
-          Selengkapnya
-        </CButtonText>
+        {datSubmissionsMine.length === 0 || loading ? (
+          ''
+        ) : (
+          <CButtonText onPress={handleViewAllLogAttendace}>
+            Selengkapnya
+          </CButtonText>
+        )}
       </View>
-      <View style={{marginTop: 10}}>
-        {[1, 2, 3, 4, 5].map(item => (
-          <View key={item} style={{marginTop: 12}}>
-            <ListItemSubmission />
+
+      <View>
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: 12,
+            }}>
+            <ActivityIndicator size="large" color={COLORS.bgPrimary} />
+            <Text style={{textAlign: 'center', marginTop: 10}}>
+              Load data pengajuan ..
+            </Text>
           </View>
-        ))}
+        ) : (
+          <View>
+            {datSubmissionsMine.length === 0 ? (
+              <View style={{marginTop: 20}}>
+                <Text>Belum ada data riwayat pengajuan</Text>
+              </View>
+            ) : (
+              datSubmissionsMine.map((item: any) => (
+                <View key={item.id} style={{marginTop: 12}}>
+                  <ListItemSubmission item={item} />
+                </View>
+              ))
+            )}
+          </View>
+        )}
       </View>
     </View>
   );

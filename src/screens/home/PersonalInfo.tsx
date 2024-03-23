@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {stateGlobalProfile} from '../../redux/features/profile/interface';
@@ -90,7 +91,7 @@ const CInputImage = ({label, url, changeImage, isEdit}: typeCInputImage) => {
             <Image
               style={styles.imageProfile}
               source={{
-                uri: `${baseURL}/${url.path}`,
+                uri: `${url}`,
               }}
               resizeMode="cover"
             />
@@ -129,18 +130,21 @@ const CInputImage = ({label, url, changeImage, isEdit}: typeCInputImage) => {
 };
 
 interface typeForm {
-  photo?: string | undefined;
+  bank_name?: string;
+  account_number?: string;
+  account_name?: string;
   name?: string;
-  roleName?: string;
   email?: string;
+  password?: string;
+  gender?: string;
+  photo?: any;
+  roleName?: string;
   phoneNumber?: string;
   emergencyContact?: string;
   address?: string;
-  // gender?:string,
   npwp?: string;
   no_nrp?: string;
   nik?: string;
-  // no_rek?:string,
 }
 const PersonalInfo = () => {
   const dispatch: any = useDispatch();
@@ -163,18 +167,21 @@ const PersonalInfo = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const [form, setForm] = useState<typeForm>({
-    photo: undefined,
     name: '',
-    roleName: '',
     email: '',
+    password: '',
+    gender: '',
+    photo: '',
+    roleName: '',
     phoneNumber: '',
     emergencyContact: '',
     address: '',
-    // gender:"",
+    bank_name: '',
+    account_number: '',
+    account_name: '',
     npwp: '',
     no_nrp: '',
     nik: '',
-    // no_rek:"",
   });
 
   const updateData = () => {
@@ -187,19 +194,27 @@ const PersonalInfo = () => {
 
   const resetForm = () => {
     setForm({
-      photo: undefined,
       name: '',
-      roleName: '',
       email: '',
+      password: '',
+      gender: '',
+      photo: undefined,
+      roleName: '',
       phoneNumber: '',
       emergencyContact: '',
       address: '',
-      // gender:"",
       npwp: '',
       no_nrp: '',
       nik: '',
-      // no_rek:"",
+      bank_name: '',
+      account_number: '',
+      account_name: '',
     });
+  };
+
+  const [refresh, setRefresh] = useState(false);
+  const pullMe = () => {
+    dispatch(fetchProfile());
   };
 
   useEffect(() => {
@@ -209,9 +224,15 @@ const PersonalInfo = () => {
       setIsEdit(false);
       dispatch(fetchProfile());
     } else if (profile.status === 'success') {
+      setRefresh(false);
       setForm({
         name: profile.profile.user.name || '-',
         email: profile.profile.user.email || '-',
+        gender: profile.profile.user.gender || '-',
+        bank_name: profile.profile.user.bank_name || '-',
+        account_number: profile.profile.user.account_number || '-',
+        account_name: profile.profile.user.account_name || '-',
+        password: profile?.profile?.user?.password || '-',
         roleName: profile.profile.user.role.name || '-',
         phoneNumber: profile.profile.user.phoneNumber || '-',
         emergencyContact: profile.profile.user.emergencyContact || '-',
@@ -246,15 +267,20 @@ const PersonalInfo = () => {
       ),
     });
   }, [navigation, isEdit, form, statusUpdateProfile]);
+
+  console.log('form', form);
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+        }>
         <View style={styles.container}>
           <View style={{marginTop: 10}}>
             <CInputImage
               changeImage={changeImage}
               label="Foto Profile"
-              url={form.photo}
+              url={form.photo?.path || form.photo}
               isEdit={isEdit}
             />
           </View>
@@ -286,6 +312,17 @@ const PersonalInfo = () => {
               value={form.email}
               onChangeText={(newText: string) =>
                 setForm({...form, email: newText})
+              }
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
+              placeholder="Masukkan password"
+              label="Password"
+              editable={isEdit}
+              value={form.password}
+              onChangeText={(newText: string) =>
+                setForm({...form, password: newText})
               }
             />
           </View>
@@ -326,15 +363,15 @@ const PersonalInfo = () => {
             <CInputText
               placeholder="Masukkan jenis kelamin"
               label="Jenis Kelamin"
-              editable={isEdit}
-              value="Belum ada"
+              editable={false}
+              value={form.gender}
             />
           </View>
           <View style={{marginTop: 20}}>
             <CInputText
               placeholder="Masukkan NPWP"
               label="NPWP"
-              editable={isEdit}
+              editable={false}
               value={form.npwp}
               onChangeText={(newText: string) =>
                 setForm({...form, npwp: newText})
@@ -345,7 +382,7 @@ const PersonalInfo = () => {
             <CInputText
               placeholder="Masukkan NRP"
               label="NRP"
-              editable={isEdit}
+              editable={false}
               value={form.no_nrp}
               onChangeText={(newText: string) =>
                 setForm({...form, no_nrp: newText})
@@ -356,7 +393,7 @@ const PersonalInfo = () => {
             <CInputText
               placeholder="Masukkan NIK"
               label="NIK"
-              editable={isEdit}
+              editable={false}
               value={form.nik}
               onChangeText={(newText: string) =>
                 setForm({...form, nik: newText})
@@ -365,11 +402,18 @@ const PersonalInfo = () => {
           </View>
           <View style={{marginTop: 20}}>
             <CInputText
+              placeholder="Masukkan nama rek "
+              label="Nama Rek"
+              editable={false}
+              value={form.account_number}
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <CInputText
               placeholder="Masukkan No Rek"
               label="No Rek"
-              editable={isEdit}
-              // value={profile.profile.user. || '-'}
-              value="Belum ada"
+              editable={false}
+              value={form.account_number}
             />
           </View>
         </View>

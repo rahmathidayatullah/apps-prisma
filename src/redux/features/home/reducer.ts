@@ -68,6 +68,17 @@ import {
   SUCCESS_SUBMIT_OVERTIME,
   ERROR_SUBMIT_OVERTIME,
   RESET_STATE_OVERTIME,
+
+  // mine
+  START_OVERTIME_MINE,
+  SUCCESS_OVERTIME_MINE,
+  ERROR_OVERTIME_MINE,
+  START_SUBMISSION_MINE,
+  SUCCESS_SUBMISSION_MINE,
+  ERROR_SUBMISSION_MINE,
+  START_ATTENDACE_MINE,
+  SUCCESS_ATTENDACE_MINE,
+  ERROR_ATTENDACE_MINE,
 } from './constants';
 import {initialStateGlobalHome} from './interface';
 
@@ -79,6 +90,27 @@ const statusList = {
 };
 
 const initialState: initialStateGlobalHome = {
+  // mine
+  pageAttendaceMine: 1,
+  takeAttendaceMine: 5,
+  orderAttendaceMine: 'DESC',
+
+  pageOvertimesMine: 1,
+  takeOvertimesMine: 5,
+  orderOvertimesMine: 'DESC',
+
+  pageSubmissionsMine: 1,
+  takeSubmissionsMine: 5,
+  orderSubmissionsMine: 'DESC',
+
+  statusListAttendaceMine: statusList.idle,
+  statusListOvertimesMine: statusList.idle,
+  statusListSubmissionsMine: statusList.idle,
+
+  dataAttendaceMine: [],
+  dataOvertimesMine: [],
+  datSubmissionsMine: [],
+
   isShowMenuItem: {
     cuti: false,
     lembur: false,
@@ -182,6 +214,56 @@ const initialState: initialStateGlobalHome = {
 
 export default function homeReducer(state = initialState, action: any) {
   switch (action.type) {
+    case START_ATTENDACE_MINE:
+      return {
+        ...state,
+        statusListAttendaceMine: statusList.process,
+      };
+    case SUCCESS_ATTENDACE_MINE:
+      return {
+        ...state,
+        statusListAttendaceMine: statusList.success,
+        dataAttendaceMine: action.data,
+      };
+    case ERROR_ATTENDACE_MINE:
+      return {
+        ...state,
+        statusListAttendaceMine: statusList.process,
+      };
+
+    case START_SUBMISSION_MINE:
+      return {
+        ...state,
+        statusListSubmissionsMine: statusList.process,
+      };
+    case SUCCESS_SUBMISSION_MINE:
+      return {
+        ...state,
+        statusListSubmissionsMine: statusList.success,
+        datSubmissionsMine: action.data,
+      };
+    case ERROR_SUBMISSION_MINE:
+      return {
+        ...state,
+        statusListSubmissionsMine: statusList.error,
+      };
+
+    case START_OVERTIME_MINE:
+      return {
+        ...state,
+        statusListOvertimesMine: statusList.process,
+      };
+    case SUCCESS_OVERTIME_MINE:
+      return {
+        ...state,
+        statusListOvertimesMine: statusList.success,
+        dataOvertimesMine: action.data,
+      };
+    case ERROR_OVERTIME_MINE:
+      return {
+        ...state,
+        statusListOvertimesMine: statusList.error,
+      };
     case ON_PRESS_MENU_ITEM:
       return {
         ...state,

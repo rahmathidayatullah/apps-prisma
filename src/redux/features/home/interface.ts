@@ -16,6 +16,26 @@ export interface stateGlobalHome {
 }
 
 export interface initialStateGlobalHome {
+  pageAttendaceMine: number;
+  takeAttendaceMine: number;
+  orderAttendaceMine: string;
+
+  pageOvertimesMine: number;
+  takeOvertimesMine: number;
+  orderOvertimesMine: string;
+
+  pageSubmissionsMine: number;
+  takeSubmissionsMine: number;
+  orderSubmissionsMine: string;
+
+  statusListAttendaceMine: string;
+  statusListOvertimesMine: string;
+  statusListSubmissionsMine: string;
+
+  dataAttendaceMine: any;
+  dataOvertimesMine: any;
+  datSubmissionsMine: any;
+
   isShowMenuItem: itemShowMenuItem;
   dateClockIn: string | null;
   dateClockOut: string | null;
