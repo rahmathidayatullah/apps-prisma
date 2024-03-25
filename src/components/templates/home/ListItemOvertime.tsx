@@ -7,13 +7,12 @@ interface typeListItemOvertime {
 }
 
 export const ListItemOvertime = ({item}: typeListItemOvertime) => {
-  console.log('item', item);
-  const dataItem = {
-    startTime: '02 Feb 18:00',
-    endTime: '02 Feb 21:00',
-    jam: '2 jam',
-    status: 'Pending',
-  };
+  // const dataItem = {
+  //   startTime: '02 Feb 18:00',
+  //   endTime: '02 Feb 21:00',
+  //   jam: '2 jam',
+  //   status: 'Pending',
+  // };
   return (
     <View
       style={[

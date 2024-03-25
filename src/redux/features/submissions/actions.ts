@@ -14,6 +14,7 @@ import {
   SUCCESS_CATEGORY_SUBMISSIONS,
   ERROR_CATEGORY_SUBMISSIONS,
 } from './constants';
+import { currentDateWithFormat, futureDateOneYear } from '../../../contants/routes';
 
 const debounceGetSubmissions = debounce(getSubmissions, 100);
 
@@ -26,11 +27,17 @@ export const getListSubmissions = () => {
     const page = getState().submissions.page;
     const take = getState().submissions.take;
     const order = getState().submissions.order;
+    const keyword = getState().submissions.keyword;
+    const startDate = getState().submissions.startDate || currentDateWithFormat;
+    const endDate = getState().submissions.endDate || futureDateOneYear;
 
     const params = {
       page,
       take,
       order,
+      search: keyword,
+      endDate,
+      startDate,
     };
 
     try {

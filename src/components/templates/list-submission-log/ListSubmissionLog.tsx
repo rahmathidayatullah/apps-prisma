@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,6 +15,11 @@ import {getListSubmissions} from '../../../redux/features/submissions/actions';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../contants';
 import CalendarPicker from 'react-native-calendar-picker';
+import {
+  CLEAR_START_DATE_END_DATE,
+  SET_END_DATE,
+  SET_START_DATE,
+} from '../../../redux/features/submissions/constants';
 
 interface typeInputTextWithIcon {
   placeholder: string;
@@ -86,22 +92,28 @@ const TemplateListOfSubmission = () => {
   const dispatch: any = useDispatch();
   const submissions = useSelector((state: any) => state.submissions);
 
-  const {dataListSubmissions, page, take, order, statusListSubmissions} =
-    submissions;
+  const {
+    dataListSubmissions,
+    page,
+    take,
+    order,
+    keyword,
+    startDate,
+    endDate,
+    statusListSubmissions,
+  } = submissions;
 
   const [selectedStartDate, setSelectedStartDate] = useState<any>('');
   const [selectedEndDate, setSelectedEndDate] = useState<any>('');
   const [showCalender, setShowCalender] = useState<any>(false);
 
   const handleClearValue = () => {
-    setSelectedStartDate('');
-    setSelectedEndDate('');
+    dispatch({type: CLEAR_START_DATE_END_DATE});
   };
   const onPressInputContainer = () => {
     setShowCalender(!showCalender);
   };
   const onDateChange = (date: any, type: any) => {
-    // console.log(JSON.stringify(date));
     const newDate = JSON.stringify(date);
     const newDate1 = newDate.substring(1, newDate.length - 1);
     const dates = newDate1.split('T');
@@ -109,31 +121,37 @@ const TemplateListOfSubmission = () => {
     const day = date1[2];
     const month = date1[1];
     const year = date1[0];
-    // console.log(day + '-' + month + '-' + year);
 
     if (type == 'END_DATE') {
       if (day == undefined) {
-        setSelectedEndDate('');
+        dispatch({
+          type: SET_END_DATE,
+          value: '',
+        });
       } else {
         setShowCalender(false);
-        setSelectedEndDate(day + '/' + month + '/' + year);
+        dispatch({
+          type: SET_END_DATE,
+          value: year + '-' + month + '-' + day,
+        });
       }
     } else {
-      setSelectedStartDate(day + '/' + month + '/' + year);
+      dispatch({
+        type: SET_START_DATE,
+        value: year + '-' + month + '-' + day,
+      });
     }
   };
 
   useEffect(() => {
     dispatch(getListSubmissions());
-  }, [page, take, order]);
+  }, [page, take, order, keyword, endDate]);
 
-  if (statusListSubmissions === 'process') {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-        <ActivityIndicator size="large" color={COLORS.bgPrimary} />
-      </View>
-    );
-  }
+  useEffect(() => {
+    if (statusListSubmissions === 'success') {
+      setRefresh(false);
+    }
+  }, [statusListSubmissions]);
 
   if (statusListSubmissions === 'error') {
     return (
@@ -149,8 +167,17 @@ const TemplateListOfSubmission = () => {
       </View>
     );
   }
+
+  const [refresh, setRefresh] = useState(false);
+  const pullMe = () => {
+    dispatch(getListSubmissions());
+  };
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+      }>
       <View style={styles.container}>
         <View style={styles.containerTitleList}>
           <CInputTextWithIconLabel
@@ -168,10 +195,8 @@ const TemplateListOfSubmission = () => {
               <IconAntDesign name="closecircleo" size={19} color="#B8B8B8" />
             }
             clearValue={handleClearValue}
-            value={`${
-              selectedStartDate ? `${selectedStartDate} - ` : ''
-            }${selectedEndDate}`}
-            isValueExist={selectedStartDate && selectedStartDate}
+            value={`${startDate ? `${startDate} - ` : ''}${endDate}`}
+            isValueExist={startDate && startDate}
           />
         </View>
         {showCalender ? (
@@ -188,17 +213,39 @@ const TemplateListOfSubmission = () => {
         ) : (
           ''
         )}
-        <View>
-          {dataListSubmissions.length === 0 ? (
-            <Text>Data Kosong</Text>
-          ) : (
-            dataListSubmissions.map((item: any) => (
-              <View key={item.id} style={{marginTop: 12}}>
-                <ListItemSubmission item={item} />
+        {statusListSubmissions === 'process' ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: 40,
+            }}>
+            <ActivityIndicator size="large" color={COLORS.bgPrimary} />
+          </View>
+        ) : (
+          <View>
+            {dataListSubmissions.length === 0 ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  width: '100%',
+                  height: '100%',
+                  marginTop: 40,
+                }}>
+                <Text style={{textAlign: 'center'}}>Data kosong</Text>
               </View>
-            ))
-          )}
-        </View>
+            ) : (
+              dataListSubmissions.map((item: any) => (
+                <View key={item.id} style={{marginTop: 12}}>
+                  <ListItemSubmission item={item} />
+                </View>
+              ))
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );

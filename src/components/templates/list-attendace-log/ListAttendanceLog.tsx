@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,6 +15,11 @@ import {getListAttendances} from '../../../redux/features/attendances/actions';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../contants';
 import CalendarPicker from 'react-native-calendar-picker';
+import {
+  CLEAR_START_DATE_END_DATE,
+  SET_END_DATE,
+  SET_START_DATE,
+} from '../../../redux/features/attendances/constants';
 
 interface typeInputTextWithIcon {
   placeholder: string;
@@ -92,22 +98,26 @@ const TemplateListAttendaceLog = () => {
   const dispatch: any = useDispatch();
   const attendances = useSelector((state: any) => state.attendances);
 
-  const {dataListAttendaces, page, take, order, statusListAttendaces} =
-    attendances;
+  const {
+    dataListAttendaces,
+    page,
+    take,
+    order,
+    keyword,
+    startDate,
+    endDate,
+    statusListAttendaces,
+  } = attendances;
 
-  const [selectedStartDate, setSelectedStartDate] = useState<any>('');
-  const [selectedEndDate, setSelectedEndDate] = useState<any>('');
   const [showCalender, setShowCalender] = useState<any>(false);
 
   const handleClearValue = () => {
-    setSelectedStartDate('');
-    setSelectedEndDate('');
+    dispatch({type: CLEAR_START_DATE_END_DATE});
   };
   const onPressInputContainer = () => {
     setShowCalender(!showCalender);
   };
   const onDateChange = (date: any, type: any) => {
-    // console.log(JSON.stringify(date));
     const newDate = JSON.stringify(date);
     const newDate1 = newDate.substring(1, newDate.length - 1);
     const dates = newDate1.split('T');
@@ -115,30 +125,37 @@ const TemplateListAttendaceLog = () => {
     const day = date1[2];
     const month = date1[1];
     const year = date1[0];
-    // console.log(day + '-' + month + '-' + year);
 
     if (type == 'END_DATE') {
       if (day == undefined) {
-        setSelectedEndDate('');
+        dispatch({
+          type: SET_END_DATE,
+          value: '',
+        });
       } else {
         setShowCalender(false);
-        setSelectedEndDate(day + '/' + month + '/' + year);
+        dispatch({
+          type: SET_END_DATE,
+          value: year + '-' + month + '-' + day,
+        });
       }
     } else {
-      setSelectedStartDate(day + '/' + month + '/' + year);
+      dispatch({
+        type: SET_START_DATE,
+        value: year + '-' + month + '-' + day,
+      });
     }
   };
+
   useEffect(() => {
     dispatch(getListAttendances());
-  }, [page, take, order]);
+  }, [page, take, order, keyword, endDate]);
 
-  if (statusListAttendaces === 'process') {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-        <ActivityIndicator size="large" color={COLORS.bgPrimary} />
-      </View>
-    );
-  }
+  useEffect(() => {
+    if (statusListAttendaces === 'success') {
+      setRefresh(false);
+    }
+  }, [statusListAttendaces]);
 
   if (statusListAttendaces === 'error') {
     return (
@@ -155,8 +172,16 @@ const TemplateListAttendaceLog = () => {
     );
   }
 
+  const [refresh, setRefresh] = useState(false);
+  const pullMe = () => {
+    dispatch(getListAttendances());
+  };
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+      }>
       <View style={styles.container}>
         <View style={styles.containerTitleList}>
           <CInputTextWithIconLabel
@@ -174,10 +199,8 @@ const TemplateListAttendaceLog = () => {
               <IconAntDesign name="closecircleo" size={19} color="#B8B8B8" />
             }
             clearValue={handleClearValue}
-            value={`${
-              selectedStartDate ? `${selectedStartDate} - ` : ''
-            }${selectedEndDate}`}
-            isValueExist={selectedStartDate && selectedStartDate}
+            value={`${startDate ? `${startDate} - ` : ''}${endDate}`}
+            isValueExist={startDate && startDate}
           />
         </View>
         {showCalender ? (
@@ -194,17 +217,40 @@ const TemplateListAttendaceLog = () => {
         ) : (
           ''
         )}
-        <View>
-          {dataListAttendaces.length === 0 ? (
-            <Text>Data Kosong</Text>
-          ) : (
-            dataListAttendaces.map((item: any) => (
-              <View key={item.id} style={{marginTop: 12}}>
-                <ListItemAttendace item={item} />
+
+        {statusListAttendaces === 'process' ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: 40,
+            }}>
+            <ActivityIndicator size="large" color={COLORS.bgPrimary} />
+          </View>
+        ) : (
+          <View>
+            {dataListAttendaces.length === 0 ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  width: '100%',
+                  height: '100%',
+                  marginTop: 40,
+                }}>
+                <Text style={{textAlign: 'center'}}>Data kosong</Text>
               </View>
-            ))
-          )}
-        </View>
+            ) : (
+              dataListAttendaces.map((item: any) => (
+                <View key={item.id} style={{marginTop: 12}}>
+                  <ListItemAttendace item={item} />
+                </View>
+              ))
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );

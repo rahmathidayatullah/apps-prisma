@@ -31,10 +31,13 @@ export const postLogin = (email: string, password: string | number) => {
     dispatch({
       type: START_LOGIN,
     });
+    console.log('start postLogin');
     try {
       const {
         data: {data},
       } = await login(email, password);
+
+      console.log('success postLogin', data);
 
       await AsyncStorage.setItem('userData', JSON.stringify(data));
       dispatch({
@@ -42,7 +45,7 @@ export const postLogin = (email: string, password: string | number) => {
         userData: data,
       });
     } catch (error: any) {
-      console.log('error', error);
+      console.log('error postLogin', error);
       dispatch({
         type: ERROR_LOGIN,
         error: JSON.stringify(error),

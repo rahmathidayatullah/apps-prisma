@@ -89,6 +89,7 @@ import {
   patchOvertimesClockOut,
 } from '../../../api/overtime';
 import {getAttendacesMine} from '../../../api/attendace';
+import { currentDateWithFormat, futureDateOneYear } from '../../../contants/routes';
 
 export const getListAttendancesMine = () => {
   return async (dispatch: any, getState: any) => {
@@ -99,11 +100,18 @@ export const getListAttendancesMine = () => {
     const page = getState().home.pageAttendaceMine;
     const take = getState().home.takeAttendaceMine;
     const order = getState().home.orderAttendaceMine;
+    const keyword = getState().home.keywordAttendaceMine;
+    const startDate = getState().home.startDateAttendaceMine || currentDateWithFormat;
+    const endDate = getState().home.endDateAttendaceMine || futureDateOneYear;
+    
 
     const params = {
       page,
       take,
       order,
+      search: keyword,
+      endDate,
+      startDate,
     };
 
     try {
@@ -141,11 +149,17 @@ export const getListOvertimesMine = () => {
     const page = getState().home.pageOvertimesMine;
     const take = getState().home.takeOvertimesMine;
     const order = getState().home.orderOvertimesMine;
+    const keyword = getState().home.keywordOvertimesMine;
+    const startDate = getState().home.startDateOvertimesMine || currentDateWithFormat;
+    const endDate = getState().home.endDateOvertimesMine || futureDateOneYear;
 
     const params = {
       page,
       take,
       order,
+      search: keyword,
+      endDate,
+      startDate,
     };
 
     try {
@@ -183,11 +197,17 @@ export const getListSubmissionsMine = () => {
     const page = getState().home.pageSubmissionsMine;
     const take = getState().home.takeSubmissionsMine;
     const order = getState().home.orderSubmissionsMine;
+    const keyword = getState().home.keywordSubmissionsMine;
+    const startDate = getState().home.startDateSubmissionsMine || currentDateWithFormat;
+    const endDate = getState().home.endDateSubmissionsMine || futureDateOneYear;
 
     const params = {
       page,
       take,
       order,
+      search: keyword,
+      endDate,
+      startDate,
     };
 
     try {
@@ -996,4 +1016,4 @@ export const submitOvertime = (payload: any) => {
       }
     }
   };
-};
+  };

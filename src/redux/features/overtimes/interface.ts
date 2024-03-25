@@ -8,4 +8,7 @@ export interface initialStateGlobalOvertimes {
   order: string;
   statusListOvertimes: string;
   dataListOvertimes: any;
+  keyword: string,
+  startDate: string,
+  endDate: string,
 }
