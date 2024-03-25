@@ -92,23 +92,6 @@ const TemplateHome = () => {
   // console.log('profile', profile);
   // console.log('auth', auth);
 
-  console.log(
-    ' =======>>>>>>>> statusListAttendaceMine',
-    statusListAttendaceMine,
-  );
-  console.log(
-    ' =======>>>>>>>> statusListOvertimesMine',
-    statusListOvertimesMine,
-  );
-  console.log(
-    ' =======>>>>>>>> statusListSubmissionsMine',
-    statusListSubmissionsMine,
-  );
-
-  console.log(' =======>>>>>>>> dataAttendaceMine', dataAttendaceMine);
-  console.log(' =======>>>>>>>> dataOvertimesMine', dataOvertimesMine);
-  console.log(' =======>>>>>>>> datSubmissionsMine', datSubmissionsMine);
-
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));

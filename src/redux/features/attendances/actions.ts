@@ -11,6 +11,7 @@ import {
 import {getAttendaces} from '../../../api/attendace';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {Alert} from 'react-native';
+import { currentDateWithFormat, futureDateOneYear } from '../../../contants/routes';
 
 const debounceGetAttendaces = debounce(getAttendaces, 100);
 
@@ -19,15 +20,22 @@ export const getListAttendances = () => {
     dispatch({
       type: START_ATTENDACES,
     });
+    console.log('start fetch getListAttendances');
 
     const page = getState().attendances.page;
     const take = getState().attendances.take;
     const order = getState().attendances.order;
+    const keyword = getState().attendances.keyword;
+    const startDate = getState().attendances.startDate || currentDateWithFormat;
+    const endDate = getState().attendances.endDate || futureDateOneYear;
 
     const params = {
       page,
       take,
       order,
+      search: keyword,
+      endDate,
+      startDate,
     };
 
     try {

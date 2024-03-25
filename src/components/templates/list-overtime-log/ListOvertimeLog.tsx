@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,6 +15,11 @@ import {getListOvertimes} from '../../../redux/features/overtimes/actions';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../contants';
 import CalendarPicker from 'react-native-calendar-picker';
+import {
+  CLEAR_START_DATE_END_DATE,
+  SET_END_DATE,
+  SET_START_DATE,
+} from '../../../redux/features/overtimes/constants';
 
 interface typeInputTextWithIcon {
   placeholder: string;
@@ -86,21 +92,26 @@ const TemplateListOvertimeLog = () => {
   const dispatch: any = useDispatch();
   const overtimes = useSelector((state: any) => state.overtimes);
 
-  const {dataListOvertimes, page, take, order, statusListOvertimes} = overtimes;
+  const {
+    dataListOvertimes,
+    page,
+    take,
+    order,
+    keyword,
+    startDate,
+    endDate,
+    statusListOvertimes,
+  } = overtimes;
 
-  const [selectedStartDate, setSelectedStartDate] = useState<any>('');
-  const [selectedEndDate, setSelectedEndDate] = useState<any>('');
   const [showCalender, setShowCalender] = useState<any>(false);
 
   const handleClearValue = () => {
-    setSelectedStartDate('');
-    setSelectedEndDate('');
+    dispatch({type: CLEAR_START_DATE_END_DATE});
   };
   const onPressInputContainer = () => {
     setShowCalender(!showCalender);
   };
   const onDateChange = (date: any, type: any) => {
-    // console.log(JSON.stringify(date));
     const newDate = JSON.stringify(date);
     const newDate1 = newDate.substring(1, newDate.length - 1);
     const dates = newDate1.split('T');
@@ -108,31 +119,37 @@ const TemplateListOvertimeLog = () => {
     const day = date1[2];
     const month = date1[1];
     const year = date1[0];
-    // console.log(day + '-' + month + '-' + year);
 
     if (type == 'END_DATE') {
       if (day == undefined) {
-        setSelectedEndDate('');
+        dispatch({
+          type: SET_END_DATE,
+          value: '',
+        });
       } else {
         setShowCalender(false);
-        setSelectedEndDate(day + '/' + month + '/' + year);
+        dispatch({
+          type: SET_END_DATE,
+          value: year + '-' + month + '-' + day,
+        });
       }
     } else {
-      setSelectedStartDate(day + '/' + month + '/' + year);
+      dispatch({
+        type: SET_START_DATE,
+        value: year + '-' + month + '-' + day,
+      });
     }
   };
 
   useEffect(() => {
     dispatch(getListOvertimes());
-  }, [page, take, order]);
+  }, [page, take, order, keyword, endDate]);
 
-  if (statusListOvertimes === 'process') {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-        <ActivityIndicator size="large" color={COLORS.bgPrimary} />
-      </View>
-    );
-  }
+  useEffect(() => {
+    if (statusListOvertimes === 'success') {
+      setRefresh(false);
+    }
+  }, [statusListOvertimes]);
 
   if (statusListOvertimes === 'error') {
     return (
@@ -148,8 +165,17 @@ const TemplateListOvertimeLog = () => {
       </View>
     );
   }
+
+  const [refresh, setRefresh] = useState(false);
+  const pullMe = () => {
+    dispatch(getListOvertimes());
+  };
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+      }>
       <View style={styles.container}>
         <View style={styles.containerTitleList}>
           <CInputTextWithIconLabel
@@ -167,10 +193,8 @@ const TemplateListOvertimeLog = () => {
               <IconAntDesign name="closecircleo" size={19} color="#B8B8B8" />
             }
             clearValue={handleClearValue}
-            value={`${
-              selectedStartDate ? `${selectedStartDate} - ` : ''
-            }${selectedEndDate}`}
-            isValueExist={selectedStartDate && selectedStartDate}
+            value={`${startDate ? `${startDate} - ` : ''}${endDate}`}
+            isValueExist={startDate && startDate}
           />
         </View>
         {showCalender ? (
@@ -187,17 +211,39 @@ const TemplateListOvertimeLog = () => {
         ) : (
           ''
         )}
-        <View>
-          {dataListOvertimes.length === 0 ? (
-            <Text>Data Kosong</Text>
-          ) : (
-            dataListOvertimes.map((item: any) => (
-              <View key={item.id} style={{marginTop: 8}}>
-                <ListItemOvertime item={item} />
+        {statusListOvertimes === 'process' ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: 40,
+            }}>
+            <ActivityIndicator size="large" color={COLORS.bgPrimary} />
+          </View>
+        ) : (
+          <View>
+            {dataListOvertimes.length === 0 ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  width: '100%',
+                  height: '100%',
+                  marginTop: 40,
+                }}>
+                <Text style={{textAlign: 'center'}}>Data kosong</Text>
               </View>
-            ))
-          )}
-        </View>
+            ) : (
+              dataListOvertimes.map((item: any) => (
+                <View key={item.id} style={{marginTop: 12}}>
+                  <ListItemOvertime item={item} />
+                </View>
+              ))
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );

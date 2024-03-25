@@ -94,14 +94,23 @@ const initialState: initialStateGlobalHome = {
   pageAttendaceMine: 1,
   takeAttendaceMine: 5,
   orderAttendaceMine: 'DESC',
+  keywordAttendaceMine:"",
+  startDateAttendaceMine:"",
+  endDateAttendaceMine:"",
 
   pageOvertimesMine: 1,
   takeOvertimesMine: 5,
   orderOvertimesMine: 'DESC',
+  keywordOvertimesMine:"",
+  startDateOvertimesMine:"",
+  endDateOvertimesMine:"",
 
   pageSubmissionsMine: 1,
   takeSubmissionsMine: 5,
   orderSubmissionsMine: 'DESC',
+  keywordSubmissionsMine:"",
+  startDateSubmissionsMine:"",
+  endDateSubmissionsMine:"",
 
   statusListAttendaceMine: statusList.idle,
   statusListOvertimesMine: statusList.idle,

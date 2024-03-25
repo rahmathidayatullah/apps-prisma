@@ -8,6 +8,9 @@ import {
   START_CATEGORY_SUBMISSIONS,
   SUCCESS_CATEGORY_SUBMISSIONS,
   ERROR_CATEGORY_SUBMISSIONS,
+  SET_START_DATE,
+  SET_END_DATE,
+  CLEAR_START_DATE_END_DATE,
 } from './constants';
 
 import {initialStateGlobalSubmissions} from './interface';
@@ -23,6 +26,9 @@ const initialState: initialStateGlobalSubmissions = {
   page: 1,
   take: 100,
   order: 'DESC',
+  keyword: '',
+  startDate: '',
+  endDate: '',
   statusListSubmissions: statusList.idle,
   statusSubmissionsDetail: statusList.idle,
   listCategorySubmission: [],
@@ -32,6 +38,25 @@ const initialState: initialStateGlobalSubmissions = {
 
 export default function submissionsReducer(state = initialState, action: any) {
   switch (action.type) {
+    case SET_START_DATE:
+      return {
+        ...state,
+        startDate: action.value,
+      };
+
+    case SET_END_DATE:
+      return {
+        ...state,
+        endDate: action.value,
+      };
+
+    case CLEAR_START_DATE_END_DATE:
+      return {
+        ...state,
+        endDate: '',
+        startDate: '',
+      };
+
     case START_SUBMISSIONS:
       return {
         ...state,

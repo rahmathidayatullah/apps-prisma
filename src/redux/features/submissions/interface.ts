@@ -11,4 +11,7 @@ export interface initialStateGlobalSubmissions {
   page: number;
   take: number;
   order: string;
+  keyword: string,
+  startDate: string,
+  endDate: string,
 }

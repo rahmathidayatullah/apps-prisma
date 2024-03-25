@@ -48,6 +48,7 @@ import IconPenjualan from '../components/atoms/svg/penjualan';
 import IconAkad from '../components/atoms/svg/akad';
 import IconHome from '../components/atoms/svg/home';
 import IconLogistik from '../components/atoms/svg/logistik';
+import moment from 'moment';
 
 // export const routeMenuItem: MenuItem[] = [
 //   {
@@ -192,3 +193,15 @@ export const listAnnouncement = [
     img: require('../assets/images/img-4.png'),
   },
 ];
+
+const currentYear = moment().year();
+
+// Generate start date for January 1st of the current year
+export const currentDateWithFormat = moment(`${currentYear}-01-01`).format(
+  "YYYY-MM-DD"
+);
+
+// Generate end date for December 31st of the current year
+export const futureDateOneYear = moment(`${currentYear}-12-31`).format(
+  "YYYY-MM-DD"
+);
