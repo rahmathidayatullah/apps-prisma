@@ -48,6 +48,9 @@ import {
   SUCCESS_SUBMIT_SUBMISSION,
   ERROR_SUBMIT_SUBMISSION,
   RESET_STATE_SUBMISSION,
+  START_CATEGORY_SUBMISSIONS,
+  SUCCESS_CATEGORY_SUBMISSIONS,
+  ERROR_CATEGORY_SUBMISSIONS,
 
   // lembur/overtime
   TOOGLE_PICKER_END_DATE_OVERTIME,
@@ -94,23 +97,23 @@ const initialState: initialStateGlobalHome = {
   pageAttendaceMine: 1,
   takeAttendaceMine: 5,
   orderAttendaceMine: 'DESC',
-  keywordAttendaceMine:"",
-  startDateAttendaceMine:"",
-  endDateAttendaceMine:"",
+  keywordAttendaceMine: '',
+  startDateAttendaceMine: '',
+  endDateAttendaceMine: '',
 
   pageOvertimesMine: 1,
   takeOvertimesMine: 5,
   orderOvertimesMine: 'DESC',
-  keywordOvertimesMine:"",
-  startDateOvertimesMine:"",
-  endDateOvertimesMine:"",
+  keywordOvertimesMine: '',
+  startDateOvertimesMine: '',
+  endDateOvertimesMine: '',
 
   pageSubmissionsMine: 1,
   takeSubmissionsMine: 5,
   orderSubmissionsMine: 'DESC',
-  keywordSubmissionsMine:"",
-  startDateSubmissionsMine:"",
-  endDateSubmissionsMine:"",
+  keywordSubmissionsMine: '',
+  startDateSubmissionsMine: '',
+  endDateSubmissionsMine: '',
 
   statusListAttendaceMine: statusList.idle,
   statusListOvertimesMine: statusList.idle,
@@ -187,6 +190,7 @@ const initialState: initialStateGlobalHome = {
   showPickerStartTimeSubmission: false,
 
   descriptionSubmission: '',
+  listCategorySubmission: [],
   selectCategorySubmission: '',
   file1Submission: null,
   file2Submission: null,
@@ -223,6 +227,23 @@ const initialState: initialStateGlobalHome = {
 
 export default function homeReducer(state = initialState, action: any) {
   switch (action.type) {
+    case START_CATEGORY_SUBMISSIONS:
+      return {
+        ...state,
+        statusListCategorySubmission: statusList.process,
+      };
+    case SUCCESS_CATEGORY_SUBMISSIONS:
+      return {
+        ...state,
+        statusListCategorySubmission: statusList.success,
+        listCategorySubmission: action.data,
+      };
+    case ERROR_CATEGORY_SUBMISSIONS:
+      return {
+        ...state,
+        statusListCategorySubmission: statusList.error,
+      };
+
     case START_ATTENDACE_MINE:
       return {
         ...state,
@@ -492,8 +513,23 @@ export default function homeReducer(state = initialState, action: any) {
       };
 
     case CHANGE_CATEOGRY_SUBMISSION:
+      const newListCategorySubmission = state.listCategorySubmission.map(
+        (item: any, index: any) => {
+          if (item.value === action.value) {
+            return {
+              ...item,
+              _index: Number(action.value) - 1,
+            };
+          }
+          return item;
+        },
+      );
+      console.log('newListCategorySubmission', newListCategorySubmission);
       return {
         ...state,
+
+        listCategorySubmission: newListCategorySubmission,
+
         selectCategorySubmission: action.value,
       };
 

@@ -59,6 +59,8 @@ export async function getCategorySubmission() {
     newUserData = JSON.parse(userData);
   }
 
+  console.log('newUserData.access_token', newUserData.access_token);
+
   return await axios.get(`${baseURL}/submission-categories`, {
     headers: {
       Authorization: `Bearer ${newUserData.access_token}`,

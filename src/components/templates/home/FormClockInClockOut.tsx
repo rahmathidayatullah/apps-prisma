@@ -51,6 +51,7 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
 
     if (!latitude || !longitude || !imageSelfie) {
       Alert.alert('Pastikan foto selfie dan lokasi terisi');
+      return;
     }
 
     if (clockIn) {

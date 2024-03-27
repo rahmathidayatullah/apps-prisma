@@ -163,7 +163,7 @@ const TemplateListOfSubmission = () => {
           width: '100%',
           height: '100%',
         }}>
-        <Text style={{textAlign: 'center'}}>Somthing when wrong</Text>
+        <Text style={{textAlign: 'center'}}>Terjadi Kesalahan</Text>
       </View>
     );
   }

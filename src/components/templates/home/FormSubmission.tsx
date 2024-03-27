@@ -16,6 +16,7 @@ import {
   tooglePickerEndDateSubmission,
   tooglePickerStartDateSubmission,
   changeCategorySubmission,
+  getListCategorySubmission,
 } from '../../../redux/features/home/actions';
 import {ScrollView} from 'react-native-gesture-handler';
 import TextWithLabelIconDate from '../../atoms/input/TextWithLabelIconDate';
@@ -30,9 +31,6 @@ import {
   REMOVE_FILE2_SUBMISSION,
 } from '../../../redux/features/home/constants';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {stateGlobalSubmissions} from '../../../redux/features/submissions/interface';
-// import {getListCategorySubmission} from '../../../redux/features/submissions/actions';
-
 const FormSubmission = ({bottomSheetModalRef}: any) => {
   const navigation: any = useNavigation();
   const dispatch: any = useDispatch();
@@ -45,6 +43,7 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
     valueStartDateSubmission,
     showPickerStartDateSubmission,
 
+    listCategorySubmission,
     selectCategorySubmission,
 
     descriptionSubmission,
@@ -55,11 +54,6 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
     statusSubmitSubmission,
   } = useSelector((state: stateGlobalHome) => state.home);
 
-  // const submissions = useSelector(
-  //   (state: stateGlobalSubmissions) => state.submissions,
-  // );
-  // const {listCategorySubmission} = submissions;
-
   const handleSubmitSubmission = () => {
     if (
       valueEndDateSubmission === '' ||
@@ -67,6 +61,7 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
       selectCategorySubmission === ''
     ) {
       Alert.alert('Tanngal mulai, tanggal selesai, dan kategory harus di isi');
+      return;
     } else {
       const payload = {
         valueEndDateSubmission,
@@ -124,12 +119,12 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
     // });
   };
 
-  // useEffect(() => {
-  //   // dispatch(getListCategorySubmission());
-  //   return () => {
-  //     resetState();
-  //   };
-  // }, []);
+  useEffect(() => {
+    dispatch(getListCategorySubmission());
+    // return () => {
+    //   resetState();
+    // };
+  }, []);
 
   // const resetState = () => {
   //   dispatch(resetValueBottomSheet());
@@ -161,6 +156,7 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
               placeholder="Pilih kategori"
               onChange={onChanceCategory}
               value={selectCategorySubmission}
+              dataOption={listCategorySubmission}
             />
           </View>
           {/* input start date */}

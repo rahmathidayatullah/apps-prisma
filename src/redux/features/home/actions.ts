@@ -45,6 +45,9 @@ import {
   START_SUBMIT_SUBMISSION,
   SUCCESS_SUBMIT_SUBMISSION,
   ERROR_SUBMIT_SUBMISSION,
+  START_CATEGORY_SUBMISSIONS,
+  SUCCESS_CATEGORY_SUBMISSIONS,
+  ERROR_CATEGORY_SUBMISSIONS,
 
   // lembur/overtime
   TOOGLE_PICKER_END_DATE_OVERTIME,
@@ -82,14 +85,58 @@ import {postClockIn, postClockOut, postOvertime} from '../../../api/home';
 import {Alert} from 'react-native';
 import {SUCCESS_LOGOUT} from '../auth/constants';
 import {fetchProfile} from '../profile/actions';
-import {getSubmissionsMine, postSubmission} from '../../../api/submission';
+import {
+  getCategorySubmission,
+  getSubmissionsMine,
+  postSubmission,
+} from '../../../api/submission';
 import {
   getOvertimesMine,
   patchOvertimesClockIn,
   patchOvertimesClockOut,
 } from '../../../api/overtime';
 import {getAttendacesMine} from '../../../api/attendace';
-import { currentDateWithFormat, futureDateOneYear } from '../../../contants/routes';
+import {
+  currentDateWithFormat,
+  futureDateOneYear,
+} from '../../../contants/routes';
+
+export const getListCategorySubmission = () => {
+  return async (dispatch: any) => {
+    dispatch({
+      type: START_CATEGORY_SUBMISSIONS,
+    });
+    console.log('start fetch getListCategorySubmission');
+    try {
+      const {
+        data: {data},
+      } = await getCategorySubmission();
+      const newData = data.map((item: any) => {
+        return {
+          id: item.id,
+          label: item.name,
+          value: item.id,
+        };
+      });
+      dispatch({
+        type: SUCCESS_CATEGORY_SUBMISSIONS,
+        data: newData,
+      });
+    } catch (error: any) {
+      console.log('error fetch getListCategorySubmission', error);
+      if (error.response?.status === 401) {
+        Alert.alert(error.code, error.response?.data?.message);
+        dispatch({
+          type: SUCCESS_LOGOUT,
+        });
+      } else {
+        dispatch({
+          type: ERROR_CATEGORY_SUBMISSIONS,
+        });
+      }
+    }
+  };
+};
 
 export const getListAttendancesMine = () => {
   return async (dispatch: any, getState: any) => {
@@ -101,9 +148,9 @@ export const getListAttendancesMine = () => {
     const take = getState().home.takeAttendaceMine;
     const order = getState().home.orderAttendaceMine;
     const keyword = getState().home.keywordAttendaceMine;
-    const startDate = getState().home.startDateAttendaceMine || currentDateWithFormat;
+    const startDate =
+      getState().home.startDateAttendaceMine || currentDateWithFormat;
     const endDate = getState().home.endDateAttendaceMine || futureDateOneYear;
-    
 
     const params = {
       page,
@@ -150,7 +197,8 @@ export const getListOvertimesMine = () => {
     const take = getState().home.takeOvertimesMine;
     const order = getState().home.orderOvertimesMine;
     const keyword = getState().home.keywordOvertimesMine;
-    const startDate = getState().home.startDateOvertimesMine || currentDateWithFormat;
+    const startDate =
+      getState().home.startDateOvertimesMine || currentDateWithFormat;
     const endDate = getState().home.endDateOvertimesMine || futureDateOneYear;
 
     const params = {
@@ -198,7 +246,8 @@ export const getListSubmissionsMine = () => {
     const take = getState().home.takeSubmissionsMine;
     const order = getState().home.orderSubmissionsMine;
     const keyword = getState().home.keywordSubmissionsMine;
-    const startDate = getState().home.startDateSubmissionsMine || currentDateWithFormat;
+    const startDate =
+      getState().home.startDateSubmissionsMine || currentDateWithFormat;
     const endDate = getState().home.endDateSubmissionsMine || futureDateOneYear;
 
     const params = {
@@ -1016,4 +1065,4 @@ export const submitOvertime = (payload: any) => {
       }
     }
   };
-  };
+};
