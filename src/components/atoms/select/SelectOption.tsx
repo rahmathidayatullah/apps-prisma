@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
-import {categorySubmission} from '../../../contants/routes';
 import {COLORS} from '../../../contants';
 
 interface typeSelectOption {
@@ -9,6 +8,7 @@ interface typeSelectOption {
   value: any;
   label?: string;
   placeholder?: string;
+  dataOption?: any;
 }
 
 const CSelectOption = ({
@@ -16,14 +16,16 @@ const CSelectOption = ({
   value,
   label,
   placeholder,
+  dataOption = [],
 }: typeSelectOption) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.containerInput}>
         <Text style={{color: COLORS.bgGrey}}>{label}</Text>
         <Dropdown
+          key="value"
           style={styles.dropdown}
-          data={categorySubmission}
+          data={dataOption}
           labelField="label"
           valueField="value"
           placeholder={placeholder}

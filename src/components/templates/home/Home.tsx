@@ -64,6 +64,7 @@ import 'moment/locale/id';
 import ListAnnoucement from './ListAnnoucement';
 import FormOvertime2 from './FormOvertime2';
 import CardMenuItem2 from './CardMenuItem2';
+import {getListAnnoucementHome} from '../../../redux/features/announcement/actions';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
@@ -88,6 +89,10 @@ const TemplateHome = () => {
   const newData =
     typeof userData === 'string' ? JSON.parse(userData) : userData;
   const profile = useSelector((state: stateGlobalProfile) => state.profile);
+  const announcement = useSelector((state: any) => state.announcement);
+  const {statusList: statusListAnnouncement, dataList: dataListAnnouncement} =
+    announcement;
+  console.log('announcement', announcement);
   // console.log('home', home);
   // console.log('profile', profile);
   // console.log('auth', auth);
@@ -128,6 +133,7 @@ const TemplateHome = () => {
     dispatch(getListAttendancesMine());
     dispatch(getListOvertimesMine());
     dispatch(getListSubmissionsMine());
+    dispatch(getListAnnoucementHome());
 
     const timerID = setInterval(() => {
       setCurrentTime(moment().format('HH:mm'));
@@ -249,6 +255,7 @@ const TemplateHome = () => {
     dispatch(getListAttendancesMine());
     dispatch(getListOvertimesMine());
     dispatch(getListSubmissionsMine());
+    dispatch(getListAnnoucementHome());
   };
 
   return (
@@ -421,7 +428,10 @@ const TemplateHome = () => {
                 />
               ))}
             </ScrollView>
-            <ListAnnoucement />
+            <ListAnnoucement
+              dataAnnouncement={dataListAnnouncement}
+              loading={statusListAnnouncement === 'process'}
+            />
             <View style={styles.containerListAttendace}>
               <ListAttendace
                 dataAttendaceMine={dataAttendaceMine}

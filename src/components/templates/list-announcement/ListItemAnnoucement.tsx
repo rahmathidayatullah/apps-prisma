@@ -10,11 +10,17 @@ const ListItemAnnoucement = ({item, onPress}: typeOfListItemAnnoucement) => {
   return (
     <TouchableOpacity style={styles.wrapItemAnnouncement} onPress={onPress}>
       <View style={styles.containerImgAnnouncement}>
-        <Image style={styles.imgAnnouncement} source={item.img} />
+        {/* <Image style={styles.imgAnnouncement} source={item.img} /> */}
+        <Image
+          style={styles.imgAnnouncement}
+          source={{
+            uri: item.image1,
+          }}
+        />
       </View>
       <View style={styles.containerTextItemAnnouncement}>
-        <Text style={{fontSize: 13, fontWeight: '600'}}>{item.title}</Text>
-        <Text style={{fontSize: 11}}>{item.description}</Text>
+        <Text style={{fontSize: 13, fontWeight: '600'}}>{item.title1}</Text>
+        <Text style={{fontSize: 11}}>{item.description1}</Text>
       </View>
     </TouchableOpacity>
   );

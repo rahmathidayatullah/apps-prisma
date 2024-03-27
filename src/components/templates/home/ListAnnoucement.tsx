@@ -1,12 +1,26 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import CButtonText from '../../atoms/button/ButtonText';
-import {listAnnouncement, routeMenu} from '../../../contants/routes';
+// import {listAnnouncement, routeMenu} from '../../../contants/routes';
+import {routeMenu} from '../../../contants/routes';
 import {COLORS} from '../../../contants';
 import {useNavigation} from '@react-navigation/native';
 
-const ListAnnoucement = () => {
+interface typeListAnnouncement {
+  dataAnnouncement: any;
+  loading?: boolean;
+}
+
+const ListAnnoucement = ({dataAnnouncement, loading}: typeListAnnouncement) => {
   const navigation: any = useNavigation();
+
   const handleDetail = (item: any) => {
     navigation.navigate(routeMenu.DETAIL_ANNOUCEMENT, {
       itemId: item.id,
@@ -16,30 +30,60 @@ const ListAnnoucement = () => {
     <View style={styles.containerAnnouncement}>
       <View style={styles.wrapTitleAnnouncement}>
         <Text style={styles.wrapTitle}>Pengumuman</Text>
-        <CButtonText
-          onPress={() => navigation.navigate(routeMenu.LIST_OF_ANNOUCEMENT)}>
-          Selengkapnya
-        </CButtonText>
+        {dataAnnouncement.length === 0 || loading ? (
+          ''
+        ) : (
+          <CButtonText
+            onPress={() => navigation.navigate(routeMenu.LIST_OF_ANNOUCEMENT)}>
+            Selengkapnya
+          </CButtonText>
+        )}
       </View>
-      <View style={styles.wrapListItemAnnouncement}>
-        {listAnnouncement.map((item: any) => {
-          return (
-            <TouchableOpacity
-              style={styles.wrapItemAnnouncement}
-              key={item.id}
-              onPress={() => handleDetail(item)}>
-              <View style={styles.containerImgAnnouncement}>
-                <Image style={styles.imgAnnouncement} source={item.img} />
-              </View>
-              <View style={styles.containerTextItemAnnouncement}>
-                <Text style={{fontSize: 13, fontWeight: '600'}}>
-                  {item.title}
-                </Text>
-                <Text style={{fontSize: 11}}>{item.description}</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+
+      <View>
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: 12,
+            }}>
+            <ActivityIndicator size="large" color={COLORS.bgPrimary} />
+            <Text style={{textAlign: 'center', marginTop: 10}}>
+              Load data pengumuman ..
+            </Text>
+          </View>
+        ) : dataAnnouncement.length === 0 ? (
+          <View style={{marginTop: 20}}>
+            <Text>Belum ada data pengumuman</Text>
+          </View>
+        ) : (
+          <View style={styles.wrapListItemAnnouncement}>
+            {dataAnnouncement.map((item: any) => {
+              return (
+                <TouchableOpacity
+                  style={styles.wrapItemAnnouncement}
+                  key={item.id}
+                  onPress={() => handleDetail(item)}>
+                  <View style={styles.containerImgAnnouncement}>
+                    <Image
+                      style={styles.imgAnnouncement}
+                      // source={item.image1}
+                      source={{uri: item.image1}}
+                    />
+                  </View>
+                  <View style={styles.containerTextItemAnnouncement}>
+                    <Text style={{fontSize: 13, fontWeight: '600'}}>
+                      {item.title1}
+                    </Text>
+                    <Text style={{fontSize: 11}}>{item.description1}</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
       </View>
     </View>
   );

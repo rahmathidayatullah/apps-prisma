@@ -23,7 +23,6 @@ export const ListAttendace = ({
     <View style={styles.container}>
       <View style={styles.containerTitleList}>
         <Text style={styles.textAttendaceLog}>Riwayat Absensi</Text>
-
         {dataAttendaceMine.length === 0 || loading ? (
           ''
         ) : (

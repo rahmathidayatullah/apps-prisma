@@ -58,6 +58,7 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
 
     if (!latitude || !longitude || !imageSelfie) {
       Alert.alert('Pastikan foto selfie dan lokasi terisi');
+      return;
     }
 
     if (

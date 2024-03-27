@@ -78,6 +78,7 @@ export default function attendacesReducer(state = initialState, action: any) {
       return {
         ...state,
         statusAttendacesDetail: statusList.success,
+        dataDetail: action.data,
       };
     case ERROR_ATTENDACES_DETAIL:
       return {

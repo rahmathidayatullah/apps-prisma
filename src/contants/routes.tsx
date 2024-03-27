@@ -139,24 +139,24 @@ export interface typeItemCategorySubmission {
   label: string;
 }
 
-export const categorySubmission: typeItemCategorySubmission[] = [
+export const categorySubmission: any = [
   {
-    id: 1,
+    // id: 1,
     value: '1',
     label: 'Cuti Tahunan',
   },
   {
-    id: 2,
+    // id: 2,
     value: '2',
     label: 'Izin Sakit',
   },
   {
-    id: 3,
+    // id: 3,
     value: '3',
     label: 'Lainnya',
   },
   {
-    id: 4,
+    // id: 4,
     value: '4',
     label: 'Libur',
   },
@@ -198,10 +198,10 @@ const currentYear = moment().year();
 
 // Generate start date for January 1st of the current year
 export const currentDateWithFormat = moment(`${currentYear}-01-01`).format(
-  "YYYY-MM-DD"
+  'YYYY-MM-DD',
 );
 
 // Generate end date for December 31st of the current year
 export const futureDateOneYear = moment(`${currentYear}-12-31`).format(
-  "YYYY-MM-DD"
+  'YYYY-MM-DD',
 );

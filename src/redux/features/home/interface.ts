@@ -16,27 +16,26 @@ export interface stateGlobalHome {
 }
 
 export interface initialStateGlobalHome {
-
   pageAttendaceMine: number;
   takeAttendaceMine: number;
   orderAttendaceMine: string;
-  keywordAttendaceMine:string,
-  startDateAttendaceMine:string,
-  endDateAttendaceMine:string,
+  keywordAttendaceMine: string;
+  startDateAttendaceMine: string;
+  endDateAttendaceMine: string;
 
   pageOvertimesMine: number;
   takeOvertimesMine: number;
   orderOvertimesMine: string;
-  keywordOvertimesMine:string,
-  startDateOvertimesMine:string,
-  endDateOvertimesMine:string,
+  keywordOvertimesMine: string;
+  startDateOvertimesMine: string;
+  endDateOvertimesMine: string;
 
   pageSubmissionsMine: number;
   takeSubmissionsMine: number;
   orderSubmissionsMine: string;
-  keywordSubmissionsMine:string,
-  startDateSubmissionsMine:string,
-  endDateSubmissionsMine:string,
+  keywordSubmissionsMine: string;
+  startDateSubmissionsMine: string;
+  endDateSubmissionsMine: string;
 
   statusListAttendaceMine: string;
   statusListOvertimesMine: string;
@@ -99,6 +98,7 @@ export interface initialStateGlobalHome {
   showPickerStartTimeSubmission: boolean;
 
   descriptionSubmission: string;
+  listCategorySubmission?: any;
   selectCategorySubmission: string;
 
   file1Submission: any;
