@@ -77,7 +77,12 @@ const ListAnnoucement = ({dataAnnouncement, loading}: typeListAnnouncement) => {
                     <Text style={{fontSize: 13, fontWeight: '600'}}>
                       {item.title1}
                     </Text>
-                    <Text style={{fontSize: 11}}>{item.description1}</Text>
+                    <Text
+                      numberOfLines={3}
+                      ellipsizeMode="tail"
+                      style={{fontSize: 11}}>
+                      {item.description1}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               );

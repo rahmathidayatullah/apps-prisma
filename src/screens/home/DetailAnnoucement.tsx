@@ -89,16 +89,18 @@ const DetailAnnoucement = ({route}: any) => {
           <Image
             style={styles.img}
             source={{
-              uri: dataDetail.image1,
+              uri: dataDetail?.image1 ?? '',
             }}
           />
         </View>
         <View style={{paddingHorizontal: 12}}>
           <View style={{marginTop: 20}}>
-            <Text style={styles.title}>{dataDetail.title1}</Text>
+            <Text style={styles.title}>{dataDetail?.title1 ?? '-'}</Text>
           </View>
           <View style={{marginTop: 10}}>
-            <Text style={styles.description}>{dataDetail.description1}</Text>
+            <Text style={styles.description}>
+              {dataDetail?.description1 ?? '-'}
+            </Text>
             {/* <Text style={styles.description}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima
               quo, mollitia quibusdam ipsam, modi doloribus pariatur, officia

@@ -28,7 +28,7 @@ const LoginScreen = () => {
   const navigation: any = useNavigation();
 
   const {statusLogin, userData, error, response, response2, response3} =
-    useSelector((state: stateGlobalAuth) => state.auth);
+    useSelector((state: any) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -89,6 +89,25 @@ const LoginScreen = () => {
             />
           </View>
 
+          {statusLogin === 'error' ? (
+            <View style={{marginVertical: 10}}>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  color: COLORS.bgRedList,
+                  textAlign: 'center',
+                }}>
+                {error && error?.message?.response?.message
+                  ? 'Tidak ada pengguna dengan email dan password yg di masukkan'
+                  : error?.message
+                  ? 'Password atau email tidak sesuai'
+                  : 'Terjadi kesalahan'}
+              </Text>
+            </View>
+          ) : (
+            ''
+          )}
+
           <View style={{marginTop: 15, flexDirection: 'row'}}>
             <CButton
               disabled={!email || !password || statusLogin === 'process'}
@@ -99,27 +118,6 @@ const LoginScreen = () => {
               {statusLogin === 'error' && 'Gagal login'}
             </CButton>
           </View>
-
-          {/* start ===================== debug */}
-          {/* {userData && (
-            <View style={{marginTop: 15, flexDirection: 'row'}}>
-              <Text>userData :{JSON.stringify(userData)}</Text>
-            </View>
-          )}
-          <View style={{marginTop: 15, flexDirection: 'row'}}>
-            <Text>error :{error}</Text>
-          </View>
-          <View style={{marginTop: 15, flexDirection: 'row'}}>
-            <Text>response :{response}</Text>
-          </View>
-          <View style={{marginTop: 15, flexDirection: 'row'}}>
-            <Text>response2 :{response2}</Text>
-          </View>
-          <View style={{marginTop: 15, flexDirection: 'row'}}>
-            <Text>response3 :{response3}</Text>
-          </View> */}
-          {/* end ===================== debug */}
-
           <View
             style={{
               marginTop: 15,

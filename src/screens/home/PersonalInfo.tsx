@@ -23,7 +23,7 @@ import {
   updateProfile,
 } from '../../redux/features/profile/actions';
 import {RESET_FORM_PROFILE} from '../../redux/features/profile/constants';
-import {baseURL} from '../../api/user';
+import {COLORS} from '../../contants';
 
 interface typeInputText {
   placeholder: string;
@@ -31,6 +31,7 @@ interface typeInputText {
   onChangeText?: any;
   value?: string;
   editable?: boolean;
+  multiline?: boolean;
 }
 
 const CInputText = ({
@@ -39,6 +40,7 @@ const CInputText = ({
   onChangeText,
   value,
   editable = true,
+  multiline = false,
 }: typeInputText) => {
   return (
     <View style={[styles.containerInputIconLabel]}>
@@ -47,10 +49,16 @@ const CInputText = ({
         <TextInput
           editable={editable}
           placeholderTextColor="#ccc"
-          style={styles.input}
+          style={[
+            styles.input,
+            {height: multiline ? 80 : 50},
+            {color: editable ? COLORS.bgGrey : '#7E7E7E'},
+            {backgroundColor: editable ? 'transparent' : '#F5F5F5'},
+          ]}
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}
+          multiline={multiline}
         />
       </View>
     </View>
@@ -317,7 +325,7 @@ const PersonalInfo = () => {
           </View>
           <View style={{marginTop: 20}}>
             <CInputText
-              placeholder="Masukkan password"
+              placeholder="Masukkan password jika ingin diubah"
               label="Password"
               editable={isEdit}
               value={form.password}
@@ -357,6 +365,7 @@ const PersonalInfo = () => {
               onChangeText={(newText: string) =>
                 setForm({...form, address: newText})
               }
+              multiline={true}
             />
           </View>
           <View style={{marginTop: 20}}>
@@ -438,15 +447,15 @@ const styles = StyleSheet.create({
   containerInput: {
     position: 'relative',
     flexDirection: 'row',
+    marginTop: 10,
   },
   input: {
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     paddingBottom: 15,
-    borderRadius: 16,
-    height: 50,
+    borderRadius: 8,
+    paddingLeft: 16,
     flex: 1,
-    color: '#000000',
     fontWeight: '600',
   },
   imageProfile: {
