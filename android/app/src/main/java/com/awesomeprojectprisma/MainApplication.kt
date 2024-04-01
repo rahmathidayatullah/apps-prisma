@@ -1,6 +1,7 @@
 package com.awesomeprojectprisma
 
 import com.oblador.vectoricons.VectorIconsPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -22,6 +23,7 @@ class MainApplication : Application(), ReactApplication {
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
+              SplashScreenReactPackage()
             }
 
         override fun getJSMainModuleName(): String = "index"
