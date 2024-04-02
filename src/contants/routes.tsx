@@ -27,6 +27,7 @@ export const routeMenu = {
   DETAIL_ANNOUCEMENT: 'Detail Annoucement',
   TAKE_SEFIE: 'Take Selfie',
   VIEW_CURRENT_LOCATION: 'View Current Location',
+  ATTENDACE: 'Attendance',
 
   // menu profile
   PERSONAL_INFO: 'Personal Info',
@@ -85,7 +86,7 @@ import moment from 'moment';
 export const routeMenuItem: MenuItem[] = [
   {
     id: 1,
-    value: 'pengajuan',
+    value: 'kehadiran',
     label: 'Kehadiran',
     path: '/',
     icon: (

@@ -34,7 +34,11 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = () => {
-    dispatch(postLogin(email, password));
+    const body = {
+      email,
+      password
+    }
+    dispatch(postLogin(body));
   };
   return (
     <ScrollView style={{flex: 1}}>

@@ -6,6 +6,7 @@ import submissionsReducer from './features/submissions/reducer';
 import overtimesReducer from './features/overtimes/reducer';
 import attendancesReducer from './features/attendances/reducer';
 import announcementReducer from './features/announcement/reducer';
+import shiftReducer from './features/shift/reducer';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     overtimes: overtimesReducer,
     attendances: attendancesReducer,
     announcement: announcementReducer,
+    shift: shiftReducer,
   },
 });
 

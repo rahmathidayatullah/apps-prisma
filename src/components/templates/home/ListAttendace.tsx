@@ -15,6 +15,7 @@ export const ListAttendace = ({
   dataAttendaceMine,
   loading = true,
 }: typeListAttendace) => {
+  console.log('dataAttendaceMine', dataAttendaceMine);
   const navigation: any = useNavigation();
   const handleViewAllLogAttendace = () => {
     navigation.navigate(routeMenu.LIST_ATTENDACE_LOG);

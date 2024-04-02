@@ -18,22 +18,56 @@ export const ListItemAttendace = ({item}: typeListItemAttendace) => {
     <View
       style={[
         styles.container,
-        item.status === 'Reject'
+        item.status === 'Reject' || item.isLate === true
           ? {backgroundColor: COLORS.bgRedList}
+          : item.status === 'Approve'
+          ? {backgroundColor: '#219c90'}
           : {backgroundColor: COLORS.bgGreyList},
       ]}>
       <View>
-        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        <Text
+          style={{
+            color:
+              item.status === 'Reject' ||
+              item.isLate === true ||
+              item.status === 'Approve'
+                ? 'white'
+                : '',
+          }}>
           {moment(item.date).format('DD MMM')}
         </Text>
-        <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+        <Text
+          style={{
+            color:
+              item.status === 'Reject' ||
+              item.isLate === true ||
+              item.status === 'Approve'
+                ? 'white'
+                : '',
+          }}>
           {item.status}
         </Text>
       </View>
-      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+      <Text
+        style={{
+          color:
+            item.status === 'Reject' ||
+            item.isLate === true ||
+            item.status === 'Approve'
+              ? 'white'
+              : '',
+        }}>
         {item.clockIn ?? '- : -'}
       </Text>
-      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+      <Text
+        style={{
+          color:
+            item.status === 'Reject' ||
+            item.isLate === true ||
+            item.status === 'Approve'
+              ? 'white'
+              : '',
+        }}>
         {item.clockOut ?? '- : -'}
       </Text>
     </View>

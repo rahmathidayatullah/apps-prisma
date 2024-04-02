@@ -524,7 +524,11 @@ export const onChangeTextPermission = (value: string) => {
   };
 };
 
-export const submitClockIn = (payload: any, clockIn: boolean) => {
+export const submitClockIn = (
+  payload: any,
+  clockIn: boolean,
+  isFlexible: boolean,
+) => {
   return async (dispatch: any) => {
     dispatch({
       type: START_CLOCK_IN,
@@ -533,17 +537,21 @@ export const submitClockIn = (payload: any, clockIn: boolean) => {
     // const fileName = nameFileImage[nameFileImage.length - 1];
     try {
       if (clockIn) {
-        const newPayloadClockIn = {
+        const newPayloadClockIn: any = {
           clockInPhoto: `data:${payload.imageSelfie.mime};base64,${payload.imageSelfie.data}`,
           clockInLongitude: `${payload.longitude ?? ''}`,
           clockInLatitude: `${payload.latitude ?? ''}`,
           description: `${payload.description}`,
         };
+        if (isFlexible) {
+          newPayloadClockIn.shiftId = payload.selectShift;
+        }
+        console.log('newPayloadClockIn', newPayloadClockIn);
         const res = await postClockIn(newPayloadClockIn);
         console.log('success submitClockIn', res);
         dispatch(fetchProfile());
       } else {
-        const newPayloadClockOut = {
+        const newPayloadClockOut: any = {
           clockOutPhoto: `data:${payload.imageSelfie.mime};base64,${payload.imageSelfie.data}`,
           clockOutLongitude: `${payload.longitude ?? ''}`,
           clockOutLatitude: `${payload.latitude ?? ''}`,

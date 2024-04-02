@@ -194,6 +194,12 @@ const PersonalInfo = () => {
 
   const updateData = () => {
     if (isEdit) {
+      console.log('form', form);
+      if (form.photo?.path) {
+        form.photo?.path;
+      } else {
+        form.photo = '';
+      }
       dispatch(updateProfile(form));
     } else {
       setIsEdit(true);
@@ -240,7 +246,7 @@ const PersonalInfo = () => {
         bank_name: profile.profile.user.bank_name || '-',
         account_number: profile.profile.user.account_number || '-',
         account_name: profile.profile.user.account_name || '-',
-        password: profile?.profile?.user?.password || '-',
+        password: profile?.profile?.user?.password || '',
         roleName: profile.profile.user.role.name || '-',
         phoneNumber: profile.profile.user.phoneNumber || '-',
         emergencyContact: profile.profile.user.emergencyContact || '-',
@@ -316,7 +322,7 @@ const PersonalInfo = () => {
             <CInputText
               placeholder="Masukkan email"
               label="Email"
-              editable={isEdit}
+              editable={false}
               value={form.email}
               onChangeText={(newText: string) =>
                 setForm({...form, email: newText})

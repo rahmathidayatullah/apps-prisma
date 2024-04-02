@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: '-215%',
+    // bottom: '-200%',
     left: '3%',
     // box shadow
     shadowColor: COLORS.bgBlackShadow,

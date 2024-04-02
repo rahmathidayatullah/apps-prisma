@@ -44,9 +44,15 @@ export const getListAnnoucement = () => {
       } = await debounceGetAnnoucement(params);
       console.log('success fetch getListAnnoucement', data);
 
+      let newData = [];
+
+      if (data.length) {
+        newData = data.filter((item: any) => item.publish);
+      }
+
       dispatch({
         type: SUCCESS_FETCH_ANNOUCEMENT,
-        data,
+        data: newData,
       });
     } catch (error: any) {
       console.log('error fetch getListAnnoucement', error);
@@ -93,9 +99,15 @@ export const getListAnnoucementHome = () => {
       } = await debounceGetAnnoucement(params);
       console.log('success fetch getListAnnoucement', data);
 
+      let newData = [];
+
+      if (data.length) {
+        newData = data.filter((item: any) => item.publish);
+      }
+
       dispatch({
         type: SUCCESS_FETCH_ANNOUCEMENT,
-        data,
+        data: newData,
       });
     } catch (error: any) {
       console.log('error fetch getListAnnoucement', error);
