@@ -10,6 +10,7 @@ import ViewCurrentLocation from '../../screens/home/ViewCurrentLocation';
 import ListOvertimeLog from '../../screens/home/ListOvertimeLog';
 import ListOfAnnouncement from '../../screens/home/ListOfAnnouncement';
 import DetailAnnoucement from '../../screens/home/DetailAnnoucement';
+import Attendance from '../../screens/home/Attendance';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,13 @@ export default function NestedHomeNaviagator() {
           component={ListOvertimeLog}
           options={{
             title: 'Riwayat Lembur',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.ATTENDACE}
+          component={Attendance}
+          options={{
+            title: 'Kehadiran',
           }}
         />
         <Stack.Screen

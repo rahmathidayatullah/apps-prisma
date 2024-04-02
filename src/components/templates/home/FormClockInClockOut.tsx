@@ -10,13 +10,21 @@ import ImagePicker from 'react-native-image-crop-picker';
 import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
 import Geolocation from '@react-native-community/geolocation';
 import {stateGlobalHome} from '../../../redux/features/home/interface';
+import CSelectOption from '../../atoms/select/SelectOption';
 
 interface typeFormClockInClockOut {
   clockIn?: boolean;
   clockOut?: boolean;
   bottomSheetModalRef?: any;
+  dataShift?: any;
+  isFlexible?: boolean;
 }
-const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
+const FormClockInClockOut = ({
+  clockIn,
+  dataShift,
+  isFlexible,
+}: typeFormClockInClockOut) => {
+  console.log('dataShift', dataShift);
   const dispatch: any = useDispatch();
   const {statusClockIn} = useSelector((state: stateGlobalHome) => state.home);
   const [imageSelfie, setImageSelfie] = useState(null);
@@ -28,6 +36,13 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [description, setDescription] = useState('');
+
+  //
+  const [selectShift, setSelectShift] = useState<any>(null);
+
+  const onChangeShift = (shift: any) => {
+    setSelectShift(shift.value);
+  };
 
   const onPressInputCamera = () => {
     ImagePicker.openCamera({
@@ -48,16 +63,38 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
       longitude,
       latitude,
     };
+    const payload2 = {
+      imageSelfie,
+      description,
+      longitude,
+      latitude,
+      selectShift,
+    };
 
     if (!latitude || !longitude || !imageSelfie) {
       Alert.alert('Pastikan foto selfie dan lokasi terisi');
       return;
     }
 
+    if (isFlexible && !selectShift) {
+      Alert.alert('Pastikan shift terisi');
+      return;
+    }
+
     if (clockIn) {
-      dispatch(submitClockIn(payload, true));
+      // Alert.alert(
+      //   'jika isFlexsible true dari user profile.role maka kirim shift',
+      // );
+      if (isFlexible && selectShift) {
+        dispatch(submitClockIn(payload2, true, true));
+      } else {
+        dispatch(submitClockIn(payload, true, false));
+      }
     } else {
-      dispatch(submitClockIn(payload, false));
+      // Alert.alert(
+      //   'jika isFlexsible true dari user profile.role maka kirim shift',
+      // );
+      dispatch(submitClockIn(payload, false, false));
     }
   };
   const getCurrentPosition = () => {
@@ -90,6 +127,7 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
     setLatitude('');
     setLongitude('');
     setDescription('');
+    setSelectShift(null);
   };
 
   return (
@@ -104,6 +142,24 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
           clockIn ? 'Absen Masuk' : 'Absen Keluar'
         }`}</Text>
         <View style={styles.containerForm}>
+          {isFlexible && clockIn ? (
+            <View
+              style={{
+                marginTop: 10,
+                flexDirection: 'row',
+                paddingHorizontal: 30,
+              }}>
+              <CSelectOption
+                label="Shift"
+                placeholder="Pilih Shift"
+                onChange={onChangeShift}
+                value={selectShift}
+                dataOption={dataShift}
+              />
+            </View>
+          ) : (
+            ''
+          )}
           <View
             style={{
               marginTop: 10,
@@ -163,6 +219,7 @@ const FormClockInClockOut = ({clockIn}: typeFormClockInClockOut) => {
               onChangeText={(nextText: string) => setDescription(nextText)}
             />
           </View>
+
           <View
             style={{
               marginTop: 15,

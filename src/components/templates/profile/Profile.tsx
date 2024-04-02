@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import {COLORS} from '../../../contants';
 // import Badge from '../../atoms/badge/Badge';
@@ -19,6 +20,7 @@ import {logout} from '../../../redux/features/auth/actions';
 import LinearGradient from 'react-native-linear-gradient';
 import {stateGlobalAuth} from '../../../redux/features/auth/interface';
 import moment from 'moment';
+import {fetchProfile} from '../../../redux/features/profile/actions';
 
 const Profile = () => {
   const navigation: any = useNavigation();
@@ -27,7 +29,7 @@ const Profile = () => {
   const {userData} = auth;
   const newData =
     typeof userData === 'string' ? JSON.parse(userData) : userData;
-
+  const profile = useSelector((state: any) => state.profile);
   const dataMenu = [
     {
       id: 1,
@@ -77,9 +79,24 @@ const Profile = () => {
       clearInterval(timerID);
     };
   }, []);
+
+  useEffect(() => {
+    if (profile.status === 'success') {
+      setRefresh(false);
+    }
+  }, [profile.status]);
+
+  const [refresh, setRefresh] = useState(false);
+  const pullMe = () => {
+    dispatch(fetchProfile());
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+        }>
         <View style={{paddingBottom: 10}}>
           <LinearGradient
             start={{x: 0.5, y: 0.1}}
@@ -90,11 +107,25 @@ const Profile = () => {
               <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
                 <ImageProfile />
                 <View>
-                  <Text style={styles.titleName}>{newData.user.name}</Text>
-                  <Text style={styles.titleRole}>{newData.user.role.name}</Text>
-                  <Text style={styles.titleRole}>
-                    PT Prisma Inti Propertindo
+                  <Text style={styles.titleName}>
+                    {profile?.profile?.user?.name ?? '-'}
                   </Text>
+                  <Text style={styles.titleRole}>
+                    {profile?.profile?.user?.role?.name ?? '-'}
+                  </Text>
+                  <View style={{height: 22}}>
+                    {profile?.profile?.user?.companies?.length !== 0 ? (
+                      newData.user.companies.map((item: any) => {
+                        return (
+                          <Text style={styles.titleRole} key={item.id}>
+                            {item.name}
+                          </Text>
+                        );
+                      })
+                    ) : (
+                      <Text style={styles.titleRole}></Text>
+                    )}
+                  </View>
                 </View>
               </View>
               <View>

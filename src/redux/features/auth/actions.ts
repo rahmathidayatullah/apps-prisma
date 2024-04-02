@@ -26,7 +26,7 @@ export const initAuth = () => {
   };
 };
 
-export const postLogin = (email: string, password: string | number) => {
+export const postLogin = (body: any) => {
   return async (dispatch: any) => {
     dispatch({
       type: START_LOGIN,
@@ -35,7 +35,7 @@ export const postLogin = (email: string, password: string | number) => {
     try {
       const {
         data: {data},
-      } = await login(email, password);
+      } = await login(body);
 
       console.log('success postLogin', data);
 
@@ -45,9 +45,10 @@ export const postLogin = (email: string, password: string | number) => {
         userData: data,
       });
     } catch (error: any) {
+      console.log('error postLogin', error);
       dispatch({
         type: ERROR_LOGIN,
-        error: error?.response?.data ?? null,
+        error: error?.response?.data ?? undefined,
       });
     }
   };

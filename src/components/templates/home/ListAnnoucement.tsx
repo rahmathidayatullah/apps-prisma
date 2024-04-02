@@ -50,7 +50,8 @@ const ListAnnoucement = ({dataAnnouncement, loading}: typeListAnnouncement) => {
               marginTop: 12,
             }}>
             <ActivityIndicator size="large" color={COLORS.bgPrimary} />
-            <Text style={{textAlign: 'center', marginTop: 10}}>
+            <Text
+              style={{textAlign: 'center', marginTop: 10, paddingBottom: 20}}>
               Load data pengumuman ..
             </Text>
           </View>

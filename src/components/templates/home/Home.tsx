@@ -66,6 +66,7 @@ import ListAnnoucement from './ListAnnoucement';
 import FormOvertime2 from './FormOvertime2';
 import CardMenuItem2 from './CardMenuItem2';
 import {getListAnnoucementHome} from '../../../redux/features/announcement/actions';
+import {fetchShift} from '../../../redux/features/shift/actions';
 // import notifee, {TimestampTrigger, TriggerType} from '@notifee/react-native';
 
 // async function onDisplayNotification() {
@@ -134,6 +135,8 @@ const TemplateHome = () => {
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
   const home = useSelector((state: stateGlobalHome) => state.home);
+  const shift = useSelector((state: any) => state.shift);
+  const {data: dataShift, status: statusShift} = shift;
   const {
     isShowMenuItem,
     statusClockIn,
@@ -152,14 +155,14 @@ const TemplateHome = () => {
   const {userData} = auth;
   const newData =
     typeof userData === 'string' ? JSON.parse(userData) : userData;
-  const profile = useSelector((state: stateGlobalProfile) => state.profile);
+  const profile = useSelector((state: any) => state.profile);
   const announcement = useSelector((state: any) => state.announcement);
   const {statusList: statusListAnnouncement, dataList: dataListAnnouncement} =
     announcement;
-  console.log('announcement', announcement);
-  // console.log('home', home);
-  // console.log('profile', profile);
-  // console.log('auth', auth);
+  // console.log('announcement', announcement);
+  console.log('home', home);
+  console.log('profile', profile);
+  console.log('auth', auth);
 
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');
@@ -191,9 +194,17 @@ const TemplateHome = () => {
     }
   };
 
+  const handleClickOpenMenu = (item: any) => {
+    if (item === 'kehadiran') {
+      navigation.navigate(routeMenu.ATTENDACE);
+    } else {
+      return;
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchProfile());
-
+    dispatch(fetchShift());
     dispatch(getListAttendancesMine());
     dispatch(getListOvertimesMine());
     dispatch(getListSubmissionsMine());
@@ -316,6 +327,7 @@ const TemplateHome = () => {
   const [refresh, setRefresh] = useState(false);
   const pullMe = () => {
     dispatch(fetchProfile());
+    dispatch(fetchShift());
     dispatch(getListAttendancesMine());
     dispatch(getListOvertimesMine());
     dispatch(getListSubmissionsMine());
@@ -336,7 +348,6 @@ const TemplateHome = () => {
                 start={{x: 0.5, y: 0.1}}
                 end={{x: 0.5, y: 0.9}}
                 colors={['#219C90', '#219C90', '#FBB03B']}
-                // style={styles.containerHead}>
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -345,18 +356,29 @@ const TemplateHome = () => {
                   bottom: 0,
                 }}
               />
-              {/* <View style={styles.containerHead}> */}
               <View style={styles.containerHeadTitleImage}>
                 <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
                   <ImageProfile />
                   <View>
-                    <Text style={styles.titleName}>{newData.user.name}</Text>
-                    <Text style={styles.titleRole}>
-                      {newData.user.role.name}
+                    <Text style={styles.titleName}>
+                      {profile?.profile?.user?.name ?? '-'}
                     </Text>
                     <Text style={styles.titleRole}>
-                      PT Prisma Inti Propertindo
+                      {profile?.profile?.user?.role?.name ?? '-'}
                     </Text>
+                    <View style={{height: 22}}>
+                      {profile?.profile?.user?.companies?.length !== 0 ? (
+                        newData.user.companies.map((item: any) => {
+                          return (
+                            <Text style={styles.titleRole} key={item.id}>
+                              {item.name}
+                            </Text>
+                          );
+                        })
+                      ) : (
+                        <Text style={styles.titleRole}></Text>
+                      )}
+                    </View>
                   </View>
                 </View>
                 <View>
@@ -421,8 +443,8 @@ const TemplateHome = () => {
                           fontSize: 12,
                           fontWeight: '600',
                         }}>
-                        {newData.user.shift.start_time}
-                        &nbsp; - {newData.user.shift.end_time}
+                        {newData?.user?.shift?.start_time ?? '-:-'}
+                        &nbsp; - {newData?.user?.shift?.end_time ?? '-:-'}
                       </Text>
                     </View>
                   </View>
@@ -486,7 +508,7 @@ const TemplateHome = () => {
               }}>
               {routeMenuItem.map((item: MenuItem) => (
                 <CardMenuItem2
-                  // onPress={() => handleOnPressMenuItem(item.value)}
+                  onPress={() => handleClickOpenMenu(item.value)}
                   key={item.id}
                   item={item}
                 />
@@ -501,7 +523,7 @@ const TemplateHome = () => {
               dataAnnouncement={dataListAnnouncement}
               loading={statusListAnnouncement === 'process'}
             />
-            <View style={styles.containerListAttendace}>
+            {/* <View style={styles.containerListAttendace}>
               <ListAttendace
                 dataAttendaceMine={dataAttendaceMine}
                 loading={statusListAttendaceMine === 'process'}
@@ -518,7 +540,7 @@ const TemplateHome = () => {
                 dataOvertimesMine={dataOvertimesMine}
                 loading={statusListOvertimesMine === 'process'}
               />
-            </View>
+            </View> */}
           </View>
           {atLeastOneTrue && <View style={styles.backdrop} />}
           <BottomSheetModal
@@ -539,12 +561,16 @@ const TemplateHome = () => {
               )}
               {isShowMenuItem.clockIn && (
                 <FormClockInClockOut
+                  isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+                  dataShift={dataShift}
                   clockIn
                   bottomSheetModalRef={bottomSheetModalRef}
                 />
               )}
               {isShowMenuItem.clockOut && (
                 <FormClockInClockOut
+                  isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+                  dataShift={dataShift}
                   clockOut
                   bottomSheetModalRef={bottomSheetModalRef}
                 />

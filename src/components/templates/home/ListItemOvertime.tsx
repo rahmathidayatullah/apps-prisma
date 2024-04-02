@@ -19,18 +19,44 @@ export const ListItemOvertime = ({item}: typeListItemOvertime) => {
         styles.container,
         item.status === 'Reject'
           ? {backgroundColor: COLORS.bgRedList}
+          : item.status === 'Approve'
+          ? {backgroundColor: '#219c90'}
           : {backgroundColor: COLORS.bgGreyList},
       ]}>
-      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+      <Text
+        style={{
+          color:
+            item.status === 'Reject' || item.status === 'Approve'
+              ? 'white'
+              : '',
+        }}>
         {item.startTime ?? '- : -'}
       </Text>
-      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+      <Text
+        style={{
+          color:
+            item.status === 'Reject' || item.status === 'Approve'
+              ? 'white'
+              : '',
+        }}>
         {item.endTime ?? '- : -'}
       </Text>
-      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+      <Text
+        style={{
+          color:
+            item.status === 'Reject' || item.status === 'Approve'
+              ? 'white'
+              : '',
+        }}>
         {item.totalTime ?? '-'}
       </Text>
-      <Text style={{color: item.status === 'Reject' ? 'white' : ''}}>
+      <Text
+        style={{
+          color:
+            item.status === 'Reject' || item.status === 'Approve'
+              ? 'white'
+              : '',
+        }}>
         {item.status ?? '-'}
       </Text>
     </View>
