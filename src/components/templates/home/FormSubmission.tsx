@@ -289,9 +289,9 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
               placeholder="Upload file pendukung 1"
               // label="Upload file"
               label={`${
-                selectCategorySubmission === '1'
+                selectCategorySubmission == '1'
                   ? 'Upload form Cuti'
-                  : selectCategorySubmission === '2'
+                  : selectCategorySubmission == '2'
                   ? 'Upload foto berobat'
                   : 'Upload file pendukung (optional)'
               }`}
@@ -333,7 +333,7 @@ const FormSubmission = ({bottomSheetModalRef}: any) => {
               // label="Upload file 2"
 
               label={`${
-                selectCategorySubmission === '2'
+                selectCategorySubmission == '2'
                   ? 'Upload surat keterangan dokter'
                   : 'Upload file pendukung (optional)'
               }`}

@@ -115,7 +115,7 @@ const Profile = () => {
                   </Text>
                   <View style={{height: 22}}>
                     {profile?.profile?.user?.companies?.length !== 0 ? (
-                      newData.user.companies.map((item: any) => {
+                      profile?.profile?.user.companies.map((item: any) => {
                         return (
                           <Text style={styles.titleRole} key={item.id}>
                             {item.name}
