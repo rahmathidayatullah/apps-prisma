@@ -1,4 +1,4 @@
-package com.awesomeprojectprisma
+package com.prismaproperties
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;

@@ -12,7 +12,7 @@ export async function getSubmissions(params: any) {
     newUserData = JSON.parse(userData);
   }
 
-  return await axios.get(`${baseURL}/submissions`, {
+  return await axios.get(`${baseURL}/submissions/mine`, {
     params,
     headers: {
       Authorization: `Bearer ${newUserData.access_token}`,

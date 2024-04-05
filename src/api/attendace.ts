@@ -12,7 +12,7 @@ export async function getAttendaces(params: any) {
     newUserData = JSON.parse(userData);
   }
 
-  return await axios.get(`${baseURL}/attendances`, {
+  return await axios.get(`${baseURL}/attendances/mine`, {
     params,
     headers: {
       Authorization: `Bearer ${newUserData.access_token}`,

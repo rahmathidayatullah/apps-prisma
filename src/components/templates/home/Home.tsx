@@ -316,7 +316,7 @@ const TemplateHome = () => {
     value => value === true,
   );
 
-  if (!newData && !profile) {
+  if (!profile) {
     return (
       <View>
         <Text>No Data</Text>
@@ -368,7 +368,7 @@ const TemplateHome = () => {
                     </Text>
                     <View style={{height: 22}}>
                       {profile?.profile?.user?.companies?.length !== 0 ? (
-                        newData.user.companies.map((item: any) => {
+                        profile?.profile?.user.companies.map((item: any) => {
                           return (
                             <Text style={styles.titleRole} key={item.id}>
                               {item.name}
@@ -404,7 +404,8 @@ const TemplateHome = () => {
                   }}>
                   <View style={{paddingVertical: 10}}>
                     <Text style={styles.titleDay}>
-                      {greeting} {newData.user.name}, {greeting2}
+                      {greeting} {profile?.profile?.user?.name ?? '-'},{' '}
+                      {greeting2}
                     </Text>
                   </View>
                   <View
@@ -443,8 +444,10 @@ const TemplateHome = () => {
                           fontSize: 12,
                           fontWeight: '600',
                         }}>
-                        {newData?.user?.shift?.start_time ?? '-:-'}
-                        &nbsp; - {newData?.user?.shift?.end_time ?? '-:-'}
+                        {profile?.profile?.user?.role?.shift?.start_time ??
+                          '-:-'}
+                        &nbsp; -{' '}
+                        {profile?.profile?.user?.role?.shift?.end_time ?? '-:-'}
                       </Text>
                     </View>
                   </View>
@@ -480,28 +483,15 @@ const TemplateHome = () => {
                   />
                 </View>
               </ContainerCardClockInOut>
-              {/* <View
-                style={{
-                  position: 'absolute',
-                  backgroundColor: 'red',
-                  height: 100,
-                  width: 100,
-                  bottom: -10,
-                }}></View> */}
-              {/* </LinearGradient> */}
             </View>
-            {/* </View> */}
 
             <ScrollView
               horizontal
               style={{
                 marginTop: 180,
                 flexDirection: 'row',
-                // justifyContent: 'space-around',
                 gap: 10,
-                // flexWrap: 'wrap',
                 marginBottom: 20,
-                // paddingHorizontal: 8,
                 overflow: 'scroll',
                 width: '100%',
                 paddingBottom: 10,

@@ -76,7 +76,7 @@ const FormClockInClockOut = ({
       return;
     }
 
-    if (isFlexible && !selectShift) {
+    if (isFlexible && !selectShift && clockIn) {
       Alert.alert('Pastikan shift terisi');
       return;
     }
