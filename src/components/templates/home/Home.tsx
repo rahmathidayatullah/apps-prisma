@@ -360,7 +360,10 @@ const TemplateHome = () => {
               <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
                 <ImageProfile />
                 <View>
-                  <Text style={styles.titleName}>
+                  <Text
+                    style={styles.titleName}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {profile?.profile?.user?.name ?? '-'}
                   </Text>
                   <Text style={styles.titleRole}>
@@ -632,6 +635,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   titleName: {
+    width: 160,
     fontSize: 18,
     fontWeight: '700',
     color: 'white',

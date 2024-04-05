@@ -107,7 +107,10 @@ const Profile = () => {
               <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
                 <ImageProfile />
                 <View>
-                  <Text style={styles.titleName}>
+                  <Text
+                    style={styles.titleName}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {profile?.profile?.user?.name ?? '-'}
                   </Text>
                   <Text style={styles.titleRole}>
@@ -115,7 +118,7 @@ const Profile = () => {
                   </Text>
                   <View style={{height: 22}}>
                     {profile?.profile?.user?.companies?.length !== 0 ? (
-                      profile?.profile?.user.companies.map((item: any) => {
+                      profile?.profile?.user?.companies?.map((item: any) => {
                         return (
                           <Text style={styles.titleRole} key={item.id}>
                             {item.name}
@@ -224,6 +227,7 @@ const styles = StyleSheet.create({
   },
 
   titleName: {
+    width: 160,
     fontSize: 18,
     fontWeight: '700',
     color: 'white',
