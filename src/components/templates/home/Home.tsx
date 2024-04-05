@@ -67,6 +67,7 @@ import FormOvertime2 from './FormOvertime2';
 import CardMenuItem2 from './CardMenuItem2';
 import {getListAnnoucementHome} from '../../../redux/features/announcement/actions';
 import {fetchShift} from '../../../redux/features/shift/actions';
+import BottomSheetManual from '../../molecules/BottomSheetManual';
 // import notifee, {TimestampTrigger, TriggerType} from '@notifee/react-native';
 
 // async function onDisplayNotification() {
@@ -316,7 +317,7 @@ const TemplateHome = () => {
     value => value === true,
   );
 
-  if (!profile) {
+  if (!newData && !profile) {
     return (
       <View>
         <Text>No Data</Text>
@@ -335,89 +336,87 @@ const TemplateHome = () => {
   };
 
   return (
-    // <GestureHandlerRootView style={{flex: 1}}>
-    <BottomSheetModalProvider>
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refresh} onRefresh={pullMe} />
-          }>
-          <View style={styles.container}>
-            <View style={styles.containerHead}>
-              <LinearGradient
-                start={{x: 0.5, y: 0.1}}
-                end={{x: 0.5, y: 0.9}}
-                colors={['#219C90', '#219C90', '#FBB03B']}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                }}
-              />
-              <View style={styles.containerHeadTitleImage}>
-                <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
-                  <ImageProfile />
-                  <View>
-                    <Text style={styles.titleName}>
-                      {profile?.profile?.user?.name ?? '-'}
-                    </Text>
-                    <Text style={styles.titleRole}>
-                      {profile?.profile?.user?.role?.name ?? '-'}
-                    </Text>
-                    <View style={{height: 22}}>
-                      {profile?.profile?.user?.companies?.length !== 0 ? (
-                        profile?.profile?.user.companies.map((item: any) => {
-                          return (
-                            <Text style={styles.titleRole} key={item.id}>
-                              {item.name}
-                            </Text>
-                          );
-                        })
-                      ) : (
-                        <Text style={styles.titleRole}></Text>
-                      )}
-                    </View>
-                  </View>
-                </View>
+    // <BottomSheetModalProvider>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+        }>
+        <View style={styles.container}>
+          <View style={styles.containerHead}>
+            <LinearGradient
+              start={{x: 0.5, y: 0.1}}
+              end={{x: 0.5, y: 0.9}}
+              colors={['#219C90', '#219C90', '#FBB03B']}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+            />
+            <View style={styles.containerHeadTitleImage}>
+              <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
+                <ImageProfile />
                 <View>
-                  <Text
-                    style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
-                    {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
+                  <Text style={styles.titleName}>
+                    {profile?.profile?.user?.name ?? '-'}
                   </Text>
-                  <Text
-                    style={{
-                      textAlign: 'right',
-                      fontSize: 10,
-                      color: 'white',
-                    }}>
-                    {currentTime} WIB
+                  <Text style={styles.titleRole}>
+                    {profile?.profile?.user?.role?.name ?? '-'}
                   </Text>
+                  <View style={{height: 22}}>
+                    {profile?.profile?.user?.companies?.length !== 0 ? (
+                      profile?.profile?.user?.companies?.map((item: any) => {
+                        return (
+                          <Text style={styles.titleRole} key={item.id}>
+                            {item.name}
+                          </Text>
+                        );
+                      })
+                    ) : (
+                      <Text style={styles.titleRole}></Text>
+                    )}
+                  </View>
                 </View>
               </View>
+              <View>
+                <Text style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
+                  {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'right',
+                    fontSize: 10,
+                    color: 'white',
+                  }}>
+                  {currentTime} WIB
+                </Text>
+              </View>
+            </View>
 
-              <ContainerCardClockInOut>
+            <ContainerCardClockInOut>
+              <View
+                style={{
+                  flexDirection: 'column',
+                }}>
+                <View style={{paddingVertical: 10}}>
+                  <Text style={styles.titleDay}>
+                    {greeting} {profile?.profile?.user?.name ?? '-'},{' '}
+                    {greeting2}
+                  </Text>
+                </View>
                 <View
                   style={{
-                    flexDirection: 'column',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 4,
+                    width: '100%',
+                    marginTop: 10,
                   }}>
-                  <View style={{paddingVertical: 10}}>
-                    <Text style={styles.titleDay}>
-                      {greeting} {profile?.profile?.user?.name ?? '-'},{' '}
-                      {greeting2}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: 4,
-                      width: '100%',
-                      marginTop: 10,
-                    }}>
-                    {/* <View>
+                  {/* <View>
                       <View style={styles.containerBadge}>
                         <View style={styles.containerBgBadge} />
                         <Text style={styles.textBadge}>
@@ -425,124 +424,144 @@ const TemplateHome = () => {
                         </Text>
                       </View>
                     </View> */}
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: 4,
-                      }}>
-                      <IconMaterialIcons
-                        name="access-alarm"
-                        size={24}
-                        color={COLORS.bgPrimary}
-                      />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 4,
+                    }}>
+                    <IconMaterialIcons
+                      name="access-alarm"
+                      size={24}
+                      color={COLORS.bgPrimary}
+                    />
 
-                      <Text
-                        style={{
-                          color: COLORS.bgPrimary,
-                          fontSize: 12,
-                          fontWeight: '600',
-                        }}>
-                        {profile?.profile?.user?.role?.shift?.start_time ??
-                          '-:-'}
-                        &nbsp; -{' '}
-                        {profile?.profile?.user?.role?.shift?.end_time ?? '-:-'}
-                      </Text>
-                    </View>
+                    <Text
+                      style={{
+                        color: COLORS.bgPrimary,
+                        fontSize: 12,
+                        fontWeight: '600',
+                      }}>
+                      {profile?.profile?.user?.role?.shift?.start_time ?? '-:-'}
+                      &nbsp; -{' '}
+                      {profile?.profile?.user?.role?.shift?.end_time ?? '-:-'}
+                    </Text>
                   </View>
                 </View>
-                <View
-                  style={{
-                    marginTop: 8,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    gap: 8,
-                  }}>
-                  <CardClockInOut
-                    clockIn
-                    onPress={() => handleOnPressMenuItem('clockIn')}
-                  />
-                  <CardClockInOut
-                    clockOut
-                    onPress={() => handleOnPressMenuItem('clockOut')}
-                  />
-                </View>
-                <View
-                  style={{
-                    marginTop: 8,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    gap: 8,
-                  }}>
-                  <CardOvertime
-                    onPress={() => handleOnPressMenuItem('lembur')}
-                  />
-                  <CardSubmission
-                    onPress={() => handleOnPressMenuItem('pengajuan')}
-                  />
-                </View>
-              </ContainerCardClockInOut>
-            </View>
-
-            <ScrollView
-              horizontal
-              style={{
-                marginTop: 180,
-                flexDirection: 'row',
-                gap: 10,
-                marginBottom: 20,
-                overflow: 'scroll',
-                width: '100%',
-                paddingBottom: 10,
-              }}>
-              {routeMenuItem.map((item: MenuItem) => (
-                <CardMenuItem2
-                  onPress={() => handleClickOpenMenu(item.value)}
-                  key={item.id}
-                  item={item}
+              </View>
+              <View
+                style={{
+                  marginTop: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  gap: 8,
+                }}>
+                <CardClockInOut
+                  clockIn
+                  onPress={() => handleOnPressMenuItem('clockIn')}
                 />
-              ))}
-            </ScrollView>
-            {/* <View>
+                <CardClockInOut
+                  clockOut
+                  onPress={() => handleOnPressMenuItem('clockOut')}
+                />
+              </View>
+              <View
+                style={{
+                  marginTop: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  gap: 8,
+                }}>
+                <CardOvertime onPress={() => handleOnPressMenuItem('lembur')} />
+                <CardSubmission
+                  onPress={() => handleOnPressMenuItem('pengajuan')}
+                />
+              </View>
+            </ContainerCardClockInOut>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={{
+              flex: 1,
+              marginTop: 180,
+              flexDirection: 'row',
+              gap: 10,
+              // marginBottom: 20,
+              overflow: 'scroll',
+              width: '100%',
+              // paddingBottom: 10,
+            }}>
+            {routeMenuItem.map((item: MenuItem) => (
+              <CardMenuItem2
+                onPress={() => handleClickOpenMenu(item.value)}
+                key={item.id}
+                item={item}
+              />
+            ))}
+          </ScrollView>
+          {/* <View>
               <Button title="test" onPress={() => onDisplayNotification()}>
                 Test
               </Button>
             </View> */}
-            <ListAnnoucement
-              dataAnnouncement={dataListAnnouncement}
-              loading={statusListAnnouncement === 'process'}
-            />
-            {/* <View style={styles.containerListAttendace}>
-              <ListAttendace
-                dataAttendaceMine={dataAttendaceMine}
-                loading={statusListAttendaceMine === 'process'}
+          <View
+            style={{
+              flex: 2,
+              // borderWidth: 1,
+              // borderColor: 'red',
+            }}>
+            <ScrollView
+            // style={{
+            //   borderWidth: 1,
+            //   borderColor: 'red',
+            // }}
+            >
+              <ListAnnoucement
+                dataAnnouncement={dataListAnnouncement}
+                loading={statusListAnnouncement === 'process'}
               />
-            </View>
-            <View style={styles.containerListAttendace}>
-              <ListSubmission
-                datSubmissionsMine={datSubmissionsMine}
-                loading={statusListSubmissionsMine === 'process'}
-              />
-            </View>
-            <View style={styles.containerListAttendace}>
-              <ListOvertime
-                dataOvertimesMine={dataOvertimesMine}
-                loading={statusListOvertimesMine === 'process'}
-              />
-            </View> */}
+            </ScrollView>
           </View>
-          {atLeastOneTrue && <View style={styles.backdrop} />}
+        </View>
+        {atLeastOneTrue ? (
+          <BottomSheetManual>
+            {isShowMenuItem.pengajuan && (
+              <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
+            )}
+            {isShowMenuItem.lembur && (
+              <FormOvertime2 bottomSheetModalRef={bottomSheetModalRef} />
+            )}
+            {isShowMenuItem.clockIn && (
+              <FormClockInClockOut
+                isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+                dataShift={dataShift}
+                clockIn
+                bottomSheetModalRef={bottomSheetModalRef}
+              />
+            )}
+            {isShowMenuItem.clockOut && (
+              <FormClockInClockOut
+                isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+                dataShift={dataShift}
+                clockOut
+                bottomSheetModalRef={bottomSheetModalRef}
+              />
+            )}
+            {isShowMenuItem.clockInOvertime && <FormClockInClockOutOvertime />}
+            {isShowMenuItem.clockOutOvertime && <FormClockInClockOutOvertime />}
+          </BottomSheetManual>
+        ) : (
+          ''
+        )}
+        {/* {atLeastOneTrue && <View style={styles.backdrop} />}
           <BottomSheetModal
             ref={bottomSheetModalRef}
             index={0}
             snapPoints={snapPoints}
             onChange={handleSheetChanges}>
             <BottomSheetScrollView style={styles.contentBottomSheetContainer}>
-              {/* <ScrollView> */}
-              {/* {isShowMenuItem.cuti && (
-                    <FormCuti bottomSheetModalRef={bottomSheetModalRef} />
-                  )} */}
               {isShowMenuItem.pengajuan && (
                 <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
               )}
@@ -571,16 +590,11 @@ const TemplateHome = () => {
               {isShowMenuItem.clockOutOvertime && (
                 <FormClockInClockOutOvertime />
               )}
-              {/* {isShowMenuItem.izin && (
-                    <FormPermission bottomSheetModalRef={bottomSheetModalRef} />
-                  )} */}
-              {/* </ScrollView> */}
             </BottomSheetScrollView>
-          </BottomSheetModal>
-        </ScrollView>
-      </SafeAreaView>
-    </BottomSheetModalProvider>
-    // </GestureHandlerRootView>
+          </BottomSheetModal> */}
+      </ScrollView>
+    </SafeAreaView>
+    // </BottomSheetModalProvider>
   );
 };
 
@@ -591,8 +605,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     flex: 1,
+    height: Dimensions.get('screen').height - 100,
     backgroundColor: 'white',
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   containerHead: {
     paddingTop: 14,
@@ -601,8 +620,9 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
     backgroundColor: COLORS.bgPrimary,
     position: 'relative',
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
-  containerBody: {},
   containerHeadTitleImage: {
     marginTop: 5,
     paddingHorizontal: 2,

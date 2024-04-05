@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Alert, Button, ScrollView, StyleSheet, Text, View} from 'react-native';
 import CInputTextWithIconLabelImage from '../../atoms/input/TextWithIconLabelImage';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconsIon from 'react-native-vector-icons/Ionicons';
@@ -31,10 +31,11 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
   const [placeholderImageSelfie, setPlaceholderImageSelfie] = useState(
     'Klik untuk foto selfie',
   );
-  const [latLong, setLatLong] = useState('Loading lokasi ..');
+  const [latLong, setLatLong] = useState<any>(null);
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [description, setDescription] = useState('');
+  const [error, setError] = useState(null);
 
   const onPressInputCamera = () => {
     ImagePicker.openCamera({
@@ -90,12 +91,11 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
         setLongitude(longitude);
         setLatLong(`${latitude}, ${longitude}`);
       },
-      (error: any) => Alert.alert('Pastikan deteksi lokasi di aktifkan'),
-      // handleErrorGetLocation(error),
+      (error: any) => setError(error.message),
       {
         enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000,
+        timeout: 5000,
+        maximumAge: 60000,
       },
     );
   };
@@ -104,15 +104,24 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
     getCurrentPosition();
     return () => {
       resetState();
+      Geolocation.stopObserving();
     };
   }, []);
 
   const resetState = () => {
     setPlaceholderImageSelfie('Klik untuk foto selfie');
-    setLatLong('Loading lokasi ..');
+    setLatLong(null);
     setLatitude('');
     setLongitude('');
     setDescription('');
+    setError(null);
+  };
+
+  const retryGeolocation = () => {
+    setLatLong(null);
+    setLatitude('');
+    setError(null);
+    getCurrentPosition();
   };
 
   return (
@@ -154,21 +163,30 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
               flexDirection: 'row',
               paddingHorizontal: 30,
             }}>
-            <CInputTextWithIconLabel
-              placeholder="Loading lokasi .."
-              label="Lokasi"
-              right
-              value={latLong}
-              icon={
-                <IconsIon
-                  style={styles.iconInput}
-                  name="location-outline"
-                  size={22}
-                  color="#B8B8B8"
-                />
-              }
-              editable={false}
-            />
+            {latLong ? (
+              <CInputTextWithIconLabel
+                placeholder="Loading lokasi .."
+                label="Lokasi"
+                right
+                value={latLong}
+                icon={
+                  <IconsIon
+                    style={styles.iconInput}
+                    name="location-outline"
+                    size={22}
+                    color="#B8B8B8"
+                  />
+                }
+                editable={false}
+              />
+            ) : error ? (
+              <View>
+                <Text>Terjadi Kesalahan : {error}</Text>
+                <Button title="Dapatkan Lokasi" onPress={retryGeolocation} />
+              </View>
+            ) : (
+              <Text style={{paddingVertical: 20}}>Mencari lokasi...</Text>
+            )}
           </View>
           <View
             style={{

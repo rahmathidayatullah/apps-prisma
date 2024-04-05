@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
   // announcement
   containerAnnouncement: {
     paddingHorizontal: 12,
-    // marginTop: 10,
   },
   wrapTitleAnnouncement: {
     flexDirection: 'row',
