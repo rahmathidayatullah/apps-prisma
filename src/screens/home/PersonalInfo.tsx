@@ -194,7 +194,6 @@ const PersonalInfo = () => {
 
   const updateData = () => {
     if (isEdit) {
-      console.log('form', form);
       if (form.photo?.path) {
         form.photo?.path;
       } else {
@@ -281,8 +280,6 @@ const PersonalInfo = () => {
       ),
     });
   }, [navigation, isEdit, form, statusUpdateProfile]);
-
-  console.log('form', form);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
