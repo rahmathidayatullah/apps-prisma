@@ -24,7 +24,6 @@ const FormClockInClockOut = ({
   dataShift,
   isFlexible,
 }: typeFormClockInClockOut) => {
-  console.log('dataShift', dataShift);
   const dispatch: any = useDispatch();
   const {statusClockIn} = useSelector((state: stateGlobalHome) => state.home);
   const [imageSelfie, setImageSelfie] = useState(null);
@@ -109,7 +108,7 @@ const FormClockInClockOut = ({
       (error: any) => setError(error.message),
       {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 10000,
         maximumAge: 60000,
       },
     );

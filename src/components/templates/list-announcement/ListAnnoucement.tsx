@@ -11,8 +11,6 @@ const TemplateListAnnoucement = () => {
   const announcement = useSelector((state: any) => state.announcement);
   const {page, take, order, statusList, dataList} = announcement;
 
-  console.log('dataList annoucement', announcement);
-
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
 

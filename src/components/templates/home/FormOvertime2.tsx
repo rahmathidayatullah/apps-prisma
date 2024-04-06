@@ -94,7 +94,7 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
       (error: any) => setError(error.message),
       {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 10000,
         maximumAge: 60000,
       },
     );
