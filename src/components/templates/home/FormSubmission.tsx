@@ -31,8 +31,7 @@ import {
   REMOVE_FILE2_SUBMISSION,
 } from '../../../redux/features/home/constants';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-const FormSubmission = ({bottomSheetModalRef}: any) => {
-  const navigation: any = useNavigation();
+const FormSubmission = () => {
   const dispatch: any = useDispatch();
   const {
     valueDefaultEndDateSubmission,

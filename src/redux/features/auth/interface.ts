@@ -7,10 +7,10 @@ export interface initialStateGlobalAuth {
   userData: userData;
   statusLogin: string;
   statusLogout: string;
-  error?: string;
-  response?: string;
-  response2?: string;
-  response3?: string;
+  error?: any;
+  errorForgot?: any;
+  statusForgot?: string;
+  dataForgot?: any;
 }
 
 export interface userData {

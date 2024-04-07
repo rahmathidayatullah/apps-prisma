@@ -5,22 +5,14 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import IconsIon from 'react-native-vector-icons/Ionicons';
 import CButton from '../../atoms/button/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  submitClockIn,
-  submitOvertimeClockInOut,
-} from '../../../redux/features/home/actions';
+import {submitOvertimeClockInOut} from '../../../redux/features/home/actions';
 import ImagePicker from 'react-native-image-crop-picker';
 import CInputTextWithIconLabel from '../../atoms/input/TextWithIconLabel';
 import Geolocation from '@react-native-community/geolocation';
 import {stateGlobalHome} from '../../../redux/features/home/interface';
 import {stateGlobalProfile} from '../../../redux/features/profile/interface';
 
-interface typeFormClockInClockOut {
-  clockIn?: boolean;
-  clockOut?: boolean;
-  bottomSheetModalRef?: any;
-}
-const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
+const FormOvertime2 = () => {
   const dispatch: any = useDispatch();
   const {statusSubmitOvertime} = useSelector(
     (state: stateGlobalHome) => state.home,
@@ -76,13 +68,6 @@ const FormOvertime2 = ({clockIn}: typeFormClockInClockOut) => {
     }
   };
 
-  // const handleErrorGetLocation = (error: any) => {
-  //   getCurrentPosition();
-  //   return Alert.alert(
-  //     'Gagal mengambil lokasi, silahkan tunggu sampai lokasi ditemukan',
-  //     JSON.stringify(error),
-  //   );
-  // };
   const getCurrentPosition = () => {
     Geolocation.getCurrentPosition(
       (pos: any) => {

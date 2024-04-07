@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // borderWidth: 1,
   },
   textAttendaceLog: {
     fontSize: 16,

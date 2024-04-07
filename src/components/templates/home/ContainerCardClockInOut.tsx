@@ -12,7 +12,6 @@ const ContainerCardClockInOut = ({children}: typeCOntinerCardClockInOut) => {
 
 const styles = StyleSheet.create({
   containerCardClockInOut: {
-    // backgroundColor: COLORS.bgSecondary,
     backgroundColor: 'white',
     borderRadius: 16,
     paddingVertical: 12,
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: '-215%',
-    // bottom: '-200%',
     left: '3%',
     // box shadow
     shadowColor: COLORS.bgBlackShadow,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -18,9 +18,31 @@ import CButtonText from '../../components/atoms/button/ButtonText';
 
 import {routeMenu} from '../../contants/routes';
 import {COLORS} from '../../contants';
+import {useDispatch, useSelector} from 'react-redux';
+import {postForgotPassword} from '../../redux/features/auth/actions';
+import {RESET_FORGOT_PASSWORD} from '../../redux/features/auth/constants';
 
 const ForgotPasswordScreen = () => {
+  const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
+
+  const {errorForgot, statusForgot} = useSelector((state: any) => state.auth);
+
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = () => {
+    const body = {
+      email,
+    };
+    dispatch(postForgotPassword(body));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch({type: RESET_FORGOT_PASSWORD});
+    };
+  }, []);
+
   return (
     <ScrollView style={{flex: 1}}>
       <SafeAreaView style={styles.containerSafeArea}>
@@ -36,8 +58,6 @@ const ForgotPasswordScreen = () => {
             style={{
               flexDirection: 'row',
               width: '100%',
-              // borderWidth: 1,
-              // borderColor: '#000',
             }}>
             <Text style={styles.titleSign}>Lupa Password</Text>
           </View>
@@ -55,10 +75,51 @@ const ForgotPasswordScreen = () => {
                 color="#B8B8B8"
               />
             }
+            onChangeText={(newText: string) => setEmail(newText)}
           />
 
+          {statusForgot === 'error' ? (
+            <View style={{marginVertical: 10}}>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  color: COLORS.bgRedList,
+                  textAlign: 'center',
+                }}>
+                {errorForgot &&
+                errorForgot?.message?.message === 'User Not Found'
+                  ? 'Tidak ada pengguna dengan email yg di masukkan'
+                  : 'Terjadi kesalahan'}
+              </Text>
+            </View>
+          ) : (
+            ''
+          )}
+
+          {statusForgot === 'success' ? (
+            <View style={{marginVertical: 10}}>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  color: COLORS.bgRedList,
+                  textAlign: 'center',
+                }}>
+                Cek email konfirmasi password, untuk mengubah password
+              </Text>
+            </View>
+          ) : (
+            ''
+          )}
+
           <View style={{marginTop: 30, flexDirection: 'row'}}>
-            <CButton>Kirim</CButton>
+            <CButton
+              disabled={!email || statusForgot === 'process'}
+              onPress={handleSubmit}>
+              {statusForgot === 'idle' && 'Kirim'}
+              {statusForgot === 'process' && 'Loading ..'}
+              {statusForgot === 'success' && 'Kirim'}
+              {statusForgot === 'error' && 'Kirim'}
+            </CButton>
           </View>
 
           <View

@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import CButtonText from '../../atoms/button/ButtonText';
-// import {listAnnouncement, routeMenu} from '../../../contants/routes';
 import {routeMenu} from '../../../contants/routes';
 import {COLORS} from '../../../contants';
 import {useNavigation} from '@react-navigation/native';
@@ -96,7 +95,6 @@ const ListAnnoucement = ({dataAnnouncement, loading}: typeListAnnouncement) => {
 };
 
 const styles = StyleSheet.create({
-  // announcement
   containerAnnouncement: {
     paddingHorizontal: 12,
   },
@@ -116,9 +114,7 @@ const styles = StyleSheet.create({
   },
   wrapItemAnnouncement: {
     flexDirection: 'row',
-    // flex: 1,
     alignItems: 'center',
-    // justifyContent: 'space-between',
     gap: 10,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -130,8 +126,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     height: 80,
     width: 120,
-    // borderWidth: 1,
-    // borderColor: '#000000',
   },
   imgAnnouncement: {
     width: '100%',

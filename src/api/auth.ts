@@ -10,3 +10,12 @@ export async function login(body: any) {
     },
   });
 }
+
+export async function forgotPassword(body: any) {
+  return await axios.post(`${baseURL}/auth/forgot-password`, body, {
+    headers: {
+      Accept: '*/*',
+      'Content-Type': 'application/json',
+    },
+  });
+}

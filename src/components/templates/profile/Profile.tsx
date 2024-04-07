@@ -9,7 +9,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import {COLORS} from '../../../contants';
-// import Badge from '../../atoms/badge/Badge';
 import ImageProfile from '../home/ImageProfile';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -18,17 +17,12 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../../redux/features/auth/actions';
 import LinearGradient from 'react-native-linear-gradient';
-import {stateGlobalAuth} from '../../../redux/features/auth/interface';
 import moment from 'moment';
 import {fetchProfile} from '../../../redux/features/profile/actions';
 
 const Profile = () => {
   const navigation: any = useNavigation();
   const dispatch: any = useDispatch();
-  const auth = useSelector((state: stateGlobalAuth) => state.auth);
-  const {userData} = auth;
-  const newData =
-    typeof userData === 'string' ? JSON.parse(userData) : userData;
   const profile = useSelector((state: any) => state.profile);
   const dataMenu = [
     {
@@ -212,12 +206,6 @@ const styles = StyleSheet.create({
   },
 
   containerHeadTitleImage: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'space-between',
-    // position: 'relative',
-    // width: '100%',
-
     marginTop: 5,
     paddingHorizontal: 2,
     flexDirection: 'row',
@@ -240,16 +228,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     letterSpacing: 1,
   },
-
-  container: {},
   containerHead: {
-    // paddingHorizontal: 20,
-    // paddingVertical: 24,
-    // backgroundColor: COLORS.bgPrimary,
-    // flexDirection: 'column',
-    // justifyContent: 'space-between',
-    // alignItems: 'flex-start',
-
     paddingTop: 14,
     paddingLeft: 10,
     paddingRight: 14,
@@ -259,7 +238,6 @@ const styles = StyleSheet.create({
   line: {
     height: 2,
     width: '100%',
-    // backgroundColor: '#ECECEC',
     marginBottom: 12,
     marginTop: 12,
   },

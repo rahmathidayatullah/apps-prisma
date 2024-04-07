@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
 import IconOvertime from '../../atoms/svg/overtime';
 import {stateGlobalProfile} from '../../../redux/features/profile/interface';
@@ -22,7 +21,6 @@ const CardOvertime = ({onPress}: typeCardSubmission) => {
         <Text style={{fontWeight: 'bold', color: 'white'}}>Absen Lembur</Text>
         <View>
           <View style={styles.containerBadge}>
-            {/* <View style={styles.containerBgBadge} /> */}
             <Text style={styles.textBadge}>
               {profile.profile.overtime.clockIn
                 ? moment(
@@ -30,7 +28,6 @@ const CardOvertime = ({onPress}: typeCardSubmission) => {
                     'DD-MM-YYYY hh:mm:ss',
                   ).format('hh:mm')
                 : '-:-'}
-              {/* 18:00 */}
             </Text>
             <Text style={styles.textBadge}>-</Text>
             <Text style={styles.textBadge}>
@@ -40,10 +37,7 @@ const CardOvertime = ({onPress}: typeCardSubmission) => {
                     'DD-MM-YYYY hh:mm:ss',
                   ).format('hh:mm')
                 : '-:-'}
-              {/* 21:00 */}
             </Text>
-            {/* <Text style={styles.textBadge}>- : -</Text>
-            <Text style={styles.textBadge}>- : -</Text> */}
           </View>
         </View>
       </View>
@@ -54,7 +48,6 @@ const CardOvertime = ({onPress}: typeCardSubmission) => {
 const styles = StyleSheet.create({
   cardClockInOut: {
     flex: 1,
-    // backgroundColor: '#fff',
     backgroundColor: COLORS.bgPrimary,
     borderRadius: 8,
     paddingVertical: 6,
@@ -69,7 +62,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingTop: 3,
     paddingBottom: 3,
-    // paddingLeft: 6,
     paddingRight: 6,
     alignSelf: 'flex-start',
     flexDirection: 'row',
@@ -87,7 +79,6 @@ const styles = StyleSheet.create({
   textBadge: {
     fontSize: 11,
     fontWeight: '500',
-    // color: COLORS.bgOrangeOpacity,
     color: 'white',
   },
 });

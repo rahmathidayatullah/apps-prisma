@@ -103,8 +103,6 @@ const TemplateListOfSubmission = () => {
     statusListSubmissions,
   } = submissions;
 
-  const [selectedStartDate, setSelectedStartDate] = useState<any>('');
-  const [selectedEndDate, setSelectedEndDate] = useState<any>('');
   const [showCalender, setShowCalender] = useState<any>(false);
 
   const handleClearValue = () => {

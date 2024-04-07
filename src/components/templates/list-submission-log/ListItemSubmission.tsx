@@ -8,11 +8,6 @@ interface typeListItemSubmission {
 }
 
 export const ListItemSubmission = ({item}: typeListItemSubmission) => {
-  // const dataItem = {
-  //   status: 'Approve',
-  //   date: '01 Feb',
-  //   category: 'Izin',
-  // };
   return (
     <View
       style={[

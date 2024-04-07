@@ -1,12 +1,15 @@
 import {
+  ERROR_FORGOT_PASSWORD,
   ERROR_LOGIN,
+  START_FORGOT_PASSWORD,
   START_LOGIN,
+  SUCCESS_FORGOT_PASSWORD,
   SUCCESS_LOGIN,
   SUCCESS_LOGOUT,
 } from './constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {login} from '../../../api/auth';
+import {forgotPassword, login} from '../../../api/auth';
 
 export const initAuth = () => {
   return async (dispatch: any) => {
@@ -54,8 +57,35 @@ export const postLogin = (body: any) => {
   };
 };
 
+export const postForgotPassword = (body: any) => {
+  return async (dispatch: any) => {
+    dispatch({
+      type: START_FORGOT_PASSWORD,
+    });
+    console.log('start forgot password');
+    try {
+      const {
+        data: {data},
+      } = await forgotPassword(body);
+
+      console.log('success forgot password', data);
+
+      dispatch({
+        type: SUCCESS_FORGOT_PASSWORD,
+        data,
+      });
+    } catch (error: any) {
+      console.log('error forgot password', error);
+      dispatch({
+        type: ERROR_FORGOT_PASSWORD,
+        error: error?.response?.data ?? undefined,
+      });
+    }
+  };
+};
+
 export const logout = () => {
-  return async (dispatch: any, getState: any) => {
+  return async (dispatch: any) => {
     await AsyncStorage.clear();
     dispatch({
       type: SUCCESS_LOGOUT,
