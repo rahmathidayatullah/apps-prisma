@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
-// import CButtonText from '../../atoms/button/ButtonText';
-import {listAnnouncement, routeMenu} from '../../../contants/routes';
+import {routeMenu} from '../../../contants/routes';
 import ListItemAnnoucement from './ListItemAnnoucement';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,12 +12,6 @@ const TemplateListAnnoucement = () => {
 
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
-
-  // onPress={() =>
-  //   navigation.push('Details', {
-  //     itemId: Math.floor(Math.random() * 100),
-  //   })
-  // }
 
   const handleDetail = (item: any) => {
     navigation.navigate(routeMenu.DETAIL_ANNOUCEMENT, {

@@ -15,7 +15,6 @@ import CSelectOption from '../../atoms/select/SelectOption';
 interface typeFormClockInClockOut {
   clockIn?: boolean;
   clockOut?: boolean;
-  bottomSheetModalRef?: any;
   dataShift?: any;
   isFlexible?: boolean;
 }

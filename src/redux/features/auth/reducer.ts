@@ -5,6 +5,11 @@ import {
   START_LOGOUT,
   SUCCESS_LOGOUT,
   ERROR_LOGOUT,
+  START_FORGOT_PASSWORD,
+  SUCCESS_FORGOT_PASSWORD,
+  ERROR_FORGOT_PASSWORD,
+  RESET_FORGOT_PASSWORD,
+  RESET_STATUS_FORGOT_PASSWORD,
 } from './constants';
 
 import {initialStateGlobalAuth} from './interface';
@@ -74,14 +79,43 @@ const initialState: initialStateGlobalAuth = {
   statusLogin: statusList.idle,
   statusLogout: statusList.idle,
 
-  // error: '',
-  // response: '',
-  // response2: '',
-  // response3: '',
+  error: null,
+  errorForgot: null,
+  statusForgot: statusList.idle,
+  dataForgot: null,
 };
 
 export default function authReducer(state = initialState, action: any) {
   switch (action.type) {
+    case START_FORGOT_PASSWORD:
+      return {
+        ...state,
+        statusForgot: statusList.process,
+      };
+    case SUCCESS_FORGOT_PASSWORD:
+      return {
+        ...state,
+        statusForgot: statusList.success,
+        dataForgot: action.data,
+      };
+    case ERROR_FORGOT_PASSWORD:
+      return {
+        ...state,
+        statusForgot: statusList.error,
+        errorForgot: action.error,
+      };
+    case RESET_FORGOT_PASSWORD:
+      return {
+        ...state,
+        statusForgot: statusList.idle,
+        dataForgot: null,
+        errorForgot: null,
+      };
+    case RESET_STATUS_FORGOT_PASSWORD:
+      return {
+        ...state,
+        statusForgot: statusList.idle,
+      };
     case START_LOGIN:
       return {
         ...state,
@@ -98,9 +132,6 @@ export default function authReducer(state = initialState, action: any) {
         ...state,
         statusLogin: statusList.error,
         error: action.error,
-        response: action.response,
-        response2: action.response2,
-        response3: action.response3,
       };
 
     case START_LOGOUT:

@@ -27,8 +27,7 @@ const LoginScreen = () => {
   const dispatch: any = useDispatch();
   const navigation: any = useNavigation();
 
-  const {statusLogin, userData, error, response, response2, response3} =
-    useSelector((state: any) => state.auth);
+  const {statusLogin, error} = useSelector((state: any) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,8 +35,8 @@ const LoginScreen = () => {
   const handleSubmit = () => {
     const body = {
       email,
-      password
-    }
+      password,
+    };
     dispatch(postLogin(body));
   };
   return (
@@ -55,8 +54,6 @@ const LoginScreen = () => {
             style={{
               flexDirection: 'row',
               width: '100%',
-              // borderWidth: 1,
-              // borderColor: '#000',
             }}>
             <Text style={styles.titleSign}>Masuk</Text>
           </View>
@@ -119,7 +116,7 @@ const LoginScreen = () => {
               {statusLogin === 'idle' && 'Masuk'}
               {statusLogin === 'process' && 'Loading ..'}
               {statusLogin === 'success' && 'Berhasil Login'}
-              {statusLogin === 'error' && 'Gagal login'}
+              {statusLogin === 'error' && 'Kirim'}
             </CButton>
           </View>
           <View

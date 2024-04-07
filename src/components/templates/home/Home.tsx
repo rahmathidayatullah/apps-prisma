@@ -1,9 +1,7 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
-  Button,
   Dimensions,
-  Image,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -11,28 +9,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import Badge from '../../../components/atoms/badge/Badge';
 import ContainerCardClockInOut from '../../../components/templates/home/ContainerCardClockInOut';
 import CardClockInOut from '../../../components/templates/home/CardClockInOut';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {COLORS} from '../../../contants';
 import ImageProfile from '../../../components/templates/home/ImageProfile';
-import {
-  listAnnouncement,
-  routeMenu,
-  routeMenuItem,
-} from '../../../contants/routes';
+import {routeMenu, routeMenuItem} from '../../../contants/routes';
 import {MenuItem} from './inteface';
-import CardMenuItem from './CardMenuItem';
-import {ListAttendace} from './ListAttendace';
-import {ListSubmission} from './ListSubmission';
-// import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetScrollView,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getListAttendancesMine,
@@ -47,17 +30,13 @@ import FormClockInClockOut from './FormClockInClockOut';
 import FormClockInClockOutOvertime from './FormClockInClockOutOvertime';
 import moment from 'moment';
 import {stateGlobalAuth} from '../../../redux/features/auth/interface';
-import {ListOvertime} from './ListOvertime';
 import FormSubmission from './FormSubmission';
-import {stateGlobalProfile} from '../../../redux/features/profile/interface';
 import {fetchProfile} from '../../../redux/features/profile/actions';
-import FormOvertime from './FormOvertime';
 import {
   RESET_STATE_CLOCK_IN,
   RESET_STATE_OVERTIME,
   RESET_STATE_SUBMISSION,
 } from '../../../redux/features/home/constants';
-import CButtonText from '../../atoms/button/ButtonText';
 import LinearGradient from 'react-native-linear-gradient';
 import CardSubmission from './CardSubmission';
 import CardOvertime from './CardOvertime';
@@ -68,69 +47,6 @@ import CardMenuItem2 from './CardMenuItem2';
 import {getListAnnoucementHome} from '../../../redux/features/announcement/actions';
 import {fetchShift} from '../../../redux/features/shift/actions';
 import BottomSheetManual from '../../molecules/BottomSheetManual';
-// import notifee, {TimestampTrigger, TriggerType} from '@notifee/react-native';
-
-// async function onDisplayNotification() {
-//   const date = new Date(Date.now());
-//   date.setHours(15);
-//   date.setMinutes(40);
-
-//   // Create a time-based trigger
-//   const trigger: TimestampTrigger = {
-//     type: TriggerType.TIMESTAMP,
-//     timestamp: date.getTime(), // fire at 11:10am (10 minutes before meeting)
-//   };
-
-//   // Request permissions (required for iOS)
-//   await notifee.requestPermission();
-
-//   // Create a channel (required for Android)
-//   const channelId = await notifee.createChannel({
-//     id: 'default',
-//     name: 'Default Channel',
-//   });
-
-//   // Display a notification
-//   await notifee.createTriggerNotification(
-//     {
-//       title: 'Jangan lupa absen',
-//       body: `Segera absen .. 15:32 ${date}`,
-//       android: {
-//         channelId,
-//         // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-//         // pressAction is needed if you want the notification to open the app when pressed
-//         pressAction: {
-//           id: 'default',
-//         },
-//       },
-//     },
-//     trigger,
-//   );
-// }
-
-// async function onCreateTriggerNotification() {
-//   const date = new Date(Date.now());
-//   date.setHours(11);
-//   date.setMinutes(10);
-
-//   // Create a time-based trigger
-//   const trigger: TimestampTrigger = {
-//     type: TriggerType.TIMESTAMP,
-//     timestamp: date.getTime(), // fire at 11:10am (10 minutes before meeting)
-//   };
-
-//   // Create a trigger notification
-//   await notifee.createTriggerNotification(
-//     {
-//       title: 'Meeting with Jane',
-//       body: 'Today at 11:20am',
-//       android: {
-//         channelId: 'your-channel-id',
-//       },
-//     },
-//     trigger,
-//   );
-// }
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
@@ -143,14 +59,6 @@ const TemplateHome = () => {
     statusClockIn,
     statusSubmitSubmission,
     statusSubmitOvertime,
-
-    statusListAttendaceMine,
-    statusListOvertimesMine,
-    statusListSubmissionsMine,
-
-    dataAttendaceMine,
-    dataOvertimesMine,
-    datSubmissionsMine,
   } = home;
   const auth = useSelector((state: stateGlobalAuth) => state.auth);
   const {userData} = auth;
@@ -160,23 +68,14 @@ const TemplateHome = () => {
   const announcement = useSelector((state: any) => state.announcement);
   const {statusList: statusListAnnouncement, dataList: dataListAnnouncement} =
     announcement;
-  // console.log('announcement', announcement);
-  console.log('home', home);
-  console.log('profile', profile);
-  console.log('auth', auth);
+
+  // console.log('home', home);
+  // console.log('profile', profile);
+  // console.log('auth', auth);
 
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
-
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['50%'], []);
-  // variables
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index === -1) {
-      dispatch(resetValueBottomSheet());
-    }
-  }, []);
 
   const handleOnPressMenuItem = (menuItem: string) => {
     if (menuItem === 'clockIn' && profile.profile.clockIn) {
@@ -191,7 +90,6 @@ const TemplateHome = () => {
       Alert.alert('', 'Anda sudah absen lembur');
     } else {
       dispatch(onPressMenuItem(menuItem));
-      bottomSheetModalRef.current?.present();
     }
   };
 
@@ -254,24 +152,11 @@ const TemplateHome = () => {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', () => {
-      if (bottomSheetModalRef.current) {
-        bottomSheetModalRef.current.dismiss();
-      }
-      dispatch(resetValueBottomSheet());
-    });
-
-    // Cleanup function
-    return unsubscribe;
-  }, [navigation]);
-
-  useEffect(() => {
     if (profile.status === 'success') {
       setRefresh(false);
     }
     if (statusClockIn === 'success') {
       Alert.alert('Berhasil', 'Berhasil absen');
-      bottomSheetModalRef?.current?.dismiss();
       dispatch({
         type: RESET_STATE_CLOCK_IN,
       });
@@ -288,7 +173,6 @@ const TemplateHome = () => {
 
     if (statusSubmitSubmission === 'success') {
       Alert.alert('Berhasil', 'Berhasil membuat pengajuan');
-      bottomSheetModalRef.current?.dismiss();
       dispatch({
         type: RESET_STATE_SUBMISSION,
       });
@@ -300,7 +184,6 @@ const TemplateHome = () => {
     }
     if (statusSubmitOvertime === 'success') {
       Alert.alert('Berhasil', 'Berhasil absen lembur');
-      bottomSheetModalRef.current?.dismiss();
       dispatch({
         type: RESET_STATE_OVERTIME,
       });
@@ -336,7 +219,6 @@ const TemplateHome = () => {
   };
 
   return (
-    // <BottomSheetModalProvider>
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
         refreshControl={
@@ -419,14 +301,6 @@ const TemplateHome = () => {
                     width: '100%',
                     marginTop: 10,
                   }}>
-                  {/* <View>
-                      <View style={styles.containerBadge}>
-                        <View style={styles.containerBgBadge} />
-                        <Text style={styles.textBadge}>
-                          {profile.profile.workStatus || 'Work Shift'}
-                        </Text>
-                      </View>
-                    </View> */}
                   <View
                     style={{
                       flexDirection: 'row',
@@ -491,10 +365,8 @@ const TemplateHome = () => {
               marginTop: 180,
               flexDirection: 'row',
               gap: 10,
-              // marginBottom: 20,
               overflow: 'scroll',
               width: '100%',
-              // paddingBottom: 10,
             }}>
             {routeMenuItem.map((item: MenuItem) => (
               <CardMenuItem2
@@ -504,23 +376,11 @@ const TemplateHome = () => {
               />
             ))}
           </ScrollView>
-          {/* <View>
-              <Button title="test" onPress={() => onDisplayNotification()}>
-                Test
-              </Button>
-            </View> */}
           <View
             style={{
               flex: 2,
-              // borderWidth: 1,
-              // borderColor: 'red',
             }}>
-            <ScrollView
-            // style={{
-            //   borderWidth: 1,
-            //   borderColor: 'red',
-            // }}
-            >
+            <ScrollView>
               <ListAnnoucement
                 dataAnnouncement={dataListAnnouncement}
                 loading={statusListAnnouncement === 'process'}
@@ -530,18 +390,13 @@ const TemplateHome = () => {
         </View>
         {atLeastOneTrue ? (
           <BottomSheetManual>
-            {isShowMenuItem.pengajuan && (
-              <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
-            )}
-            {isShowMenuItem.lembur && (
-              <FormOvertime2 bottomSheetModalRef={bottomSheetModalRef} />
-            )}
+            {isShowMenuItem.pengajuan && <FormSubmission />}
+            {isShowMenuItem.lembur && <FormOvertime2 />}
             {isShowMenuItem.clockIn && (
               <FormClockInClockOut
                 isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
                 dataShift={dataShift}
                 clockIn
-                bottomSheetModalRef={bottomSheetModalRef}
               />
             )}
             {isShowMenuItem.clockOut && (
@@ -549,7 +404,6 @@ const TemplateHome = () => {
                 isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
                 dataShift={dataShift}
                 clockOut
-                bottomSheetModalRef={bottomSheetModalRef}
               />
             )}
             {isShowMenuItem.clockInOvertime && <FormClockInClockOutOvertime />}
@@ -558,46 +412,8 @@ const TemplateHome = () => {
         ) : (
           ''
         )}
-        {/* {atLeastOneTrue && <View style={styles.backdrop} />}
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            index={0}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}>
-            <BottomSheetScrollView style={styles.contentBottomSheetContainer}>
-              {isShowMenuItem.pengajuan && (
-                <FormSubmission bottomSheetModalRef={bottomSheetModalRef} />
-              )}
-              {isShowMenuItem.lembur && (
-                <FormOvertime2 bottomSheetModalRef={bottomSheetModalRef} />
-              )}
-              {isShowMenuItem.clockIn && (
-                <FormClockInClockOut
-                  isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
-                  dataShift={dataShift}
-                  clockIn
-                  bottomSheetModalRef={bottomSheetModalRef}
-                />
-              )}
-              {isShowMenuItem.clockOut && (
-                <FormClockInClockOut
-                  isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
-                  dataShift={dataShift}
-                  clockOut
-                  bottomSheetModalRef={bottomSheetModalRef}
-                />
-              )}
-              {isShowMenuItem.clockInOvertime && (
-                <FormClockInClockOutOvertime />
-              )}
-              {isShowMenuItem.clockOutOvertime && (
-                <FormClockInClockOutOvertime />
-              )}
-            </BottomSheetScrollView>
-          </BottomSheetModal> */}
       </ScrollView>
     </SafeAreaView>
-    // </BottomSheetModalProvider>
   );
 };
 
@@ -613,8 +429,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: Dimensions.get('screen').height - 100,
     backgroundColor: 'white',
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   containerHead: {
     paddingTop: 14,
@@ -623,8 +437,6 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
     backgroundColor: COLORS.bgPrimary,
     position: 'relative',
-    // borderColor: 'red',
-    // borderWidth: 1,
   },
   containerHeadTitleImage: {
     marginTop: 5,
@@ -649,72 +461,10 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   titleDay: {
-    // color: 'white',
     color: COLORS.bgPrimary,
     fontWeight: '500',
     fontSize: deviceWidth < 380 ? 12 : 14,
     textAlign: 'center',
-  },
-  containerListAttendace: {
-    paddingHorizontal: 12,
-    marginTop: 38,
-  },
-  contentBottomSheetContainer: {
-    flex: 1,
-    // alignItems: 'center',
-  },
-
-  backdrop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  containerBadge: {
-    position: 'relative',
-    overflow: 'hidden',
-    borderRadius: 4,
-    paddingTop: 3,
-    paddingBottom: 3,
-    paddingLeft: 6,
-    paddingRight: 6,
-    alignSelf: 'flex-start',
-  },
-  containerBgBadge: {
-    // backgroundColor: COLORS.bgOrangeOpacity,
-    // backgroundColor: '#fff',
-    backgroundColor: COLORS.bgPrimary,
-    // opacity: 0.08,
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-  },
-  textBadge: {
-    fontSize: 12,
-    fontWeight: '500',
-    // color: COLORS.bgPrimary,
-    color: '#ffffff',
-  },
-
-  // liniear gradient
-  linearGradient: {
-    flex: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderRadius: 5,
-    height: 200,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontFamily: 'Gill Sans',
-    textAlign: 'center',
-    margin: 10,
-    color: '#ffffff',
-    backgroundColor: 'transparent',
   },
 });
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../contants';
 import IconSubmission from '../../atoms/svg/submission';
 
@@ -12,7 +11,6 @@ const CardSubmission = ({onPress}: typeCardSubmission) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.cardClockInOut}>
       <View>
-        {/* <IconSimpleLineIcons name="login" size={28} color="white" /> */}
         <IconSubmission />
       </View>
       <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -25,7 +23,6 @@ const CardSubmission = ({onPress}: typeCardSubmission) => {
 const styles = StyleSheet.create({
   cardClockInOut: {
     flex: 1,
-    // backgroundColor: '#fff',
     backgroundColor: COLORS.bgPrimary,
     borderRadius: 8,
     paddingVertical: 6,

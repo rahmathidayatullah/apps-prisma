@@ -8,12 +8,6 @@ interface typeListItemAttendace {
 }
 
 export const ListItemAttendace = ({item}: typeListItemAttendace) => {
-  const dataItem = {
-    status: 'Work Shift',
-    date: '02 Feb',
-    clockIn: '08:00',
-    clockOut: '17:00',
-  };
   return (
     <View
       style={[
