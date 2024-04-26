@@ -8,3 +8,4 @@ declare module 'react-native-vector-icons/MaterialIcons';
 declare module 'react-native-dotenv';
 declare module 'debounce-promise';
 declare module 'react-native-calendar-picker';
+declare module '@env';

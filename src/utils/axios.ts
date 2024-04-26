@@ -1,8 +1,9 @@
 import axios from 'axios';
 // import {routeMenu} from '../contants/routes';
-const baseURL = 'https://api.dotlike.site';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// const baseURL = 'https://api.dotlike.site';
+import {baseURL} from '../api/config';
 
 const createAxiosInstance = () => {
   const instance = axios.create();

@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {baseURL} from './config';
 
-export const baseURL = 'https://api.dotlike.site';
+// export const baseURL = 'https://api.dotlike.site';
 
 export async function getProfile() {
   const userData: any = await AsyncStorage.getItem('userData');

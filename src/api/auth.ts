@@ -1,6 +1,7 @@
 import axios from 'axios';
+import {baseURL} from './config';
 
-const baseURL = 'https://api.dotlike.site';
+// const baseURL = 'https://api.dotlike.site';
 
 export async function login(body: any) {
   return await axios.post(`${baseURL}/auth/login`, body, {
