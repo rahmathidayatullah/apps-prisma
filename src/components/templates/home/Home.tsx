@@ -218,201 +218,402 @@ const TemplateHome = () => {
     dispatch(getListAnnoucementHome());
   };
 
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={pullMe} />
-        }>
-        <View style={styles.container}>
-          <View style={styles.containerHead}>
-            <LinearGradient
-              start={{x: 0.5, y: 0.1}}
-              end={{x: 0.5, y: 0.9}}
-              colors={['#219C90', '#219C90', '#FBB03B']}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
-            />
-            <View style={styles.containerHeadTitleImage}>
-              <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
-                <ImageProfile />
-                <View>
-                  <Text
-                    style={styles.titleName}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {profile?.profile?.user?.name ?? '-'}
-                  </Text>
-                  <Text style={styles.titleRole}>
-                    {profile?.profile?.user?.role?.name ?? '-'}
-                  </Text>
-                  <View style={{height: 22}}>
-                    {profile?.profile?.user?.companies?.length !== 0 ? (
-                      profile?.profile?.user?.companies?.map((item: any) => {
-                        return (
-                          <Text style={styles.titleRole} key={item.id}>
-                            {item.name}
-                          </Text>
-                        );
-                      })
-                    ) : (
-                      <Text style={styles.titleRole}></Text>
-                    )}
+  if (atLeastOneTrue === false) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={pullMe} />
+          }>
+          <View style={styles.container}>
+            <View style={styles.containerHead}>
+              <LinearGradient
+                start={{x: 0.5, y: 0.1}}
+                end={{x: 0.5, y: 0.9}}
+                colors={['#219C90', '#219C90', '#FBB03B']}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              />
+              <View style={styles.containerHeadTitleImage}>
+                <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
+                  <ImageProfile />
+                  <View>
+                    <Text
+                      style={styles.titleName}
+                      numberOfLines={1}
+                      ellipsizeMode="tail">
+                      {profile?.profile?.user?.name ?? '-'}
+                    </Text>
+                    <Text style={styles.titleRole}>
+                      {profile?.profile?.user?.role?.name ?? '-'}
+                    </Text>
+                    <View style={{height: 22}}>
+                      {profile?.profile?.user?.companies?.length !== 0 ? (
+                        profile?.profile?.user?.companies?.map((item: any) => {
+                          return (
+                            <Text style={styles.titleRole} key={item.id}>
+                              {item.name}
+                            </Text>
+                          );
+                        })
+                      ) : (
+                        <Text style={styles.titleRole}></Text>
+                      )}
+                    </View>
                   </View>
                 </View>
-              </View>
-              <View>
-                <Text style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
-                  {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
-                </Text>
-                <Text
-                  style={{
-                    textAlign: 'right',
-                    fontSize: 10,
-                    color: 'white',
-                  }}>
-                  {currentTime} WIB
-                </Text>
-              </View>
-            </View>
-
-            <ContainerCardClockInOut>
-              <View
-                style={{
-                  flexDirection: 'column',
-                }}>
-                <View style={{paddingVertical: 10}}>
-                  <Text style={styles.titleDay}>
-                    {greeting} {profile?.profile?.user?.name ?? '-'},{' '}
-                    {greeting2}
+                <View>
+                  <Text
+                    style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
+                    {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
+                  </Text>
+                  <Text
+                    style={{
+                      textAlign: 'right',
+                      fontSize: 10,
+                      color: 'white',
+                    }}>
+                    {currentTime} WIB
                   </Text>
                 </View>
+              </View>
+
+              <ContainerCardClockInOut>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 4,
-                    width: '100%',
-                    marginTop: 10,
+                    flexDirection: 'column',
                   }}>
+                  <View style={{paddingVertical: 10}}>
+                    <Text style={styles.titleDay}>
+                      {greeting} {profile?.profile?.user?.name ?? '-'},{' '}
+                      {greeting2}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      justifyContent: 'center',
                       alignItems: 'center',
                       gap: 4,
+                      width: '100%',
+                      marginTop: 10,
                     }}>
-                    <IconMaterialIcons
-                      name="access-alarm"
-                      size={24}
-                      color={COLORS.bgPrimary}
-                    />
-
-                    <Text
+                    <View
                       style={{
-                        color: COLORS.bgPrimary,
-                        fontSize: 12,
-                        fontWeight: '600',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: 4,
                       }}>
-                      {profile?.profile?.user?.role?.shift?.start_time ?? '-:-'}
-                      &nbsp; -{' '}
-                      {profile?.profile?.user?.role?.shift?.end_time ?? '-:-'}
-                    </Text>
+                      <IconMaterialIcons
+                        name="access-alarm"
+                        size={24}
+                        color={COLORS.bgPrimary}
+                      />
+
+                      <Text
+                        style={{
+                          color: COLORS.bgPrimary,
+                          fontSize: 12,
+                          fontWeight: '600',
+                        }}>
+                        {profile?.profile?.user?.role?.shift?.start_time ??
+                          '-:-'}
+                        &nbsp; -{' '}
+                        {profile?.profile?.user?.role?.shift?.end_time ?? '-:-'}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-              <View
-                style={{
-                  marginTop: 8,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  gap: 8,
-                }}>
-                <CardClockInOut
+                <View
+                  style={{
+                    marginTop: 8,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: 8,
+                  }}>
+                  <CardClockInOut
+                    clockIn
+                    onPress={() => handleOnPressMenuItem('clockIn')}
+                  />
+                  <CardClockInOut
+                    clockOut
+                    onPress={() => handleOnPressMenuItem('clockOut')}
+                  />
+                </View>
+                <View
+                  style={{
+                    marginTop: 8,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: 8,
+                  }}>
+                  <CardOvertime
+                    onPress={() => handleOnPressMenuItem('lembur')}
+                  />
+                  <CardSubmission
+                    onPress={() => handleOnPressMenuItem('pengajuan')}
+                  />
+                </View>
+              </ContainerCardClockInOut>
+            </View>
+
+            <ScrollView
+              horizontal
+              style={{
+                flex: 1,
+                marginTop: 180,
+                flexDirection: 'row',
+                gap: 10,
+                overflow: 'scroll',
+                width: '100%',
+              }}>
+              {routeMenuItem.map((item: MenuItem) => (
+                <CardMenuItem2
+                  onPress={() => handleClickOpenMenu(item.value)}
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </ScrollView>
+            <View
+              style={{
+                flex: 2,
+              }}>
+              <ScrollView>
+                <ListAnnoucement
+                  dataAnnouncement={dataListAnnouncement}
+                  loading={statusListAnnouncement === 'process'}
+                />
+              </ScrollView>
+            </View>
+          </View>
+          {atLeastOneTrue ? (
+            <BottomSheetManual>
+              {isShowMenuItem.pengajuan && <FormSubmission />}
+              {isShowMenuItem.lembur && <FormOvertime2 />}
+              {isShowMenuItem.clockIn && (
+                <FormClockInClockOut
+                  isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+                  dataShift={dataShift}
                   clockIn
-                  onPress={() => handleOnPressMenuItem('clockIn')}
                 />
-                <CardClockInOut
+              )}
+              {isShowMenuItem.clockOut && (
+                <FormClockInClockOut
+                  isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+                  dataShift={dataShift}
                   clockOut
-                  onPress={() => handleOnPressMenuItem('clockOut')}
                 />
+              )}
+              {isShowMenuItem.clockInOvertime && (
+                <FormClockInClockOutOvertime />
+              )}
+              {isShowMenuItem.clockOutOvertime && (
+                <FormClockInClockOutOvertime />
+              )}
+            </BottomSheetManual>
+          ) : (
+            ''
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.containerHead}>
+          <LinearGradient
+            start={{x: 0.5, y: 0.1}}
+            end={{x: 0.5, y: 0.9}}
+            colors={['#219C90', '#219C90', '#FBB03B']}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+          <View style={styles.containerHeadTitleImage}>
+            <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
+              <ImageProfile />
+              <View>
+                <Text
+                  style={styles.titleName}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {profile?.profile?.user?.name ?? '-'}
+                </Text>
+                <Text style={styles.titleRole}>
+                  {profile?.profile?.user?.role?.name ?? '-'}
+                </Text>
+                <View style={{height: 22}}>
+                  {profile?.profile?.user?.companies?.length !== 0 ? (
+                    profile?.profile?.user?.companies?.map((item: any) => {
+                      return (
+                        <Text style={styles.titleRole} key={item.id}>
+                          {item.name}
+                        </Text>
+                      );
+                    })
+                  ) : (
+                    <Text style={styles.titleRole}></Text>
+                  )}
+                </View>
               </View>
-              <View
+            </View>
+            <View>
+              <Text style={{fontSize: 12, color: 'white', fontWeight: '500'}}>
+                {moment().format('dddd')}, {moment().format('DD MMMM YYYY')}
+              </Text>
+              <Text
                 style={{
-                  marginTop: 8,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  gap: 8,
+                  textAlign: 'right',
+                  fontSize: 10,
+                  color: 'white',
                 }}>
-                <CardOvertime onPress={() => handleOnPressMenuItem('lembur')} />
-                <CardSubmission
-                  onPress={() => handleOnPressMenuItem('pengajuan')}
-                />
-              </View>
-            </ContainerCardClockInOut>
+                {currentTime} WIB
+              </Text>
+            </View>
           </View>
 
-          <ScrollView
-            horizontal
-            style={{
-              flex: 1,
-              marginTop: 180,
-              flexDirection: 'row',
-              gap: 10,
-              overflow: 'scroll',
-              width: '100%',
-            }}>
-            {routeMenuItem.map((item: MenuItem) => (
-              <CardMenuItem2
-                onPress={() => handleClickOpenMenu(item.value)}
-                key={item.id}
-                item={item}
-              />
-            ))}
-          </ScrollView>
-          <View
-            style={{
-              flex: 2,
-            }}>
-            <ScrollView>
-              <ListAnnoucement
-                dataAnnouncement={dataListAnnouncement}
-                loading={statusListAnnouncement === 'process'}
-              />
-            </ScrollView>
-          </View>
-        </View>
-        {atLeastOneTrue ? (
-          <BottomSheetManual>
-            {isShowMenuItem.pengajuan && <FormSubmission />}
-            {isShowMenuItem.lembur && <FormOvertime2 />}
-            {isShowMenuItem.clockIn && (
-              <FormClockInClockOut
-                isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
-                dataShift={dataShift}
+          <ContainerCardClockInOut>
+            <View
+              style={{
+                flexDirection: 'column',
+              }}>
+              <View style={{paddingVertical: 10}}>
+                <Text style={styles.titleDay}>
+                  {greeting} {profile?.profile?.user?.name ?? '-'}, {greeting2}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 4,
+                  width: '100%',
+                  marginTop: 10,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 4,
+                  }}>
+                  <IconMaterialIcons
+                    name="access-alarm"
+                    size={24}
+                    color={COLORS.bgPrimary}
+                  />
+
+                  <Text
+                    style={{
+                      color: COLORS.bgPrimary,
+                      fontSize: 12,
+                      fontWeight: '600',
+                    }}>
+                    {profile?.profile?.user?.role?.shift?.start_time ?? '-:-'}
+                    &nbsp; -{' '}
+                    {profile?.profile?.user?.role?.shift?.end_time ?? '-:-'}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 8,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: 8,
+              }}>
+              <CardClockInOut
                 clockIn
+                onPress={() => handleOnPressMenuItem('clockIn')}
               />
-            )}
-            {isShowMenuItem.clockOut && (
-              <FormClockInClockOut
-                isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
-                dataShift={dataShift}
+              <CardClockInOut
                 clockOut
+                onPress={() => handleOnPressMenuItem('clockOut')}
               />
-            )}
-            {isShowMenuItem.clockInOvertime && <FormClockInClockOutOvertime />}
-            {isShowMenuItem.clockOutOvertime && <FormClockInClockOutOvertime />}
-          </BottomSheetManual>
-        ) : (
-          ''
-        )}
-      </ScrollView>
+            </View>
+            <View
+              style={{
+                marginTop: 8,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: 8,
+              }}>
+              <CardOvertime onPress={() => handleOnPressMenuItem('lembur')} />
+              <CardSubmission
+                onPress={() => handleOnPressMenuItem('pengajuan')}
+              />
+            </View>
+          </ContainerCardClockInOut>
+        </View>
+
+        <ScrollView
+          horizontal
+          style={{
+            flex: 1,
+            marginTop: 180,
+            flexDirection: 'row',
+            gap: 10,
+            overflow: 'scroll',
+            width: '100%',
+          }}>
+          {routeMenuItem.map((item: MenuItem) => (
+            <CardMenuItem2
+              onPress={() => handleClickOpenMenu(item.value)}
+              key={item.id}
+              item={item}
+            />
+          ))}
+        </ScrollView>
+        <View
+          style={{
+            flex: 2,
+          }}>
+          <ScrollView>
+            <ListAnnoucement
+              dataAnnouncement={dataListAnnouncement}
+              loading={statusListAnnouncement === 'process'}
+            />
+          </ScrollView>
+        </View>
+      </View>
+      {atLeastOneTrue ? (
+        <BottomSheetManual>
+          {isShowMenuItem.pengajuan && <FormSubmission />}
+          {isShowMenuItem.lembur && <FormOvertime2 />}
+          {isShowMenuItem.clockIn && (
+            <FormClockInClockOut
+              isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+              dataShift={dataShift}
+              clockIn
+            />
+          )}
+          {isShowMenuItem.clockOut && (
+            <FormClockInClockOut
+              isFlexible={profile?.profile?.user?.role?.isFlexible ?? false}
+              dataShift={dataShift}
+              clockOut
+            />
+          )}
+          {isShowMenuItem.clockInOvertime && <FormClockInClockOutOvertime />}
+          {isShowMenuItem.clockOutOvertime && <FormClockInClockOutOvertime />}
+        </BottomSheetManual>
+      ) : (
+        ''
+      )}
     </SafeAreaView>
   );
 };

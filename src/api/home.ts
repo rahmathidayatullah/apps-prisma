@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {baseURL} from './config';
 
-const baseURL = 'https://api.dotlike.site';
+// const baseURL = 'https://api.dotlike.site';
 
 export async function postClockIn(payload: any) {
   const userData: any = await AsyncStorage.getItem('userData');

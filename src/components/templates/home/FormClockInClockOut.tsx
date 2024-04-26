@@ -106,7 +106,7 @@ const FormClockInClockOut = ({
       },
       (error: any) => setError(error.message),
       {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         timeout: 10000,
         maximumAge: 60000,
       },
