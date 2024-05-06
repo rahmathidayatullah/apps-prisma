@@ -104,9 +104,9 @@ const TemplateHome = () => {
   useEffect(() => {
     dispatch(fetchProfile());
     dispatch(fetchShift());
-    dispatch(getListAttendancesMine());
-    dispatch(getListOvertimesMine());
-    dispatch(getListSubmissionsMine());
+    // dispatch(getListAttendancesMine());
+    // dispatch(getListOvertimesMine());
+    // dispatch(getListSubmissionsMine());
     dispatch(getListAnnoucementHome());
 
     const timerID = setInterval(() => {
@@ -212,9 +212,9 @@ const TemplateHome = () => {
   const pullMe = () => {
     dispatch(fetchProfile());
     dispatch(fetchShift());
-    dispatch(getListAttendancesMine());
-    dispatch(getListOvertimesMine());
-    dispatch(getListSubmissionsMine());
+    // dispatch(getListAttendancesMine());
+    // dispatch(getListOvertimesMine());
+    // dispatch(getListSubmissionsMine());
     dispatch(getListAnnoucementHome());
   };
 

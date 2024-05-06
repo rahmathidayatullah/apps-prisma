@@ -50,6 +50,9 @@ const FormClockInClockOut = ({
       cropping: true,
       includeBase64: true,
       useFrontCamera: true,
+      compressImageQuality: 0.3, // Adjust quality as needed (0.0 - 1.0)
+      compressImageMaxWidth: 1000, // Optional maximum width
+      compressImageMaxHeight: 1000, // Optional maximum height
     }).then((image: any) => {
       setImageSelfie(image);
       setPlaceholderImageSelfie('foto.jpg');
