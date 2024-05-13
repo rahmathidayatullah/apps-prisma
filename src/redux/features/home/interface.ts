@@ -47,6 +47,7 @@ export interface initialStateGlobalHome {
 
   isShowMenuItem: itemShowMenuItem;
   dateClockIn: string | null;
+  errorClockIn: any;
   dateClockOut: string | null;
   dateClockInOvertime: string | null;
   dateClockOutOvertime: string | null;
@@ -103,6 +104,8 @@ export interface initialStateGlobalHome {
 
   file1Submission: any;
   file2Submission: any;
+
+  errorSubmission: any;
   statusSubmitSubmission: string;
 
   // lembur/overtime
@@ -128,6 +131,7 @@ export interface initialStateGlobalHome {
   selectCategoryOvertime: string;
   file1Overtime: null;
 
+  errorOvertime: any;
   statusSubmitOvertime: string;
 
   // clock in

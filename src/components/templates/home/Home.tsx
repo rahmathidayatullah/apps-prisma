@@ -18,9 +18,6 @@ import {routeMenu, routeMenuItem} from '../../../contants/routes';
 import {MenuItem} from './inteface';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getListAttendancesMine,
-  getListOvertimesMine,
-  getListSubmissionsMine,
   onPressMenuItem,
   resetValueBottomSheet,
 } from '../../../redux/features/home/actions';
@@ -47,6 +44,7 @@ import CardMenuItem2 from './CardMenuItem2';
 import {getListAnnoucementHome} from '../../../redux/features/announcement/actions';
 import {fetchShift} from '../../../redux/features/shift/actions';
 import BottomSheetManual from '../../molecules/BottomSheetManual';
+import {NotifError} from '../../../utils/errorMessage';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
@@ -56,8 +54,14 @@ const TemplateHome = () => {
   const {data: dataShift, status: statusShift} = shift;
   const {
     isShowMenuItem,
+
+    errorClockIn,
     statusClockIn,
+
+    errorSubmission,
     statusSubmitSubmission,
+
+    errorOvertime,
     statusSubmitOvertime,
   } = home;
   const auth = useSelector((state: stateGlobalAuth) => state.auth);
@@ -164,11 +168,11 @@ const TemplateHome = () => {
     }
 
     if (statusClockIn === 'error') {
-      Alert.alert('Peringantan', 'Terjadi kesalahan');
+      Alert.alert('Gagal Absen', NotifError(errorClockIn));
     }
 
     if (statusSubmitSubmission === 'error') {
-      Alert.alert('Peringantan', 'Terjadi kesalahan');
+      Alert.alert('Gagal Pengajuan', NotifError(errorSubmission));
     }
 
     if (statusSubmitSubmission === 'success') {
@@ -180,7 +184,7 @@ const TemplateHome = () => {
     }
 
     if (statusSubmitOvertime === 'error') {
-      Alert.alert('Peringantan', 'Terjadi kesalahan');
+      Alert.alert('Gagal absen lembur', NotifError(errorOvertime));
     }
     if (statusSubmitOvertime === 'success') {
       Alert.alert('Berhasil', 'Berhasil absen lembur');
@@ -212,12 +216,10 @@ const TemplateHome = () => {
   const pullMe = () => {
     dispatch(fetchProfile());
     dispatch(fetchShift());
-    // dispatch(getListAttendancesMine());
-    // dispatch(getListOvertimesMine());
-    // dispatch(getListSubmissionsMine());
     dispatch(getListAnnoucementHome());
   };
 
+  // jika salah dialog bottom sheet another on active
   if (atLeastOneTrue === false) {
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -372,6 +374,8 @@ const TemplateHome = () => {
                 gap: 10,
                 overflow: 'scroll',
                 width: '100%',
+                paddingTop: Dimensions.get('screen').height < 670 ? 15 : 0,
+                paddingBottom: Dimensions.get('screen').height < 670 ? 25 : 0,
               }}>
               {routeMenuItem.map((item: MenuItem) => (
                 <CardMenuItem2
@@ -425,6 +429,7 @@ const TemplateHome = () => {
       </SafeAreaView>
     );
   }
+  // jika  dialog bottom sheet all nonactive
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
