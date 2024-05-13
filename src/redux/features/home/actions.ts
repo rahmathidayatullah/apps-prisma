@@ -571,7 +571,10 @@ export const submitClockIn = (
           type: SUCCESS_LOGOUT,
         });
       } else {
-        dispatch({type: ERROR_CLOCK_IN});
+        dispatch({
+          type: ERROR_CLOCK_IN,
+          data: error,
+        });
       }
     }
   };
@@ -784,6 +787,7 @@ export const submitSubmission = (payload: any) => {
       } else {
         dispatch({
           type: ERROR_SUBMIT_SUBMISSION,
+          data: error,
         });
       }
     }
@@ -838,7 +842,7 @@ export const submitOvertimeClockInOut = (
           type: SUCCESS_LOGOUT,
         });
       } else {
-        dispatch({type: ERROR_SUBMIT_OVERTIME});
+        dispatch({type: ERROR_SUBMIT_OVERTIME, data: error});
       }
     }
   };

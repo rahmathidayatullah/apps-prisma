@@ -14,7 +14,7 @@ import notifee, {
   TimestampTrigger,
   TriggerType,
 } from '@notifee/react-native';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
 import moment from 'moment';
 
 const RootNavigation = () => {
@@ -34,8 +34,8 @@ const RootNavigation = () => {
 
     // Mon Apr 01 2024 18:05:59 GMT+0700 convert to 18:05
 
-    const inputDate = moment(timeStart, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ");
-    const formattedTime = inputDate.format("HH:mm");
+    const inputDate = moment(timeStart, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+    const formattedTime = inputDate.format('HH:mm');
 
     // Create a time-based trigger
     // const trigger: TimestampTrigger = {
@@ -90,8 +90,8 @@ const RootNavigation = () => {
     timeStart.setHours(7);
     timeStart.setMinutes(50);
 
-    const inputDate = moment(timeStart, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ");
-    const formattedTime = inputDate.format("HH:mm");
+    const inputDate = moment(timeStart, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+    const formattedTime = inputDate.format('HH:mm');
 
     // Create a time-based trigger
     // const trigger: TimestampTrigger = {
@@ -146,7 +146,7 @@ const RootNavigation = () => {
     init();
     onDisplayNotification1805();
     onDisplayNotification0750();
-    if(Platform.OS === 'android') SplashScreen.hide();
+    if (Platform.OS === 'android') SplashScreen.hide();
   }, []);
 
   if (loading) {
@@ -158,7 +158,10 @@ const RootNavigation = () => {
   }
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="black" barStyle="light-content" />
+      <StatusBar
+        backgroundColor="black"
+        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
+      />
       {userData.access_token === '' ? <AuthNavigator /> : <HomeNaviagator />}
     </NavigationContainer>
   );

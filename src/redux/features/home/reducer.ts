@@ -135,6 +135,7 @@ const initialState: initialStateGlobalHome = {
   },
 
   dateClockIn: null, // "07-03-2024 08:00:00" | "- : -"
+  errorClockIn: null,
   dateClockOut: null, // "07-03-2024 17:00:00" | "- : -"
   dateClockInOvertime: null, // "07-03-2024 18:00:00" | "- : -"
   dateClockOutOvertime: null, // "07-03-2024 20:00:00" | "- : -"
@@ -195,6 +196,7 @@ const initialState: initialStateGlobalHome = {
   file1Submission: null,
   file2Submission: null,
 
+  errorSubmission: null,
   statusSubmitSubmission: statusList.idle,
 
   // lembur/overtime
@@ -219,6 +221,8 @@ const initialState: initialStateGlobalHome = {
   descriptionOvertime: '',
   selectCategoryOvertime: '',
   file1Overtime: null,
+
+  errorOvertime: null,
   statusSubmitOvertime: statusList.idle,
 
   // clock in
@@ -569,11 +573,13 @@ export default function homeReducer(state = initialState, action: any) {
       return {
         ...state,
         statusSubmitSubmission: statusList.error,
+        errorSubmission: action.data,
       };
 
     case RESET_STATE_SUBMISSION:
       return {
         ...state,
+        errorSubmission: null,
         statusSubmitSubmission: statusList.idle,
         valueDefaultEndDateSubmission: new Date(),
         valueEndDateSubmission: '',
@@ -618,6 +624,7 @@ export default function homeReducer(state = initialState, action: any) {
         ...state,
         statusClockIn: statusList.error,
         dateClockIn: moment().format('DD-MM-YYYY hh:mm:ss'),
+        errorClockIn: action.data,
       };
 
     case CLOCK_OUT:
@@ -628,6 +635,7 @@ export default function homeReducer(state = initialState, action: any) {
     case RESET_STATE_CLOCK_IN:
       return {
         ...state,
+        errorClockIn: null,
         statusClockIn: statusList.idle,
       };
 
@@ -729,11 +737,13 @@ export default function homeReducer(state = initialState, action: any) {
       return {
         ...state,
         statusSubmitOvertime: statusList.error,
+        errorOvertime: action.data,
       };
 
     case RESET_STATE_OVERTIME:
       return {
         ...state,
+        errorOvertime: null,
         statusSubmitOvertime: statusList.idle,
         valueDefaultEndDateOvertime: new Date(),
         valueEndDateOvertime: '',
