@@ -56,7 +56,7 @@ export const routeMenuItem: MenuItem[] = [
   },
   {
     id: 3,
-    value: 'cuti',
+    value: 'penjualan',
     label: 'Penjualan',
     path: '/',
     icon: <IconPenjualan />,

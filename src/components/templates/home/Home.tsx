@@ -45,6 +45,9 @@ import {getListAnnoucementHome} from '../../../redux/features/announcement/actio
 import {fetchShift} from '../../../redux/features/shift/actions';
 import BottomSheetManual from '../../molecules/BottomSheetManual';
 import {NotifError} from '../../../utils/errorMessage';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {baseURLWeb} from '../../../api/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TemplateHome = () => {
   const dispatch: any = useDispatch();
@@ -97,9 +100,46 @@ const TemplateHome = () => {
     }
   };
 
-  const handleClickOpenMenu = (item: any) => {
+  const handleClickOpenMenu = async (item: any) => {
     if (item === 'kehadiran') {
       navigation.navigate(routeMenu.ATTENDACE);
+    } else if (item === 'penjualan') {
+      if (InAppBrowser) {
+        const userData: any = await AsyncStorage.getItem('userData');
+        let newUserData = null;
+
+        if (typeof userData === 'string') {
+          newUserData = JSON.parse(userData);
+        }
+
+        const url = `${baseURLWeb}/projects-marketing-detail?token=${newUserData.access_token}&isIt=Marketing&projectId=1`; // Replace with the URL you want to open
+        const isAvailable = await InAppBrowser.isAvailable;
+        // await InAppBrowser.close();
+        const result = await InAppBrowser.open(url, {
+          // iOS-specific options
+          dismissButtonStyle: 'close',
+          preferredBarTintColor: '#000',
+          preferredControlTintColor: 'white',
+          readerMode: false,
+          animated: true,
+          modalPresentationStyle: 'fullScreen',
+          modalTransitionStyle: 'coverVertical',
+          modalEnabled: true,
+          enableBarCollapsing: false,
+          // Android-specific options
+          showTitle: true,
+          enableUrlBarHiding: true,
+          enableDefaultShare: true,
+
+          forceCloseOnRedirection: false,
+          headers: {
+            'my-custom-header': 'my-custom-header-value',
+          },
+        });
+        console.log(result);
+      } else {
+        console.error('InAppBrowser is null');
+      }
     } else {
       return;
     }
