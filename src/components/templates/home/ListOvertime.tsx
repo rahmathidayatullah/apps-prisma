@@ -24,7 +24,7 @@ export const ListOvertime = ({
       <View style={styles.containerTitleList}>
         <Text style={styles.textAttendaceLog}>Riwayat Lembur</Text>
 
-        {dataOvertimesMine.length === 0 || loading ? (
+        {dataOvertimesMine?.length === 0 || loading ? (
           ''
         ) : (
           <CButtonText onPress={handleViewAllLogAttendace}>
@@ -47,12 +47,12 @@ export const ListOvertime = ({
               Load data lembur ..
             </Text>
           </View>
-        ) : dataOvertimesMine.length === 0 ? (
+        ) : dataOvertimesMine?.length === 0 ? (
           <View style={{marginTop: 20}}>
             <Text>Belum ada data riwayat lembur</Text>
           </View>
         ) : (
-          dataOvertimesMine.map((item: any) => (
+          dataOvertimesMine?.map((item: any) => (
             <View key={item.id} style={{marginTop: 12}}>
               <ListItemOvertime item={item} />
             </View>

@@ -33,6 +33,12 @@
 	</dict>
 	<key>UIUserInterfaceStyle</key>
     <string>Light</string>
+	
+	<key>NSDocumentsFolderUsageDescription</key>
+<string></string>
+<key>NSDownloadsFolderUsageDescription</key>
+<string></string>
+
 	<key>NSCameraUsageDescription</key>
 	<string>Needs access to your Camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

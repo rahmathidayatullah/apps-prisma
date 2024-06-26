@@ -27,7 +27,12 @@ export const routeMenu = {
   DETAIL_ANNOUCEMENT: 'Detail Annoucement',
   TAKE_SEFIE: 'Take Selfie',
   VIEW_CURRENT_LOCATION: 'View Current Location',
+  //
   ATTENDACE: 'Attendance',
+  SALE: 'Sale',
+  PROJECT: 'Proyek',
+  PROJECT_DETAIL: 'Detail Proyek',
+  PROJECT2: 'Proyek2',
 
   // menu profile
   PERSONAL_INFO: 'Personal Info',
@@ -36,6 +41,13 @@ export const routeMenu = {
   LOGIN: 'Login',
   REGISTER: 'Register',
   FORGOT_PASSWORD: 'Forgot Password',
+
+  // booking
+  BOOKING_FORM: 'Booking',
+  LIST_BOOKING: 'List Booking',
+  DETAIL_BOOKING: 'Detail Booking',
+  // generate
+  GENERATE_FLPP: 'Generate FLPP',
 };
 
 import {MenuItem} from '../components/templates/home/inteface';
@@ -55,14 +67,28 @@ export const routeMenuItem: MenuItem[] = [
     icon: <IconOvertime2 />,
   },
   {
-    id: 3,
-    value: 'cuti',
+    id: 2,
+    value: 'penjualan',
     label: 'Penjualan',
     path: '/',
     icon: <IconPenjualan />,
   },
+  // {
+  //   id: 6,
+  //   value: 'projec2',
+  //   label: 'Proyek2',
+  //   path: '/',
+  //   icon: <IconPenjualan />,
+  // },
   {
-    id: 2,
+    id: 7,
+    value: 'project',
+    label: 'Proyek',
+    path: '/',
+    icon: <IconPenjualan />,
+  },
+  {
+    id: 3,
     value: 'lembur',
     label: 'List Persiapan Akad',
     path: '/profile',

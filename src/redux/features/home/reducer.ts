@@ -528,7 +528,6 @@ export default function homeReducer(state = initialState, action: any) {
           return item;
         },
       );
-      console.log('newListCategorySubmission', newListCategorySubmission);
       return {
         ...state,
 
