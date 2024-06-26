@@ -11,6 +11,14 @@ import ListOvertimeLog from '../../screens/home/ListOvertimeLog';
 import ListOfAnnouncement from '../../screens/home/ListOfAnnouncement';
 import DetailAnnoucement from '../../screens/home/DetailAnnoucement';
 import Attendance from '../../screens/home/Attendance';
+import Sale from '../../screens/home/Sale';
+import Proyek from '../../screens/home/Proyek';
+import Proyek2 from '../../screens/home/Proyek2';
+import ProyekDetail from '../../screens/home/proyek-detail/ProyekDetail';
+import BookingForm from '../../screens/home/BookingForm';
+import ListBooking from '../../screens/home/ListBooking';
+import DetailBooking from '../../screens/home/detail-booking/DetailBooking';
+import GenerateFlpp from '../../screens/home/generate-flpp/GenerateFlpp';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +60,55 @@ export default function NestedHomeNaviagator() {
           }}
         />
         <Stack.Screen
+          name={routeMenu.SALE}
+          component={Sale}
+          options={{
+            title: 'Penjualan',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.PROJECT}
+          component={Proyek2}
+          options={{
+            title: 'Proyek',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.PROJECT_DETAIL}
+          component={ProyekDetail}
+          options={{
+            title: 'Proyek Detail',
+          }}
+        />
+        {/* <Stack.Screen
+          name={routeMenu.PROJECT2}
+          component={Proyek2}
+          options={{
+            title: 'Proyek2',
+          }}
+        /> */}
+        <Stack.Screen
+          name={routeMenu.BOOKING_FORM}
+          component={BookingForm}
+          options={{
+            title: 'Booking',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.LIST_BOOKING}
+          component={ListBooking}
+          options={{
+            title: 'List Booking',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.DETAIL_BOOKING}
+          component={DetailBooking}
+          options={{
+            title: 'Detail Booking',
+          }}
+        />
+        <Stack.Screen
           name={routeMenu.LIST_OF_ANNOUCEMENT}
           component={ListOfAnnouncement}
           options={{
@@ -71,6 +128,13 @@ export default function NestedHomeNaviagator() {
           component={ViewCurrentLocation}
           options={{
             title: 'Lokasi Sekarang',
+          }}
+        />
+        <Stack.Screen
+          name={routeMenu.GENERATE_FLPP}
+          component={GenerateFlpp}
+          options={{
+            title: 'Generate FLPP',
           }}
         />
       </Stack.Navigator>

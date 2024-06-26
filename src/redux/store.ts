@@ -7,6 +7,11 @@ import overtimesReducer from './features/overtimes/reducer';
 import attendancesReducer from './features/attendances/reducer';
 import announcementReducer from './features/announcement/reducer';
 import shiftReducer from './features/shift/reducer';
+import projectReducer from './features/project/reducer';
+import bookingReducer from './features/booking/reducer';
+import generateReducer from './features/generate/reducer';
+import blockReducer from './features/block/reducer';
+import phaseReducer from './features/phase/reducer';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +23,11 @@ export const store = configureStore({
     attendances: attendancesReducer,
     announcement: announcementReducer,
     shift: shiftReducer,
+    project: projectReducer,
+    booking: bookingReducer,
+    generate: generateReducer,
+    block: blockReducer,
+    phase: phaseReducer,
   },
 });
 

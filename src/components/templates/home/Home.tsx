@@ -73,10 +73,6 @@ const TemplateHome = () => {
   const {statusList: statusListAnnouncement, dataList: dataListAnnouncement} =
     announcement;
 
-  // console.log('home', home);
-  // console.log('profile', profile);
-  // console.log('auth', auth);
-
   const [greeting, setGreeting] = useState('');
   const [greeting2, setGreeting2] = useState('');
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
@@ -100,7 +96,13 @@ const TemplateHome = () => {
   const handleClickOpenMenu = (item: any) => {
     if (item === 'kehadiran') {
       navigation.navigate(routeMenu.ATTENDACE);
-    } else {
+    } else if (item === 'project') {
+      navigation.navigate(routeMenu.PROJECT);
+    }
+    //  else if (item === 'project2') {
+    //   navigation.navigate(routeMenu.PROJECT2);
+    // }
+    else {
       return;
     }
   };

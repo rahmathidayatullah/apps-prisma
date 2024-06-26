@@ -1,6 +1,6 @@
 export function NotifError(dataError: any) {
   if (dataError?.response?.data?.message) {
-    return `${dataError?.code} ${dataError?.response?.data?.message}, silahkan coba lagi`;
+    return `${dataError?.response?.data?.message}`;
   }
-  return `Terjadi kesalahan ${dataError?.code}, silahkan coba lagi .`;
+  return `${dataError?.code} Terjadi kesalahan ${dataError?.code}, silahkan coba lagi .`;
 }

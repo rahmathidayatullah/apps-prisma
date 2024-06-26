@@ -223,7 +223,7 @@ const TemplateListOvertimeLog = () => {
           </View>
         ) : (
           <View>
-            {dataListOvertimes.length === 0 ? (
+            {dataListOvertimes?.length === 0 ? (
               <View
                 style={{
                   flex: 1,

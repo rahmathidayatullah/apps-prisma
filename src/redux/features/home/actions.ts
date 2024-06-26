@@ -212,13 +212,13 @@ export const getListOvertimesMine = () => {
 
     try {
       const {
-        data: {data},
+        data: {result},
       } = await getOvertimesMine(params);
-      console.log('success fetch getLisOvertimessMine', data);
+      console.log('success fetch getLisOvertimessMine', result);
 
       dispatch({
         type: SUCCESS_OVERTIME_MINE,
-        data,
+        data: result,
       });
     } catch (error: any) {
       console.log('error fetch getLisOvertimessMine', error);
